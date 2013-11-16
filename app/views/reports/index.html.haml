@@ -4,7 +4,7 @@
       %th Name
       %th Phone
       %th Location
-      %th Description
+      %th Responder
       %th Action
   - if @reports.none?
     %tbody
@@ -13,5 +13,12 @@
   - else
     %tbody
       - @reports.each do |report|
-        = render "report", report: report
+        %tr
+          %th= report.name
+          %td= report.phone
+          %td= report.nature
+          = simple_form_for(report, remote: true) do |f|
+            %td= f.select :responder_id, Responder.pluck(:id)
+            %td= f.submit("Assign Responder")
+
 

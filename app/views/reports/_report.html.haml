@@ -1,7 +1,0 @@
-%tr
-  %th= report.name
-  %td= report.phone
-  %td= report.nature
-  = simple_form_for(report, remote: true) do |f|
-    %td= f.select :responder, contents: Responder.all
-    %td= f.button :submit, text: "Assign Responder"

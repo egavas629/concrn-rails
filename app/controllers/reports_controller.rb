@@ -20,8 +20,7 @@ class ReportsController < ApplicationController
   end
 
   def update
-    @report = Report.find(params[:id])
-    @report.update_attributes(report_params)
+    @report = Report.find(params[:report]).update_attributes(report_params)
   end
 
 
