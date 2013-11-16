@@ -19,7 +19,6 @@ class ReportsController < ApplicationController
     @report = Report.find(params[:report]).update_attributes(report_params)
   end
 
-
   def report_params
     params.require(:report).permit(:name, :phone, :lat, :long, :status, :description)
   end
