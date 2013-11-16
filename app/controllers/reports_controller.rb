@@ -3,7 +3,8 @@ class ReportsController < ApplicationController
 
   def index
     redirect_to edit_user_registration_path unless current_user.role == 'dispatcher'
-    @reports = Report.all
+    @dispatched_reports = Report.joins(:dispatch).order("created_at desc")
+    @pending_reports = Report.joins("left join dispatches d on d.report_id = reports.id").where("d.id is null").order("created_at desc")
   end
 
   def create

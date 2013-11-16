@@ -1,33 +1,6 @@
-%table.table
-  %thead
-    %tr
-      %th Name
-      %th Phone
-      %th Crisis Info
-      %th Location
-      %th Responder
-      %th Action
-  - if @reports.none?
-    %tbody
-      %tr
-        %td{colspan: 4} No Reports
-  - else
-    %tbody
-      - @reports.each do |report|
-        %tr
-          %th= report.name
-          %td= report.phone
-          %td
-            %dl
-              %dt Age
-              %dd= report.age
-              %dt Gender
-              %dd= report.gender
-              %dt Incident Nature
-              %dd= report.nature
-          %td
-            = simple_form_for(report, remote: true) do |f|
-              %td= f.select :responder_id, Responder.pluck(:id)
-              %td= f.submit("Assign Responder")
 
+%h2 Pending Reports
+= render partial: "report_table", locals: { reports: @pending_reports }
+%h2 Dispatched
+= render partial: "report_table", locals: { reports: @dispatched_reports }
 

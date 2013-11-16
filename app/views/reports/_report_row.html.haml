@@ -1,0 +1,24 @@
+
+%tr
+  %th{title: report.created_at.to_s}= report.created_at.strftime("%I:%M %p")
+  %th= report.name
+  %td= report.phone
+  %td
+    %dl
+      %dt Age
+      %dd= report.age
+      %dt Gender
+      %dd= report.gender
+      %dt Race
+      %dd= report.race
+  %td= report.nature
+  %td
+    %img{src: "http://maps.googleapis.com/maps/api/staticmap?center=#{report.lat},#{report.long}&zoom=11&size=200x200&sensor=false"}
+  %td{class: "report-#{report.id}-dispatch"}
+    - if report.dispatched?
+      = render partial: "dispatches/dispatch", locals: { dispatch: report.dispatch }
+    - else
+      = simple_form_for(Dispatch.new) do |f|
+        = f.hidden_field :report_id, value: report.id
+        %td= f.association :responder, collection: Responder.all, label_method: :name, value_method: :id, label: false
+        %td= f.submit("Assign Responder")

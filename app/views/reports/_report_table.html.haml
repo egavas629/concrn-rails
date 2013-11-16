@@ -1,0 +1,18 @@
+%table.table
+  %thead
+    %tr
+      %th Date
+      %th Name
+      %th Phone
+      %th Patient Description
+      %th Patient Nature
+      %th Location
+      %th Responder
+  - if reports.none?
+    %tbody
+      %tr
+        %td{colspan: 7} No Reports
+  - else
+    %tbody
+      - reports.each do |report|
+        = render partial: "report_row", locals: { report: report}

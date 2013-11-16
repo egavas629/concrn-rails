@@ -1,5 +1,6 @@
 class Report < ActiveRecord::Base
   belongs_to :responder
+  has_one :dispatch
 
   def synopsis
     <<-SMS
@@ -14,5 +15,10 @@ class Report < ActiveRecord::Base
 
   def location
     '265 Dolores Street, San Francisco 94043'
+  end
+
+
+  def dispatched?
+    dispatch.present?
   end
 end
