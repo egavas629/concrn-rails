@@ -13,6 +13,7 @@ def create_reports
 end
 
 def create_accounts
+    User.destroy_all
     User.create!(email: 'dan@example.com', role: 'dispatcher', password: 'password')
 end
 
