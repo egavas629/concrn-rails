@@ -26,21 +26,16 @@
         <div class="navbar-collapse collapse">
           <% if user_signed_in? %>
             <div class='navbar-right'>
-              
               <div class="navbar-text">Logged in as <strong><%= current_user.email %></strong>
-                <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
+                <%= link_to 'Profile', edit_user_registration_path, :class => 'navbar-link' %> |
                 <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
               </div>
             </div>
           <% else %>
             <%= simple_form_for(:user, :url => session_path(:user), :html =>  {:class => "navbar-form navbar-right"}) do |f| %>
-              <div class="form-group">
-                <input type="text" placeholder="Email" class="form-control">
-              </div>
-              <div class="form-group">
-                <input type="password" placeholder="Password" class="form-control">
-              </div>
-              <button type="submit" class="btn btn-success">Sign in</button>
+              <%= f.input :email, placeholder: "email",  label: false %>
+              <%= f.input :password, type: :password, placeholder: "password", label: false %>
+              <%= f.submit "Login", class: "btn btn-success"%>
             <% end %>
           <% end %>
         </div><!--/.navbar-collapse -->
@@ -55,11 +50,8 @@
     <% end %>
       <%= yield %>
       <footer>
-        <p>&copy; Company 2013</p>
+        <p>&copy; Savage Industries (2013 - End of time)</p>
       </footer>
     </div> <!-- /container -->
-
 </body>
 </html>
-
-
