@@ -1,0 +1,24 @@
+%table.table
+  %thead
+    %tr
+      %th Name
+      %th Phone
+      %th Location
+      %th Description
+      %th Action
+  - if @reports.none?
+    %tbody
+      %tr
+        %td{colspan: 4} No Reports
+  - else
+    %tbody
+      - @reports.each do |report|
+        %tr
+          %th= report.name
+          %td= report.phone
+          %td "Location"
+          %td= report.nature
+          %td
+            = simple_form_for report do |f|
+              = f.input :name
+              = f.button :submit
