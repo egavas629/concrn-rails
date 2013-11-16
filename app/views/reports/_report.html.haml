@@ -1,0 +1,7 @@
+%tr
+  = simple_form_for(report, remote: true) do |f|
+    %th= f.input :name, placeholder: report.name
+    %td= f.input :phone, placeholder: report.phone
+    %td= f.input :nature, placeholder: report.nature
+    / %td= f.input :responder, placeholder: report.responder
+    %td= f.button :submit

@@ -37,6 +37,8 @@ GEM
     coffee-script-source (1.6.3)
     erubis (2.7.0)
     execjs (2.0.2)
+    faker (1.1.2)
+      i18n (~> 0.5)
     haml (4.0.3)
       tilt
     haml-rails (0.4)
@@ -114,6 +116,7 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 4.0.0)
+  faker
   haml
   haml-rails
   jbuilder (~> 1.2)

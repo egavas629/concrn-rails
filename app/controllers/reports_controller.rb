@@ -14,11 +14,10 @@ class ReportsController < ApplicationController
 
   def update
     @report = Report.find(params[:id])
-    if @report.update_attributes(report_params)
-      render json: @report
-    else
-      render json: @report
-    end
+    @report.update_attributes(report_params)
+
+
+    @report.attach! unless @report.attached?
   end
 
 
