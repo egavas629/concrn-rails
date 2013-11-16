@@ -1,5 +1,10 @@
 <h2> <%= resource_name.to_s.humanize %>'s Profile</h2>
-<p>You are signed up to receive notifications from our dispatchers</p>
+<% if current_user.role == "dispatcher" %>
+  <a href="<%= reports_path %>" class="btn btn-primary">Report Index</a>
+<% else %>  
+  <p>You are signed up to receive notifications from our dispatchers</p>
+<% end %>
+
 
 <%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
   <%= f.error_notification %>

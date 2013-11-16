@@ -3,6 +3,7 @@
     %tr
       %th Name
       %th Phone
+      %th Crisis Info
       %th Location
       %th Responder
       %th Action
@@ -16,9 +17,17 @@
         %tr
           %th= report.name
           %td= report.phone
-          %td= report.nature
-          = simple_form_for(report, remote: true) do |f|
-            %td= f.select :responder_id, Responder.pluck(:id)
-            %td= f.submit("Assign Responder")
+          %td
+            %dl
+              %dt Age
+              %dd= report.age
+              %dt Gender
+              %dd= report.gender
+              %dt Incident Nature
+              %dd= report.nature
+          %td
+            = simple_form_for(report, remote: true) do |f|
+              %td= f.select :responder_id, Responder.pluck(:id)
+              %td= f.submit("Assign Responder")
 
 
