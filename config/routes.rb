@@ -9,5 +9,4 @@ Streetmom::Application.routes.draw do
   end
 
   root 'pages#home'
-
 end
