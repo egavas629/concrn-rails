@@ -1,0 +1,28 @@
+.jumbotron
+  .container
+    %h1 Save our streets
+    %p Citizens use our app to report incidents, responders sign up here to respond to incidents
+    %p
+      %a.btn.btn-primary.btn-lg{:href => new_user_registration_path, :role => "button"} Learn more »
+
+.container
+  / Example row of columns
+  .row
+    .col-md-4
+      %h2 Reporters
+      %p See someone in trouble, use our app to report whats up. 
+      %p
+        %a.btn.btn-default{:href => "#", :role => "button"} View details »
+    .col-md-4
+      %h2 Responders
+      %p There could be someone in trouble nearby right now! Get text alerts when someone needs help
+      %p
+        %a.btn.btn-default{:href => "#", :role => "button"} View details »
+    .col-md-4
+      %h2 Dispatchers
+      %p Connect those who need help with those who can help
+      %p
+        %a.btn.btn-default{:href => "#", :role => "button"} View details »
+  %hr/
+  %footer
+    %p © Company 2013
