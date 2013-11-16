@@ -1,5 +1,11 @@
 class ReportsController < ApplicationController
   before_filter :authenticate_user!
+  before_filter :ensure_dispatcher
+
+  def ensure_dispatcher
+    redirect_to edit_user_registration_path unless current_user.role == 'dispatcher'
+  end
+
   def index
     @reports = Report.all
   end

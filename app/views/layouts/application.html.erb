@@ -11,12 +11,6 @@
 
 
 
-    <% if notice %>
-        <p class="alert alert-notice"><%= notice %></p>
-    <% end %>
-    <% if alert %>
-          <p class="alert alert-error"><%= alert %></p>
-    <% end %>
 
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
@@ -53,6 +47,12 @@
       </div>
     </div>
     <div class="container main">
+    <% if notice %>
+        <p class="alert alert-success"><%= notice %></p>
+    <% end %>
+    <% if alert %>
+          <p class="alert alert-warning"><%= alert %></p>
+    <% end %>
       <%= yield %>
       <footer>
         <p>&copy; Company 2013</p>

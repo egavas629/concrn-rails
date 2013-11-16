@@ -1,23 +1,20 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<h2> <%= resource_name.to_s.humanize %>'s Profile</h2>
+<p>You are signed up to receive notifications from our dispatchers</p>
 
 <%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
   <%= f.error_notification %>
+  <%= f.input :name, placeholder: "Joe" %>
+  <%= f.input :phone, placeholder: "415-555-2323" %>
+  <%= f.input :email, :required => true, :autofocus => true %>
 
-  <div class="form-inputs">
-    <%= f.input :email, :required => true, :autofocus => true %>
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+    <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
+  <% end %>
 
-    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-      <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
-    <% end %>
-
-    <%= f.input :password, :autocomplete => "off", :hint => "leave it blank if you don't want to change it", :required => false %>
-    <%= f.input :password_confirmation, :required => false %>
-    <%= f.input :current_password, :hint => "we need your current password to confirm your changes", :required => true %>
-  </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, "Update" %>
-  </div>
+  <%= f.input :password, :autocomplete => "off", :hint => "leave it blank if you don't want to change it", :required => false %>
+  <%= f.input :password_confirmation, :required => false %>
+  <%= f.input :current_password, :hint => "we need your current password to confirm your changes", :required => true %>
+  <%= f.button :submit, "Update" %>
 <% end %>
 
 <h3>Cancel my account</h3>

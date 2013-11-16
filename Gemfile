@@ -14,3 +14,4 @@ gem 'simple_form'
 gem 'faker'
 gem 'bootstrap-sass-rails'
 gem 'devise'
+
