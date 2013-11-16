@@ -6,7 +6,7 @@ class Message
     @client = Twilio::REST::Client.new account_sid, auth_token
     @client.account.messages.create(
       from: '(978) 566-1976',
-      to: '6507876770'||opts[:to],
+      to: opts[:to],
       body: body
     )
   end

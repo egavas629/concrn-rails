@@ -10,11 +10,11 @@ class Dispatch < ActiveRecord::Base
   private
 
   def alert_responder
-    Message.send report.responder_synopsis, to: responder
+    Message.send report.responder_synopsis, to: '6502481396'||responder
   end
 
   def alert_reporting_party
-    Message.send report.reporter_synopsis, to: report.phone
+    Message.send report.reporter_synopsis, to: '6507876770'||report.phone
   end
 end
 
