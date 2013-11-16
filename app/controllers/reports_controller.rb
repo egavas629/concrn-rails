@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, only: [:index]
   before_filter :ensure_dispatcher
 
   def ensure_dispatcher
