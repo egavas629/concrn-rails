@@ -16,9 +16,6 @@ class ReportsController < ApplicationController
   def update
     @report = Report.find(params[:id])
     @report.update_attributes(report_params)
-
-
-    @report.attach! unless @report.attached?
   end
 
 
