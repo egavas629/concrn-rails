@@ -2,12 +2,19 @@ class Report < ActiveRecord::Base
   belongs_to :responder
   has_one :dispatch
 
-  def synopsis
+  def responder_synopsis
     <<-SMS
     CRISIS REPORT:
-    #{location};
-    #{name}:
+    #{location}
+    #{name}
     #{phone}
+    SMS
+  end
+
+
+  def reporter_synopsis
+    <<-SMS
+    HELP is ON the WAY!
     SMS
   end
 

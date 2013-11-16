@@ -2,20 +2,19 @@ class Dispatch < ActiveRecord::Base
   belongs_to :report
   belongs_to :responder
 
+  validates_presence_of :report
+
   after_create :alert_responder
+  after_create :alert_reporting_party
 
   private
 
   def alert_responder
-    account_sid = 'ACe64730f8ebb4ad01757190b41167029d'
-    auth_token = 'b23b2285e727481056ad1003ddbc02cf'
+    Message.send report.responder_synopsis, to: responder
+  end
 
-    @client = Twilio::REST::Client.new account_sid, auth_token
-    @client.account.messages.create(
-      :from => '(978) 566-1976',
-      :to => '6507876770'||responder.phone,
-      :body => report.synopsis
-    )
+  def alert_reporting_party
+    Message.send report.reporter_synopsis, to: report.phone
   end
 end
 
