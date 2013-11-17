@@ -1,6 +1,6 @@
 %h2.page-header
   %h1
-    Reported
+    = @report.neighborhood ? "Crisis in #{@report.neighborhood}" : "Reported"
     %small="#{time_ago_in_words(@report.created_at)} ago:"
 
 %ul.list-group
