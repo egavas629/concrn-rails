@@ -1,5 +1,5 @@
-class AddStatusToDispatches < ActiveRecord::Migration
+class RemoveStatusToDispatches < ActiveRecord::Migration
   def change
-    add_column :dispatches, :status, :string, default: "pending"
+    remove_column :dispatches, :status, :string, default: "pending"
   end
 end
