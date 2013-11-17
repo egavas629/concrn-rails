@@ -3,10 +3,7 @@ Streetmom::Application.routes.draw do
 
   resources :reports
   resources :dispatches, only: %w(create)
-
-  resources :users, only: [] do
-    get 'home'
-  end
+  resources :sms
 
   root 'pages#home'
 end

@@ -4,10 +4,10 @@ class Report < ActiveRecord::Base
 
   def self.unassigned
     find_by_sql(%Q{
-      SELECT r.*, count(distinct d.id) as ad_count, count(distinct dr.id) as dr_count FROM reports r 
+      SELECT r.*, count(distinct d.id) as ad_count, count(distinct dr.id) as dr_count FROM reports r
         LEFT JOIN dispatches d on d.report_id=r.id
         LEFT JOIN dispatches dr on dr.report_id=r.id AND dr.status='rejected'
-      WHERE r.id=31 
+      WHERE r.id=31
       GROUP BY r.id
       HAVING count(distinct d.id) = count(distinct dr.id)
       })
@@ -22,7 +22,7 @@ class Report < ActiveRecord::Base
   end
 
   def pending?
-    current_dispatch && current_dispatch.pending? 
+    current_dispatch && current_dispatch.pending?
   end
 
   def self.accepted
@@ -30,7 +30,7 @@ class Report < ActiveRecord::Base
   end
 
   def accepted?
-    current_dispatch && current_dispatch.accepted? 
+    current_dispatch && current_dispatch.accepted?
   end
 
   def self.completed
@@ -38,7 +38,7 @@ class Report < ActiveRecord::Base
   end
 
   def completed?
-    current_dispatch && current_dispatch.completed? 
+    current_dispatch && current_dispatch.completed?
   end
 
   def responder_synopsis
@@ -69,7 +69,7 @@ class Report < ActiveRecord::Base
       "semi-fresh"
     elsif created_at > 9.minutes.ago
       "stale"
-    else 
+    else
       "old"
     end
   end

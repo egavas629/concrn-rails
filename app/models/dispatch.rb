@@ -1,11 +1,14 @@
 class Dispatch < ActiveRecord::Base
   belongs_to :report
   belongs_to :responder
-
   validates_presence_of :report
   validates_presence_of :responder
 
   after_commit :alert_responder
+
+  def self.latest
+    order('created_at desc').first
+  end
 
   def rejected?
     status == "rejected"
@@ -17,6 +20,10 @@ class Dispatch < ActiveRecord::Base
 
   def accepted?
     status == "accepted"
+  end
+
+  def accept!
+    update_attributes!(status: 'accepted')
   end
 
   def completed?
@@ -33,5 +40,3 @@ class Dispatch < ActiveRecord::Base
     Message.send report.reporter_synopsis, to: '6507876770'||report.phone
   end
 end
-
-# Time limit

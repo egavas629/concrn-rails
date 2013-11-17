@@ -1,4 +1,5 @@
 def create_reports
+    p 'Seeding Reports...'
     Report.destroy_all
 
     15.times do
@@ -18,12 +19,18 @@ def create_reports
 end
 
 def create_accounts
+    p 'Seeding Teammates...'
     User.destroy_all
-    User.create!(email: 'dan@example.com', role: 'dispatcher', password: 'password')
+    Dispatcher.create!(name: 'Dan', email: 'dan@example.com', password: 'password')
+    Dispatcher.create!(name: 'Doug', email: 'dbmarks@gmail.com', password: 'password')
+    Responder.create!(name: 'Jacob', email: 'jacobcsavage@gmail.com', password: 'password', phone: '6502481396')
+    Responder.create!(name: 'Gavin', email: 'quavmo@gmail.com', password: 'password', phone: '6507876770')
+
+    create_responders
 end
 
 def create_responders
-    Responder.destroy_all
+    p 'Seeding Responders...'
     15.times do
       Responder.create!(
         name: Faker::Name.name,
@@ -33,8 +40,7 @@ def create_responders
         password_confirmation: "password"
       )
     end
-
 end
+
 create_reports
 create_accounts
-create_responders
