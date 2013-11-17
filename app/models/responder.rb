@@ -55,7 +55,7 @@ class Responder < User
 
   def status
     return "unassigned" if dispatches.none?
-    "last: #{dispatches.last.status}"
+    "last: #{dispatches.order("created_at desc").first.status}"
   end
 
   private

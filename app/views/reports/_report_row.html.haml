@@ -26,13 +26,13 @@
     %a{href: "http://maps.google.com/?ll=#{report.lat},#{report.long}", target: "_blank"}
       %img{src: "http://maps.googleapis.com/maps/api/staticmap?center=#{report.lat},#{report.long}&zoom=17&size=200x200&sensor=false&markers=size:mid%7Ccolor:blue%7C#{report.lat},#{report.long}%7C"}
   %td{class: "report-#{report.id}-dispatch"}
-    - if report.pending?
-      = render partial: "dispatches/dispatch", locals: { dispatch: report.current_dispatch }
-      %dl
-        %dt Dispatched
-        %dd= time_ago_in_words(report.current_dispatch.created_at)
-    - elsif report.unassigned?
+    - if report.unassigned?
       = simple_form_for(Dispatch.new) do |f|
         = f.hidden_field :report_id, value: report.id
         =f.association :responder, collection: Responder.available, label_method: :name, value_method: :id, label: false, prompt: "Responders..."
         =f.submit("Assign Responder")
+    - else
+      = render partial: "dispatches/dispatch", locals: { dispatch: report.current_dispatch }
+      %dl
+        %dt Dispatched
+        %dd= time_ago_in_words(report.current_dispatch.created_at)
