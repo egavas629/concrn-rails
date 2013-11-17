@@ -19,3 +19,5 @@ gem 'quiet_assets'
 gem 'twilio-ruby'
 gem 'pusher'
 gem 'foreman'
+gem 'resque'
+gem 'resque-scheduler', :require => "resque_scheduler"

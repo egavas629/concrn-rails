@@ -21,7 +21,8 @@ ActiveRecord::Schema.define(version: 20131117033306) do
     t.integer  "responder_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "status",       default: "pending"
+    t.string   "status",           default: "pending"
+    t.string   "rejection_reason"
   end
 
   add_index "dispatches", ["report_id"], name: "index_dispatches_on_report_id", using: :btree
