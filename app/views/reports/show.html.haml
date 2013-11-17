@@ -24,7 +24,7 @@
   %li.list-group-item
     %h4.list-group-item-heading Patient
     .list-group-item-text="#{@report.age} #{@report.race} #{@report.gender}"
-    .list-group-item-text="\"#{@report.nature}\""
+    .list-group-item-text=@report.nature ? "\"#{@report.nature}\"" : "<Nature Not Provided>"
 
   %li.list-group-item
     %h4.list-group-item-heading Feedback
