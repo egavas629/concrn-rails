@@ -1,5 +1,5 @@
 .container.main {
-  padding-top: 50px;
+  padding-top: 75px;
 }
 
 tr.freshness-fresh {
@@ -12,4 +12,22 @@ tr.freshness-semi-fresh {
 tr.freshness-semi-stale {
   background-color: #ddd;
 
+}
+.drop-nav {
+  padding-top: 20px;
+}
+.drop-main {
+  padding-top: 75px;
+  .jumbotron {
+    background: url("/assets/hero-large.png") no-repeat;
+    height: 433px;
+    padding-top: 200px;
+    h1 {
+      text-shadow: 2px 2px 0px rgba(255, 255, 255, 1);
+    }
+    .subtitle-copy {
+      width: 450px;
+      text-shadow: 1px 2px 0px rgba(255, 255, 255, 1);
+    }
+  }
 }
