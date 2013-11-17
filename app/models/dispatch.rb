@@ -52,7 +52,7 @@ class Dispatch < ActiveRecord::Base
   end
 
   def thank_reporter
-    Message.send "Thanks for your help.", to: report.phone
+    Message.send "Crisis resolved, thanks for being a streetmom.", to: report.phone
   end
 
   def acknowledge_rejection
@@ -68,6 +68,6 @@ class Dispatch < ActiveRecord::Base
   end
 
   def acknowledge_acceptance
-    Message.send "You have been assigned to the crisis at #{report.address}.", to: report.phone
+    Message.send "You have been assigned to the crisis at #{report.address}.", to: responder.phone
   end
 end
