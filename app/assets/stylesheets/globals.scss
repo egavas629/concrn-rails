@@ -1,3 +1,15 @@
 .container.main {
   padding-top: 50px;
 }
+
+tr.freshness-fresh {
+  background-color: #fbb;
+}
+tr.freshness-semi-fresh {
+  background-color: #ffb;
+
+}
+tr.freshness-semi-stale {
+  background-color: #ddd;
+
+}

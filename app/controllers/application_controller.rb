@@ -9,4 +9,11 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:account_update) << :name
     devise_parameter_sanitizer.for(:account_update) << :phone
   end
+  def after_sign_in_path_for(user)
+    if user.role == "dispatcher"
+      reports_path
+    else
+      edit_user_registration_path
+    end
+  end
 end

@@ -1,5 +1,5 @@
 
-%tr
+%tr{class: "freshness-#{report.freshness}"}
   %th{title: report.created_at.to_s}= report.created_at.strftime("%I:%M %p")
   %th= report.name
   %td= report.phone
@@ -14,6 +14,7 @@
   %td= report.nature
   %td
     %img{src: "http://maps.googleapis.com/maps/api/staticmap?center=#{report.lat},#{report.long}&zoom=11&size=200x200&sensor=false"}
+    = report.address
   %td{class: "report-#{report.id}-dispatch"}
     - if report.dispatched?
       = render partial: "dispatches/dispatch", locals: { dispatch: report.dispatch }

@@ -8,6 +8,7 @@ def create_reports
         phone: Faker::PhoneNumber.cell_phone,
         lat: address.latitude,
         long: address.longitude,
+        address: address.street_address,
         age: "Young Adult",
         gender: "Male",
         race: "Caucasian",
@@ -23,7 +24,7 @@ end
 
 def create_responders
     15.times do
-      Responder.create(
+      Responder.create!(
         name: Faker::Name.name,
         phone: Faker::PhoneNumber.cell_phone,
         email: Faker::Internet.email,
@@ -33,6 +34,6 @@ def create_responders
     end
  
 end
-create_responders
 create_reports
 create_accounts
+create_responders

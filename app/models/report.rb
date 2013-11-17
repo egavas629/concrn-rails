@@ -28,12 +28,21 @@ class Report < ActiveRecord::Base
     SMS
   end
 
-  private
+  def freshness
+    if created_at > 2.minutes.ago
+      "fresh"
+    elsif created_at > 4.minutes.ago
+      "semi-fresh"
+    elsif created_at > 9.minutes.ago
+      "stale"
+    else 
+      "old"
+    end
+  end
 
   def location
     '265 Dolores Street, San Francisco 94043'
   end
-
 
   def dispatched?
     dispatch.present?
