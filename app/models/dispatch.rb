@@ -4,7 +4,7 @@ class Dispatch < ActiveRecord::Base
   validates_presence_of :report
   validates_presence_of :responder
 
-  after_commit :alert_responder
+  after_commit :alert_responder, on: :create
 
   def self.latest
     order('created_at desc').first
