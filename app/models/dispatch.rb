@@ -27,22 +27,32 @@ class Dispatch < ActiveRecord::Base
   end
 
   def accept!
-    acknowledge_acceptance if update_attributes!(status: 'accepted')
+    if update_attributes!(status: 'accepted')
+      acknowledge_acceptance 
+      notify_reporter
+    end
   end
 
   def reject!
+    update_attributes!(status: 'rejected')
     acknowledge_rejection
-    update_attributes!(status: 'pending', responder: nil)
   end
 
-  def finish!
-    thank_responder if update_attributes!(status: 'completed')
+  def complete!
+    if update_attributes!(status: 'completed')
+      thank_responder
+      thank_reporter
+    end
   end
 
   private
 
   def thank_responder
-    Message.send "Thanks for your help. How did it go?", to: responder.phone
+    Message.send "Thanks for your help. You are now available to be dispatched.", to: responder.phone
+  end
+
+  def thank_reporter
+    Message.send "Thanks for your help.", to: report.phone
   end
 
   def acknowledge_rejection
@@ -51,6 +61,10 @@ class Dispatch < ActiveRecord::Base
 
   def alert_responder
     Message.send report.responder_synopsis, to: responder.phone
+  end
+
+  def notify_reporter
+    Message.send report.reporter_synopsis, to: report.phone
   end
 
   def acknowledge_acceptance
