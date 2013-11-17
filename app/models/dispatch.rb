@@ -31,6 +31,7 @@ class Dispatch < ActiveRecord::Base
   end
 
   def reject!
+    acknowledge_rejection
     update_attributes!(status: 'pending', responder: nil)
   end
 
@@ -42,6 +43,10 @@ class Dispatch < ActiveRecord::Base
 
   def thank_responder
     Message.send "Thanks for your help. How did it go?", to: responder.phone
+  end
+
+  def acknowledge_rejection
+    Message.send "We appreciate your timely rejection. Your report is being re-submitted.", to: responder.phone
   end
 
   def alert_responder
