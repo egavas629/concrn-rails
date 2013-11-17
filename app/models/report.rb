@@ -93,6 +93,6 @@ class Report < ActiveRecord::Base
   def accept_feedback(opts={})
     sender = opts[:from]
     additional_feedback = opts[:body]
-    update_attributes(feedback: "#{feedback} | #{sender}: #{additional_feedback}")
+    update_attributes(feedback: "#{feedback} | #{sender.name}: #{additional_feedback}")
   end
 end
