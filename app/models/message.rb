@@ -11,6 +11,7 @@ class Message
 
   def self.receive(body, opts={})
     responder = Responder.where(phone: opts[:from]).first
+    send("#{opts[:from]} (Unknown)") unless responder
     responder.accept_dispatch
   end
 end
