@@ -22,9 +22,13 @@ class Responder < User
 
   def respond(body)
     return latest_dispatch.reject! if latest_dispatch.pending? && body.match(/no/i)
-    return latest_dispatch.complete! if latest_dispatch.accepted? && body.match(/no/i)
+    if latest_dispatch.accepted? && body.match(/no/i)
+      latest_dispatch.complete! 
+      Message.send "Thanks for your help. You are now available to be dispatched.", to: phone
+      give_feedback(body) if latest_dispatch.completed?
+      return
+    end
     return latest_dispatch.accept! unless latest_dispatch.completed?
-    give_feedback(body) if latest_dispatch.completed?
   end
 
   def dispatch_to(report)
