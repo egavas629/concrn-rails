@@ -10,6 +10,7 @@ class Responder < User
         LEFT JOIN dispatches d on d.responder_id=r.id
         LEFT JOIN dispatches dr on dr.responder_id=r.id AND dr.status not in ('pending', 'accepted')
       WHERE r.role = 'responder'
+      AND r.availability = 'availability'
       GROUP BY r.id
       HAVING count(distinct d.id) = count(distinct dr.id)
     })
