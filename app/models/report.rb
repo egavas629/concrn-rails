@@ -43,9 +43,14 @@ class Report < ActiveRecord::Base
   def responder_synopsis
     <<-SMS
     CRISIS REPORT:
-    #{address}
+    Reporter:
     #{name}
     #{phone}
+    Details:
+    #{address}
+    #{race}/#{gender}/#{age}
+    #{setting}
+    #{nature}
     SMS
   end
 
