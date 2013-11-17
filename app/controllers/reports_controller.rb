@@ -21,12 +21,19 @@ class ReportsController < ApplicationController
   end
 
   def create
-    @report = Report.create(report_params)
-    if @report.save
-      Pusher.trigger("reports" , "refresh", {})
-      render json: @report
-    else
-      render json: @report
+    begin
+      @report = Report.create(report_params)
+      if @report.save
+        Pusher.trigger("reports" , "refresh", {})
+        render json: @report
+      else
+        render json: @report
+      end
+    rescue Exception => e
+      Rails.logger.error e.message
+      e.backtrace.each do |b|
+        Rails.logger.error b
+      end
     end
   end
 
