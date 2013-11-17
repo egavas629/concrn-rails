@@ -6,7 +6,7 @@ def create_reports
       address = Faker::Address
       Report.create({
         name: Faker::Name.name,
-        phone: Faker::PhoneNumber.cell_phone,
+        phone: Responder.all.sample.phone,
         lat: 37.920556 + (rand() * (rand() > 0.5 ? -1 : 1)),
         long: 122.416667 + (rand() * (rand() > 0.5 ? -1 : 1)),
         address: address.street_address,
@@ -29,5 +29,5 @@ def create_accounts
     Responder.create!(name: 'Tommy', email: 'vajrapani666@gmail.com', password: 'password', phone: '(209) 559-2459')
 end
 
-create_reports
 create_accounts
+create_reports
