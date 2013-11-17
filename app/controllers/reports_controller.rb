@@ -3,17 +3,12 @@ class ReportsController < ApplicationController
 
   def index
     redirect_to edit_user_registration_path unless current_user.role == 'dispatcher'
-    @dispatched_reports = Report.joins(:dispatch).order("created_at desc")
-    @pending_reports = Report.joins("left join dispatches d on d.report_id = reports.id").where("d.id is null").order("created_at desc")
+    @dispatched_reports = Report.dispatched
+    @pending_reports = Report.pending
   end
 
   def create
-    @report = Report.create(report_params)
-    if @report.save
-      render json: @report
-    else
-      render json: @report
-    end
+    render json: Report.create!(report_params)
   end
 
   def update

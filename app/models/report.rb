@@ -2,6 +2,14 @@ class Report < ActiveRecord::Base
   belongs_to :responder
   has_one :dispatch
 
+  def self.pending
+    joins("left join dispatches d on d.report_id = reports.id").where("d.id is null").order("created_at desc")
+  end
+
+  def self.dispatched
+    joins(:dispatch).order("created_at desc")
+  end
+
   def responder_synopsis
     <<-SMS
     CRISIS REPORT:
@@ -14,7 +22,9 @@ class Report < ActiveRecord::Base
 
   def reporter_synopsis
     <<-SMS
-    HELP is ON the WAY!
+    CRISIS RESPONSE:
+    #{responder.name} is on the way.
+    #{responder.phone}
     SMS
   end
 
