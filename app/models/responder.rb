@@ -21,24 +21,10 @@ class Responder < User
   end
 
   def respond(body)
-    if latest_dispatch.pending?
-      case body
-      when /no/
-        latest_dispatch.reject!
-      else
-        latest_dispatch.accept!
-      end
-    elsif latest_dispatch.accepted?
-      case body
-      when /done/
-        latest_dispatch.finish!
-      else
-        Rails.logger.info body
-      end
-    elsif latest_dispatch.completed?
-      give_feedback(body)
-    end
-
+    return latest_dispatch.reject! if latest_dispatch.pending? && body.match(/no/i)
+    return latest_dispatch.complete! if latest_dispatch.accepted? && body.match(/no/i)
+    return latest_dispatch.accept! unless latest_dispatch.completed?
+    give_feedback(body) if latest_dispatch.completed?
   end
 
   def dispatch_to(report)
