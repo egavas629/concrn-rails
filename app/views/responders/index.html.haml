@@ -1,4 +1,4 @@
-%h1 Responders
+%h2 Responders
 - if @responders.any?
   %table.table
     %thead
@@ -19,6 +19,6 @@
           %td= responder.completed_count
           %td= responder.rejected_count
           %td= responder.availability
-          %td= responder.status 
+          %td= responder.status
 - else
   %p.notice It appears there are no responders
