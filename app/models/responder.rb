@@ -8,7 +8,7 @@ class Responder < User
     find_by_sql(%Q{
       SELECT r.*, count(distinct d.id) as ad_count, count(distinct dr.id) as dr_count FROM users r
         LEFT JOIN dispatches d on d.responder_id=r.id
-        LEFT JOIN dispatches dr on dr.responder_id=r.id AND dr.status!='pending'
+        LEFT JOIN dispatches dr on dr.responder_id=r.id AND dr.status not in ('pending', 'accepted')
       WHERE r.role = 'responder'
       GROUP BY r.id
       HAVING count(distinct d.id) = count(distinct dr.id)
