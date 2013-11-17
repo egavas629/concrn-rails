@@ -55,6 +55,6 @@ class Responder < User
   end
 
   def give_feedback(body)
-    latest_dispatch.report.accept_feedback(from: self, body: body)
+    latest_dispatch.report.accept_feedback(from: self.name, body: body)
   end
 end
