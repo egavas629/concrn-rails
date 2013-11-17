@@ -7,7 +7,6 @@ class Report < ActiveRecord::Base
       SELECT r.*, count(distinct d.id) as ad_count, count(distinct dr.id) as dr_count FROM reports r
         LEFT JOIN dispatches d on d.report_id=r.id
         LEFT JOIN dispatches dr on dr.report_id=r.id AND dr.status='rejected'
-      WHERE r.id=31
       GROUP BY r.id
       HAVING count(distinct d.id) = count(distinct dr.id)
       })
@@ -83,7 +82,7 @@ class Report < ActiveRecord::Base
   end
 
   def status
-    if dispatch.none? || dispatches.all(&:rejected?)
+    if dispatches.none? || dispatches.all(&:rejected?)
       "unassigned"
     else
       dispatch.status
