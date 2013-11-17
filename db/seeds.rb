@@ -23,6 +23,7 @@ def create_accounts
 end
 
 def create_responders
+    Responder.destroy_all
     15.times do
       Responder.create!(
         name: Faker::Name.name,
@@ -32,7 +33,7 @@ def create_responders
         password_confirmation: "password"
       )
     end
- 
+
 end
 create_reports
 create_accounts
