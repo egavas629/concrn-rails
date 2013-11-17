@@ -35,6 +35,10 @@ class ReportsController < ApplicationController
     render json: {success: true}
   end
 
+  def show
+    @report = Report.find(params[:id])
+  end
+
   def report_params
     params.require(:report).permit(:name, :phone, :lat, :long, :status, :nature, :setting, :observations, :age, :gender, :race)
   end

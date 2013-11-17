@@ -1,6 +1,9 @@
 
 %tr{class: "freshness-#{report.freshness}"}
-  %th{title: report.created_at.to_s}= report.created_at.strftime("%I:%M %p")
+  %th{title: report.created_at.to_s}
+    .digits= "#{report.created_at.strftime("%I:%M %p")}"
+    .words= "(#{time_ago_in_words(report.created_at)} ago)"
+    .show_link= link_to("Show Details", report)
   %th= report.name
   %td= report.phone
   %td

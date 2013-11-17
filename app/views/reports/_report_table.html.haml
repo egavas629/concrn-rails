@@ -6,7 +6,7 @@
       %th Phone
       %th Patient Description
       %th Patient Nature
-      %th Location
+      %th Address
       %th Responder
   - if reports.none?
     %tbody
@@ -15,4 +15,4 @@
   - else
     %tbody
       - reports.each do |report|
-        = render partial: "report_row", locals: { report: report}
+        = render "report_row", report: report

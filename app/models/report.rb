@@ -12,28 +12,28 @@ class Report < ActiveRecord::Base
       })
   end
 
-  def unassigned?
-    dispatches.none? || dispatches.all?(&:rejected?)
-  end
-
   def self.pending
     joins(:dispatches).where(dispatches: {status: "pending"}).order("created_at desc")
-  end
-
-  def pending?
-    current_dispatch && current_dispatch.pending?
   end
 
   def self.accepted
     joins(:dispatches).where(dispatches: {status: "accepted"}).order("created_at desc")
   end
 
-  def accepted?
-    current_dispatch && current_dispatch.accepted?
+  def unassigned?
+    dispatches.none? || dispatches.all?(&:rejected?)
   end
 
   def self.completed
     joins(:dispatches).where(dispatches: {status: "completed"}).order("created_at desc")
+  end
+
+  def pending?
+    current_dispatch && current_dispatch.pending?
+  end
+
+  def accepted?
+    current_dispatch && current_dispatch.accepted?
   end
 
   def completed?
@@ -43,7 +43,7 @@ class Report < ActiveRecord::Base
   def responder_synopsis
     <<-SMS
     CRISIS REPORT:
-    #{location}
+    #{address}
     #{name}
     #{phone}
     SMS
@@ -71,10 +71,6 @@ class Report < ActiveRecord::Base
     else
       "old"
     end
-  end
-
-  def location
-    '265 Dolores Street, San Francisco 94043'
   end
 
   def dispatched?
