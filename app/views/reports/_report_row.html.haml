@@ -11,7 +11,15 @@
       %dd= report.gender
       %dt Race
       %dd= report.race
-  %td= report.nature
+  %td
+    = report.nature
+    %dl
+      - if report.setting?
+        %dt Setting
+        %dd= report.setting
+      - if report.observations?
+        %dt Observations
+        %dd= report.observations
   %td
     = report.address
     %br/
