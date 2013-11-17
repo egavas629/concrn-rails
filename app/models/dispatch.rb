@@ -27,7 +27,7 @@ class Dispatch < ActiveRecord::Base
   end
 
   def accept!
-    alert_reporting_party if update_attributes!(status: 'accepted')
+    acknowledge_acceptance if update_attributes!(status: 'accepted')
   end
 
   def reject!
@@ -53,7 +53,7 @@ class Dispatch < ActiveRecord::Base
     Message.send report.responder_synopsis, to: responder.phone
   end
 
-  def alert_reporting_party
-    Message.send report.reporter_synopsis, to: report.phone
+  def acknowledge_acceptance
+    Message.send "You have been assigned to the crisis at #{report.address}.", to: report.phone
   end
 end
