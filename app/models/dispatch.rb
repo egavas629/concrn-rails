@@ -22,15 +22,27 @@ class Dispatch < ActiveRecord::Base
     status == "accepted"
   end
 
-  def accept!
-    alert_reporting_party if update_attributes!(status: 'accepted')
-  end
-
   def completed?
     status == "completed"
   end
 
+  def accept!
+    alert_reporting_party if update_attributes!(status: 'accepted')
+  end
+
+  def reject!
+    update_attributes!(status: 'pending', responder: nil)
+  end
+
+  def finish!
+    thank_responder if update_attributes!(status: 'completed')
+  end
+
   private
+
+  def thank_responder
+    Message.send "Thanks for your help. How did it go?", to: responder.phone
+  end
 
   def alert_responder
     Message.send report.responder_synopsis, to: responder.phone

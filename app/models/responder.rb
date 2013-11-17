@@ -19,8 +19,25 @@ class Responder < User
     write_attribute :phone, NumberSanitizer.sanitize(new_phone)
   end
 
-  def accept_dispatch
-    latest_dispatch.accept!
+  def respond(body)
+    if latest_dispatch.pending?
+      case body
+      when /no/
+        latest_dispatch.reject!
+      else
+        latest_dispatch.accept!
+      end
+    elsif latest_dispatch.accepted?
+      case body
+      when /done/
+        latest_dispatch.finish!
+      else
+        Rails.logger.info body
+      end
+    elsif latest_dispatch.completed?
+      Rails.logger.info body
+    end
+
   end
 
   def dispatch_to(report)
@@ -43,6 +60,6 @@ class Responder < User
   private
 
   def latest_dispatch
-    Dispatch.where(responder_id: id).latest
+    dispatches.latest
   end
 end
