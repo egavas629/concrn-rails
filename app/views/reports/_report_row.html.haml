@@ -24,5 +24,5 @@
     - elsif report.unassigned?
       = simple_form_for(Dispatch.new) do |f|
         = f.hidden_field :report_id, value: report.id
-        =f.association :responder, collection: Responder.available, label_method: :name, value_method: :id, label: false
+        =f.association :responder, collection: Responder.available, label_method: :name, value_method: :id, label: false, prompt: "Responders..."
         =f.submit("Assign Responder")
