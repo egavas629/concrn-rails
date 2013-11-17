@@ -23,7 +23,7 @@ class Dispatch < ActiveRecord::Base
   end
 
   def accept!
-    update_attributes!(status: 'accepted')
+    alert_reporting_party if update_attributes!(status: 'accepted')
   end
 
   def completed?
