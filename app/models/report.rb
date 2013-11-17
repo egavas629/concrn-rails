@@ -47,4 +47,16 @@ class Report < ActiveRecord::Base
   def dispatched?
     dispatch.present?
   end
+
+  def status
+    if dispatch.none?
+      "unassigned"
+    elsif dispatch.status == "pending"
+      "dispatch_pending"
+    elsif dispatch.status == "accepted"
+      "dispatch_accepted"
+    elsif dispatch.status == "completed"
+      "dispatch_completed"
+    end
+  end
 end
