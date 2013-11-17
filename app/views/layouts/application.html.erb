@@ -7,6 +7,8 @@
 
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 <body>
 
@@ -27,6 +29,14 @@
         </div>
         <div class="navbar-collapse collapse">
           <% if user_signed_in? %>
+            <% if current_user.role == 'dispatcher' %>
+              <ul class="nav navbar-nav">
+                <li <%= "class=active" if params[:action] == 'index'%> ><a href="<%= reports_path %>">Dispatch</a></li>
+                <li <%= "class=active" if params[:action] == 'active'%> ><a href="<%= active_reports_path%>">Active</a></li>
+                <li <%= "class=active" if params[:controller] == 'responders'%> ><a href="<%= responders_path %>">Responders</a></li>
+                <li <%= "class=active" if params[:action] == 'history'%> ><a href="<%= history_reports_path %>">History</a></li>
+              </ul>
+            <% end %>
             <div class='navbar-right'>
               <div class="navbar-text">Logged in as <strong><%= current_user.email %></strong>
                 <%= link_to 'Profile', edit_user_registration_path, :class => 'navbar-link' %> |

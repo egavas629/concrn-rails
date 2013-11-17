@@ -1,10 +1,23 @@
 class ReportsController < ApplicationController
   before_filter :authenticate_user!, only: [:index]
+  before_filter :ensure_dispatcher, only: %w(index active history)
+
+  def ensure_dispatcher
+    redirect_to edit_user_registration_path unless current_user.role == 'dispatcher'
+  end
 
   def index
-    redirect_to edit_user_registration_path unless current_user.role == 'dispatcher'
     @unassigned_reports = Report.unassigned
     @pending_reports = Report.pending
+  end
+
+  def active
+    redirect_to edit_user_registration_path unless current_user.role == 'dispatcher'
+    @reports = Report.accepted
+  end
+
+  def history
+    @reports = Report.completed
   end
 
   def create

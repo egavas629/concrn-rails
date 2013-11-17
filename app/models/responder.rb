@@ -27,6 +27,19 @@ class Responder < User
     Dispatch.create!(report: report, responder: self)
   end
 
+  def completed_count
+    dispatches.where(status: "completed").count
+  end
+
+  def rejected_count
+    dispatches.where(status: "rejected").count
+  end
+
+  def status
+    return "unassigned" if dispatches.none?
+    "last: #{dispatches.last.status}"
+  end
+
   private
 
   def latest_dispatch

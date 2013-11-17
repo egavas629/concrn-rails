@@ -1,0 +1,22 @@
+%h1 Responders
+- if @responders.any?
+  %table.table
+    %thead
+      %tr
+        %th Name
+        %th Phone
+        %th Email
+        %th Completed
+        %th Rejected
+        %th Current Status
+    %tbody
+      - @responders.each do |responder|
+        %tr
+          %th= responder.name
+          %td= responder.phone
+          %td= link_to responder.email, "mailto:#{responder.email}"
+          %td= responder.completed_count
+          %td= responder.rejected_count
+          %td= responder.status 
+- else
+  %p.notice It appears there are no responders
