@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131117044042) do
+ActiveRecord::Schema.define(version: 20131117054938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20131117044042) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "rejection_reason"
-    t.string   "status"
+    t.string   "status",           default: "pending"
   end
 
   add_index "dispatches", ["report_id"], name: "index_dispatches_on_report_id", using: :btree
