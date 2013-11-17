@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131117184744) do
+ActiveRecord::Schema.define(version: 20131117195004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,8 +33,8 @@ ActiveRecord::Schema.define(version: 20131117184744) do
     t.datetime "updated_at"
     t.string   "name"
     t.string   "phone"
-    t.decimal  "long",         precision: 10, scale: 6
-    t.decimal  "lat",          precision: 10, scale: 6
+    t.decimal  "long",               precision: 10, scale: 6
+    t.decimal  "lat",                precision: 10, scale: 6
     t.string   "status"
     t.text     "nature"
     t.integer  "responder_id"
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(version: 20131117184744) do
     t.string   "address"
     t.string   "setting"
     t.string   "observations"
+    t.text     "responder_feedback"
   end
 
   add_index "reports", ["responder_id"], name: "index_reports_on_responder_id", using: :btree

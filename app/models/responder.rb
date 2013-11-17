@@ -36,7 +36,7 @@ class Responder < User
         Rails.logger.info body
       end
     elsif latest_dispatch.completed?
-      Rails.logger.info body
+      give_feedback(body)
     end
 
   end
@@ -62,5 +62,9 @@ class Responder < User
 
   def latest_dispatch
     dispatches.latest
+  end
+
+  def give_feedback(body)
+    latest_dispatch.report.accept_feedback(from: self, body: body)
   end
 end

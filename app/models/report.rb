@@ -88,4 +88,11 @@ class Report < ActiveRecord::Base
       dispatch.status
     end
   end
+
+  def accept_feedback(opts={})
+    sender = opts[:from]
+    additional_feedback = opts[:body]
+
+    update_attributes(feedback: feedback + " | #{sender}: #{additional_feedback}")
+  end
 end
