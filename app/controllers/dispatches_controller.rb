@@ -1,8 +1,7 @@
 class DispatchesController < ApplicationController
   def create
-    @dispatch = Dispatch.new(dispatch_params)
-    if @dispatch.save
-      flash[:notice] = "#{@dispatch.responder.name} has been dispatched"
+    if dispatch = Dispatch.create!(dispatch_params)
+      flash[:notice] = "#{dispatch.responder.name} has been dispatched"
       redirect_to reports_path
     end
   end

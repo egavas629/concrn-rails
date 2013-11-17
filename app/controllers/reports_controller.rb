@@ -3,7 +3,7 @@ class ReportsController < ApplicationController
 
   def index
     redirect_to edit_user_registration_path unless current_user.role == 'dispatcher'
-    @dispatched_reports = Report.dispatched
+    @unassigned_reports = Report.unassigned
     @pending_reports = Report.pending
   end
 

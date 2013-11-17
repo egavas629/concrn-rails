@@ -5,8 +5,23 @@ class Dispatch < ActiveRecord::Base
   validates_presence_of :report
   validates_presence_of :responder
 
-  after_create :alert_responder
-  after_create :alert_reporting_party
+  after_commit :alert_responder
+
+  def rejected?
+    status == "rejected"
+  end
+
+  def pending?
+    status == "pending"
+  end
+
+  def accepted?
+    status == "accepted"
+  end
+
+  def completed?
+    status == "completed"
+  end
 
   private
 
