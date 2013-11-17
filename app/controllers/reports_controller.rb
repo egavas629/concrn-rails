@@ -32,6 +32,7 @@ class ReportsController < ApplicationController
 
   def update
     @report = Report.find(params[:id]).update_attributes(report_params)
+    Pusher.trigger("reports" , "refresh", @report.attributes)
     render json: {success: true}
   end
 

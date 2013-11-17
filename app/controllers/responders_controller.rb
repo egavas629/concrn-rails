@@ -14,6 +14,7 @@ class RespondersController < ApplicationController
 
   def update
     @responder = Responder.where(phone: NumberSanitizer.sanitize(params[:id])).first
+    Pusher.trigger("reports" , "refresh", {})
     @responder.update_attributes(responder_params)
     render json: @responder
   end
