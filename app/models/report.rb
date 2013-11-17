@@ -61,8 +61,8 @@ class Report < ActiveRecord::Base
   def reporter_synopsis
     <<-SMS
     CRISIS RESPONSE:
-    #{responder.name} is on the way.
-    #{responder.phone}
+    #{current_dispatch.responder.name} is on the way.
+    #{current_dispatch.responder.phone}
     SMS
   end
 
