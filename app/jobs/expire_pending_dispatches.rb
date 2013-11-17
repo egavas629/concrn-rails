@@ -8,6 +8,6 @@ class ExpirePendingDispatches
     stales.each do |dispatch|
       dispatch.update_attributes(status: "rejected", rejection_reason: "timeout")
     end
-    Pusher.trigger("reports" , "report_created", {}) if stales.any?
+    Pusher.trigger("reports" , "refresh", {}) if stales.any?
   end
 end

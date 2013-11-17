@@ -23,7 +23,7 @@ class ReportsController < ApplicationController
   def create
     @report = Report.create(report_params)
     if @report.save
-      Pusher.trigger("reports" , "report_created", @report.attributes)
+      Pusher.trigger("reports" , "refresh", @report.attributes)
       render json: @report
     else
       render json: @report
