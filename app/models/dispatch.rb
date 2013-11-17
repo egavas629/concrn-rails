@@ -3,6 +3,7 @@ class Dispatch < ActiveRecord::Base
   belongs_to :responder
 
   validates_presence_of :report
+  validates_presence_of :responder
 
   after_create :alert_responder
   after_create :alert_reporting_party
