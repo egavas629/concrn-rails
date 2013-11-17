@@ -28,12 +28,14 @@ class Dispatch < ActiveRecord::Base
 
   def accept!
     if update_attributes!(status: 'accepted')
+      update_dispatch
       acknowledge_acceptance 
       notify_reporter
     end
   end
 
   def reject!
+    update_dispatch
     update_attributes!(status: 'rejected')
     acknowledge_rejection
   end
@@ -65,6 +67,10 @@ class Dispatch < ActiveRecord::Base
 
   def notify_reporter
     Message.send report.reporter_synopsis, to: report.phone
+  end
+
+  def update_dispatch
+    Pusher.trigger("reports" , "refresh", report)
   end
 
   def acknowledge_acceptance
