@@ -8,7 +8,12 @@ Streetmom::Application.routes.draw do
     end
   end
 
-  resources :responders, only: %w(index)
+  resources :responders, only: %w(index update) do
+    collection do
+      get 'by_phone'
+    end
+  end
+
   resources :dispatches, only: %w(create)
   resources :sms
 
