@@ -31,10 +31,11 @@ class ReportsController < ApplicationController
   end
 
   def update
-    @report = Report.find(params[:report]).update_attributes(report_params)
+    @report = Report.find(params[:id]).update_attributes(report_params)
+    render json: {success: true}
   end
 
   def report_params
-    params.require(:report).permit(:name, :phone, :lat, :long, :status, :description)
+    params.require(:report).permit(:name, :phone, :lat, :long, :status, :nature, :setting, :observations, :age, :gender, :race)
   end
 end
