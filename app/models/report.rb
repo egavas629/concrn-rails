@@ -30,7 +30,12 @@ class Report < ActiveRecord::Base
   end
 
   def self.completed
-    joins(:dispatches).where(dispatches: {status: "completed"}).order("created_at desc")
+    find_by_sql(%Q{
+      SELECT r.* FROM reports r
+        LEFT JOIN dispatches d on d.report_id=r.id
+      WHERE r.status = 'completed' or d.status = 'completed'
+      ORDER BY r.created_at desc
+    })
   end
 
   def pending?
