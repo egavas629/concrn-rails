@@ -38,7 +38,7 @@
       %dl
         %dt Dispatched
         %dd= time_ago_in_words(report.current_dispatch.created_at)
-    - if report.status == "unassigned"
+    - if params[:action] == "index"
       = form_tag(historify_report_path(id: report.id), :method => :put) do 
         = submit_tag("Move to history")
     - if !report.deleted?
