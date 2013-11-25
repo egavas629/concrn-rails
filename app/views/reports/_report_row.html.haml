@@ -39,3 +39,11 @@
       %dl
         %dt Dispatched
         %dd= time_ago_in_words(report.current_dispatch.created_at)
+    - if report.status == "pending"
+      = form_tag(historify_report_path(id: report.id), :method => :put) do 
+        = submit_tag("Move to history")
+    - if report.status != "deleted"
+      = form_for(report, :method => :delete, :remote => true) do |f|
+        = f.submit("Delete")
+      
+

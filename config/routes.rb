@@ -5,6 +5,11 @@ Streetmom::Application.routes.draw do
     collection do
       get 'active'
       get 'history'
+      get 'deleted'
+    end
+
+    member do
+      put 'historify'
     end
   end
 

@@ -20,6 +20,10 @@ class ReportsController < ApplicationController
     @reports = Report.completed
   end
 
+  def deleted
+    @reports = Report.deleted
+  end
+
   def create
     begin
       @report = Report.create(report_params)
@@ -37,11 +41,24 @@ class ReportsController < ApplicationController
     end
   end
 
+  def destroy
+    @report = Report.find(params[:id])
+    @report.status = "deleted"
+    @report.destroy
+    redirect_to action: 'index'
+  end
+
   def update
     @report = Report.find(params[:id]).update_attributes(report_params)
     Pusher.trigger("reports" , "refresh", {})
     render json: {success: true}
   end
+
+  def historify
+    @report = Report.find(params[:id]).update_attributes(status: "completed")
+    redirect_to action: 'index'
+  end
+
 
   def show
     @report = Report.find(params[:id])
