@@ -95,6 +95,10 @@ class Report < ActiveRecord::Base
     end
   end
 
+  def deleted?
+    attributes["status"] == "deleted"
+  end
+
   def accept_feedback(opts={})
     sender = opts[:from]
     additional_feedback = opts[:body]
