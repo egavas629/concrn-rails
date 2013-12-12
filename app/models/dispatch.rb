@@ -54,7 +54,7 @@ class Dispatch < ActiveRecord::Base
   end
 
   def thank_reporter
-    Message.send "Crisis resolved, thanks for being a streetmom.", to: report.phone
+    Message.send "Crisis resolved, thanks for being concrned!", to: report.phone
   end
 
   def acknowledge_rejection
