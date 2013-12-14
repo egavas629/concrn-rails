@@ -29,7 +29,7 @@ class Dispatch < ActiveRecord::Base
   def accept!
     if update_attributes!(status: 'accepted')
       update_dispatch
-      acknowledge_acceptance 
+      acknowledge_acceptance
       notify_reporter
     end
   end
