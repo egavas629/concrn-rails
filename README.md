@@ -1,4 +1,0 @@
-streetmom
-=========
-
-Highground Hackathon

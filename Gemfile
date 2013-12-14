@@ -21,3 +21,8 @@ gem 'pusher'
 gem 'foreman'
 gem 'resque'
 gem 'resque-scheduler', :require => "resque_scheduler"
+
+
+group :test do
+  gem 'rspec-rails'
+end
