@@ -2,6 +2,12 @@ class Report < ActiveRecord::Base
   belongs_to :responder
   has_many :dispatches
 
+  after_commit :tell_jacob
+
+  def tell_jacob
+    Message.send responder_synopsis, to: '6502481396'
+  end
+
   def self.unassigned
     find_by_sql(%Q{
       SELECT r.*, count(distinct d.id) as ad_count, count(distinct dr.id) as dr_count FROM reports r
