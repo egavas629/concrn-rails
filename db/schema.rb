@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131125040731) do
+ActiveRecord::Schema.define(version: 20131218042823) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,14 @@ ActiveRecord::Schema.define(version: 20131125040731) do
   add_index "dispatches", ["report_id"], name: "index_dispatches_on_report_id", using: :btree
   add_index "dispatches", ["responder_id"], name: "index_dispatches_on_responder_id", using: :btree
 
+  create_table "logs", force: true do |t|
+    t.text     "body"
+    t.integer  "author_id"
+    t.integer  "report_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "reports", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -35,7 +43,7 @@ ActiveRecord::Schema.define(version: 20131125040731) do
     t.string   "phone"
     t.decimal  "long",         precision: 10, scale: 6
     t.decimal  "lat",          precision: 10, scale: 6
-    t.string   "status",                                default: "t"
+    t.string   "status",                                default: "pending"
     t.text     "nature"
     t.integer  "responder_id"
     t.string   "age"

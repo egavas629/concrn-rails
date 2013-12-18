@@ -12,12 +12,13 @@ describe Report do
     let(:responder) { create :responder }
     let(:report) { create :report }
 
-    it 'returns true until a responder is dispatched to the report' do
+    xit 'returns true until a responder is dispatched to the report' do
       ->{
-          responder.dispatch_to report
-        }.should change(report, :unassigned?).from(true).to(false)
+        responder.dispatch_to report
+      }.should change(report, :unassigned?).from(true).to(false)
     end
   end
+
   describe '#pending?'
   describe '#accepted?'
   describe '#completed?'
@@ -28,5 +29,15 @@ describe Report do
   describe '#reporter_synopsis'
   describe '#freshness'
   describe '#status'
-  describe '#accept_feedback(opts={})'
+
+  describe '#accept_feedback' do
+    let(:report) { create :report }
+    let(:jacob) { create :responder, :jacob }
+
+    it 'creates a new log' do
+      ->{
+        report.accept_feedback from: jacob, body: 'You done good'
+      }.should change { report.logs.count }.by(1)
+    end
+  end
 end

@@ -3,30 +3,33 @@
     = @report.neighborhood ? "Crisis in #{@report.neighborhood}" : "Reported"
     %small="#{time_ago_in_words(@report.created_at)} ago:"
 
-%ul.list-group
-  %li.list-group-item
-    .list-group-item-text.pull-right.btn=link_to "Move to History", report_path(@report, {report: {status: 'closed'}}), method: 'PUT'
-    %h4.list-group-item-heading Status
-    .list-group-item-text=@report.status
+.row
+  %ul.list-group.col-md-4
+    %li.list-group-item
+      .list-group-item-text.pull-right.btn=link_to "Move to History", report_path(@report, {report: {status: 'closed'}}), method: 'PUT'
+      %h4.list-group-item-heading Status
+      .list-group-item-text=@report.status
 
-  %li.list-group-item
-    %h4.list-group-item-heading Reported at
-    .list-group-item-text=@report.created_at
+    %li.list-group-item
+      %h4.list-group-item-heading Reported at
+      .list-group-item-text=@report.created_at
 
-  %li.list-group-item
-    %h4.list-group-item-heading Reporting Party
-    .list-group-item-text=@report.name
-    .list-group-item-text=@report.phone
+    %li.list-group-item
+      %h4.list-group-item-heading Reporting Party
+      .list-group-item-text=@report.name
+      .list-group-item-text=@report.phone
 
-  %li.list-group-item
-    %h4.list-group-item-heading Address
-    .list-group-item-text=@report.address
+    %li.list-group-item
+      %h4.list-group-item-heading Address
+      .list-group-item-text=@report.address
 
-  %li.list-group-item
-    %h4.list-group-item-heading Patient
-    .list-group-item-text="#{@report.age} #{@report.race} #{@report.gender}"
-    .list-group-item-text=@report.nature ? "\"#{@report.nature}\"" : "<Nature Not Provided>"
+    %li.list-group-item
+      %h4.list-group-item-heading Patient
+      .list-group-item-text="#{@report.age} #{@report.race} #{@report.gender}"
+      .list-group-item-text=@report.nature ? "\"#{@report.nature}\"" : "<Nature Not Provided>"
 
-  %li.list-group-item
-    %h4.list-group-item-heading Feedback
-    .list-group-item-text=@report.feedback || "No Feedback, Yet"
+  .col-md-8
+    %li.list-group-item
+      %h4.list-group-item-heading Feedback
+      - @report.logs.each do |log|
+        .list-group-item-text="#{log.author.name}: #{log.body}"

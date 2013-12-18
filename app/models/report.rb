@@ -1,6 +1,7 @@
 class Report < ActiveRecord::Base
   belongs_to :responder
   has_many :dispatches
+  has_many :logs
 
   after_commit :tell_jacob
 
@@ -13,7 +14,7 @@ class Report < ActiveRecord::Base
       SELECT r.*, count(distinct d.id) as ad_count, count(distinct dr.id) as dr_count FROM reports r
         LEFT JOIN dispatches d on d.report_id=r.id
         LEFT JOIN dispatches dr on dr.report_id=r.id AND dr.status='rejected'
-      WHERE r.status = 'unassigned'
+      WHERE r.status = 'pending'
       GROUP BY r.id
       HAVING count(distinct d.id) = count(distinct dr.id)
       })
@@ -36,7 +37,12 @@ class Report < ActiveRecord::Base
   end
 
   def self.completed
-    joins(:dispatches).where(dispatches: {status: "completed"}).order("created_at desc")
+    find_by_sql(%Q{
+      SELECT r.* FROM reports r
+        LEFT JOIN dispatches d on d.report_id=r.id
+      WHERE r.status = 'completed' or d.status = 'completed'
+      ORDER BY r.created_at desc
+    })
   end
 
   def pending?
@@ -98,9 +104,11 @@ class Report < ActiveRecord::Base
     valid_dispatch.present? ? valid_dispatch.status : "unassigned"
   end
 
+  def deleted?
+    attributes["status"] == "deleted"
+  end
+
   def accept_feedback(opts={})
-    sender = opts[:from]
-    additional_feedback = opts[:body]
-    update_attributes(feedback: "#{feedback} | #{sender.name}: #{additional_feedback}")
+    logs.create! author: opts[:from], body: opts[:body]
   end
 end
