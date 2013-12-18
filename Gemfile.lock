@@ -49,6 +49,11 @@ GEM
     dotenv (0.9.0)
     erubis (2.7.0)
     execjs (2.0.2)
+    factory_girl (4.3.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.3.0)
+      factory_girl (~> 4.3.0)
+      railties (>= 3.0.0)
     faker (1.1.2)
       i18n (~> 0.5)
     foreman (0.63.0)
@@ -185,6 +190,7 @@ DEPENDENCIES
   bootstrap-sass-rails
   coffee-rails (~> 4.0.0)
   devise
+  factory_girl_rails
   faker
   foreman
   haml
@@ -197,6 +203,7 @@ DEPENDENCIES
   rails (= 4.0.0)
   resque
   resque-scheduler
+  rspec-mocks
   rspec-rails
   sass-rails (~> 4.0.0)
   simple_form

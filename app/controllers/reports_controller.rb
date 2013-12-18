@@ -49,9 +49,9 @@ class ReportsController < ApplicationController
   end
 
   def update
-    @report = Report.find(params[:id]).update_attributes(report_params)
+    @report = Report.find(params[:id])
+    @report.update_attributes!(report_params)
     Pusher.trigger("reports" , "refresh", {})
-    render json: {success: true}
   end
 
   def historify
@@ -65,7 +65,9 @@ class ReportsController < ApplicationController
   end
 
   def report_params
-    params.require(:report).permit(:name, :phone, :lat, :long, :status, :nature, 
-      :setting, :observations, :age, :gender, :race, :address, :neighborhood)
+    report_attributes = [:name, :phone, :lat, :long, :status, :nature,
+      :setting, :observations, :age, :gender, :race, :address, :neighborhood]
+
+    params.require(:report).permit report_attributes
   end
 end

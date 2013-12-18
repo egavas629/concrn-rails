@@ -94,11 +94,8 @@ class Report < ActiveRecord::Base
   end
 
   def status
-    if dispatches.none? || dispatches.all(&:rejected?)
-      "unassigned"
-    else
-      dispatch.status
-    end
+    valid_dispatch = dispatches.not_rejected.latest
+    valid_dispatch.present? ? valid_dispatch.status : "unassigned"
   end
 
   def accept_feedback(opts={})

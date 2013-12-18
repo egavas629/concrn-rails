@@ -6,6 +6,10 @@ class Dispatch < ActiveRecord::Base
 
   after_commit :alert_responder, on: :create
 
+  def self.not_rejected
+    where.not(status: 'rejected')
+  end
+
   def self.latest
     order('created_at desc').first
   end
@@ -45,6 +49,10 @@ class Dispatch < ActiveRecord::Base
       thank_responder
       thank_reporter
     end
+  end
+
+  def close!
+    update_attributes!(status: 'closed')
   end
 
   private

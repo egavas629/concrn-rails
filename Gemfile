@@ -12,10 +12,8 @@ gem 'jbuilder', '~> 1.2'
 gem 'haml-rails'
 gem 'haml'
 gem 'simple_form'
-gem 'faker'
 gem 'bootstrap-sass-rails'
 gem 'devise'
-gem 'quiet_assets'
 gem 'twilio-ruby'
 gem 'pusher'
 gem 'foreman'
@@ -23,6 +21,11 @@ gem 'resque'
 gem 'resque-scheduler', :require => "resque_scheduler"
 
 
-group :test do
+
+group :development, :test do
+  gem 'quiet_assets'
+  gem 'faker'
   gem 'rspec-rails'
+  gem 'factory_girl_rails'
+  gem 'rspec-mocks'
 end
