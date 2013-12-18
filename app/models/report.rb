@@ -3,7 +3,7 @@ class Report < ActiveRecord::Base
   has_many :dispatches
   has_many :logs
 
-  after_commit :tell_jacob
+  # after_commit :tell_jacob
 
   def tell_jacob
     Message.send responder_synopsis, to: '6502481396'
