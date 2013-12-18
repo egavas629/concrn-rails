@@ -44,8 +44,8 @@ class ReportsController < ApplicationController
   def destroy
     @report = Report.find(params[:id])
     @report.status = "deleted"
-    @report.destroy
-    redirect_to action: 'index'
+    @report.save
+    redirect_to action: 'history'
   end
 
   def update

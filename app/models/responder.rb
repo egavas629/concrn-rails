@@ -16,6 +16,10 @@ class Responder < User
     })
   end
 
+  def make_available!
+    update_attributes(availability: 'available')
+  end
+
   def phone=(new_phone)
     write_attribute :phone, NumberSanitizer.sanitize(new_phone)
   end
@@ -49,7 +53,9 @@ class Responder < User
 
   def status
     return "unassigned" if dispatches.none?
-    "last: #{dispatches.order("created_at desc").first.status}"
+
+    last_dispatch = dispatches.order("created_at desc").first
+    "last: #{last_dispatch.status}"
   end
 
   private

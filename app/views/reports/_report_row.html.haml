@@ -1,4 +1,3 @@
-
 %tr{class: "freshness-#{report.freshness}"}
   %th{title: report.created_at.to_s}
     .digits= "#{report.created_at.strftime("%I:%M %p")}"
@@ -39,11 +38,9 @@
       %dl
         %dt Dispatched
         %dd= time_ago_in_words(report.current_dispatch.created_at)
-    - if report.status == "pending"
+    - if params[:action] == "index"
       = form_tag(historify_report_path(id: report.id), :method => :put) do 
         = submit_tag("Move to history")
-    - if report.status != "deleted"
-      = form_for(report, :method => :delete, :remote => true) do |f|
+    - if !report.deleted?
+      = form_for(report, :method => :delete) do |f|
         = f.submit("Delete")
-      
-
