@@ -10,14 +10,14 @@ class Report < ActiveRecord::Base
   end
 
   def self.unassigned
-    find_by_sql(%Q{
+    find_by_sql(<<-SQL)
       SELECT r.*, count(distinct d.id) as ad_count, count(distinct dr.id) as dr_count FROM reports r
         LEFT JOIN dispatches d on d.report_id=r.id
         LEFT JOIN dispatches dr on dr.report_id=r.id AND dr.status='rejected'
       WHERE r.status = 'pending'
       GROUP BY r.id
       HAVING count(distinct d.id) = count(distinct dr.id)
-      })
+    SQL
   end
 
   def self.pending

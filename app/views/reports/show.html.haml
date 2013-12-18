@@ -30,6 +30,9 @@
 
   .col-md-8
     %li.list-group-item
-      %h4.list-group-item-heading Feedback
+      %h4.list-group-item-heading Transcript
       - @report.logs.each do |log|
-        .list-group-item-text="#{log.author.name}: #{log.body}"
+        .row
+          .col-md-1= log.created_at.strftime('%H:%M')
+          .col-md-2= log.author.name
+          .col-md-9= log.body
