@@ -1,3 +1,5 @@
+raise 'Do NOT seed this Database!' unless Rails.env.development?
+
 def create_reports
     p 'Seeding Reports...'
     Report.destroy_all
@@ -22,7 +24,7 @@ def create_accounts
     p 'Seeding Teammates...'
     User.destroy_all
     Dispatcher.create!(name: 'Dan', email: 'dan@example.com', password: 'password')
-    Dispatcher.create!(name: 'Doug', email: 'dbmarks@gmail.com', password: 'password')
+    Dispatcher.create!(name: 'Doug', email: 'doug@concrn.com', password: 'password')
 
     Responder.create!(name: 'Jacob', email: 'jacobcsavage@gmail.com', password: 'password', phone: '6502481396')
     Responder.create!(name: 'Gavin', email: 'quavmo@gmail.com', password: 'password', phone: '6507876770')
