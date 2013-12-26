@@ -33,13 +33,16 @@
   %ul.list.group.col-md-8
     %li.list-group-item
       %h4.list-group-item-heading Transcript
-      - @report.logs.each do |log|
-        .row.log-entry
+      - @report.logs.each_with_index do |log, i|
+        %div{class: "row log-entry#{' dark' if i.odd?}"}
           .col-md-1= log.created_at.strftime('%H:%M')
-          .col-md-2= log.author.name
-          .col-md-7= log.body
-          - unless false #@report.unassigned?
-            .col-md-1.forward-via-sms=link_to "SMS", log_path(log, {action: 'broadcast'}), method: 'PUT'
+          .col-md-1= log.author.name
+          .col-md-6= log.body
+          - unless @report.unassigned? || log.broadcasted?
+            .col-md-3.forward-via-sms=link_to "SMS to #{@report.responder.name}", log_path(log), method: 'PUT'
+          - if log.broadcasted?
+            .col-md-3.sent-stamp= "sent to #{@report.responder.name} (#{log.updated_at.strftime('%H:%M')})"
+
 
 
 

@@ -3,16 +3,22 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 $brand-lowlight: #c3c6cc;
-$brand-shade: lighten($brand-lowlight, 16);
+$brand-shade: lighten($brand-lowlight, 12);
+$brand-highlight: red;
 
 .log-entry {
   min-height: 25px;
+
   .forward-via-sms {
     display: none;
   }
 
+  .sent-stamp { color: $brand-highlight }
+
+  &.dark { background: $brand-shade; }
+
   &:hover {
-    background: $brand-shade;
-    .forward-via-sms {display: inline; }
+    background: $brand-lowlight;
+    .forward-via-sms {display: inline;}
   }
 }
