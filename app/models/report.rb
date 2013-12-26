@@ -1,5 +1,4 @@
 class Report < ActiveRecord::Base
-  belongs_to :responder
   has_many :dispatches
   has_many :logs
 
@@ -7,6 +6,10 @@ class Report < ActiveRecord::Base
 
   def tell_jacob
     Message.send responder_synopsis, to: '6502481396'
+  end
+
+  def responder
+    current_dispatch.responder if dispatched?
   end
 
   def self.unassigned
@@ -30,10 +33,6 @@ class Report < ActiveRecord::Base
 
   def self.deleted
     where(status: "deleted")
-  end
-
-  def unassigned?
-    dispatches.none? || dispatches.all?(&:rejected?)
   end
 
   def self.completed
@@ -95,8 +94,17 @@ class Report < ActiveRecord::Base
     end
   end
 
+  def dispatch!(responder)
+    dispatches.create!(responder: responder) if unassigned?
+    # Only one responder, for now: only unassigned reports are eligible for dispatch.
+  end
+
   def dispatched?
-    dispatch.present?
+    dispatches.any?
+  end
+
+  def unassigned?
+    !dispatched? || dispatches.all?(&:rejected?)
   end
 
   def status

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131218042823) do
+ActiveRecord::Schema.define(version: 20131226050728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,11 +41,10 @@ ActiveRecord::Schema.define(version: 20131218042823) do
     t.datetime "updated_at"
     t.string   "name"
     t.string   "phone"
-    t.decimal  "long",         precision: 10, scale: 6
-    t.decimal  "lat",          precision: 10, scale: 6
-    t.string   "status",                                default: "pending"
+    t.decimal  "long",               precision: 10, scale: 6
+    t.decimal  "lat",                precision: 10, scale: 6
+    t.string   "status",                                      default: "pending"
     t.text     "nature"
-    t.integer  "responder_id"
     t.string   "age"
     t.string   "gender"
     t.string   "race"
@@ -54,9 +53,8 @@ ActiveRecord::Schema.define(version: 20131218042823) do
     t.string   "observations"
     t.text     "feedback"
     t.string   "neighborhood"
+    t.integer  "reporting_party_id"
   end
-
-  add_index "reports", ["responder_id"], name: "index_reports_on_responder_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",            null: false

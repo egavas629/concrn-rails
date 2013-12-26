@@ -4,4 +4,10 @@ class LogsController < ApplicationController
 
     redirect_to report_path(log.report)
   end
+
+  def update
+    log = Log.find params[:id]
+    log.broadcast
+    redirect_to report_path log.report
+  end
 end

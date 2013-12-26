@@ -1,6 +1,6 @@
 class Message
-  def self.send(body, opts={})
-    Telephony.message to: opts[:to], body: body
+  def self.send(body, to: to)
+    Telephony.message body: body, to: to
   end
 
   def self.receive(body, opts={})

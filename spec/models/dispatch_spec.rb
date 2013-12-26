@@ -7,7 +7,6 @@ describe Dispatch do
       accepted_dispatch = create :dispatch, :accepted
       create :dispatch, :rejected
 
-      p Dispatch.pluck(:status)
       Dispatch.not_rejected.should =~ [accepted_dispatch, new_dispatch]
     end
   end

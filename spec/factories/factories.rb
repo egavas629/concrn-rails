@@ -11,12 +11,20 @@ FactoryGirl.define do
     nature  { Faker::Company.bs }
 
     trait(:unassigned) {}
+    trait(:assigned) do
+      after(:create) do |report|
+        report.dispatch!(create :responder)
+        report.current_dispatch.accept!
+      end
+    end
   end
 
   factory :responder do
-    email { Faker::Internet.email }
-    phone { Faker::PhoneNumber.cell_phone }
+    email         { Faker::Internet.email }
+    phone         { '6504242429462' }
     password 'password'
+    name          { Faker::Name.name }
+    availability  { 'available' }
 
     trait(:jacob) do
      name "Jacob"
@@ -35,6 +43,12 @@ FactoryGirl.define do
     trait(:rejected) do
       after(:create) {|d| d.accept! }
     end
+  end
+
+  factory :log do
+    body { Faker::Lorem.sentence }
+    association :author, factory: :responder
+    association :report, factory: [:report, :assigned]
   end
 end
 

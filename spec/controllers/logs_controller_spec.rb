@@ -13,4 +13,16 @@ describe LogsController do
       Log.last.body.should == expected_content
     end
   end
+
+  describe '#update' do
+    let!(:log) { create :log }
+    let(:responder_phone) { log.report.responder.phone }
+    let(:params) { {"id"=>log.to_param} }
+    let(:request) { put :update, params }
+
+    it 'forwards the log body to the appropriate responder' do
+      Message.should_receive(:send).with log.body, to: responder_phone
+      request
+    end
+  end
 end
