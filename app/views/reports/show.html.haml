@@ -28,7 +28,7 @@
       .list-group-item-text="#{@report.age} #{@report.race} #{@report.gender}"
       .list-group-item-text=@report.nature ? "\"#{@report.nature}\"" : "<Nature Not Provided>"
 
-  .col-md-8
+  %ul.list.group.col-md-8
     %li.list-group-item
       %h4.list-group-item-heading Transcript
       - @report.logs.each do |log|
@@ -36,3 +36,9 @@
           .col-md-1= log.created_at.strftime('%H:%M')
           .col-md-2= log.author.name
           .col-md-9= log.body
+    %li.list-group-item.metaphone
+      - placeholders = ['Subject has been delivered to Azkaban...', 'Hold on a minute, I am washing my face...', 'Is now a good time to mention my relationship with the Subject?']
+      = simple_form_for @metaphone do |f|
+        = f.input :body, as: :string, label: false, placeholder: placeholders.sample
+        = f.input :author_id, :as => :hidden, :input_html => { :value => current_user.id }
+        = f.input :report_id, :as => :hidden, :input_html => { :value => @report.id }

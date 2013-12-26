@@ -1,7 +1,7 @@
 Streetmom::Application.routes.draw do
   devise_for :users
 
-  resources :reports do 
+  resources :reports do
     collection do
       get 'active'
       get 'history'
@@ -12,6 +12,8 @@ Streetmom::Application.routes.draw do
       put 'historify'
     end
   end
+
+  resources :logs
 
   resources :responders, only: %w(index update) do
     collection do

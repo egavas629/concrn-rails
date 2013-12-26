@@ -62,6 +62,7 @@ class ReportsController < ApplicationController
 
   def show
     @report = Report.find(params[:id])
+    @metaphone = Log.new
   end
 
   def report_params
