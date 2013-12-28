@@ -19,17 +19,6 @@ describe Report do
     end
   end
 
-  describe '#pending?'
-  describe '#accepted?'
-  describe '#completed?'
-  describe '#dispatched?'
-
-  describe '#responder_synopsis'
-  describe '#current_dispatch'
-  describe '#reporter_synopsis'
-  describe '#freshness'
-  describe '#status'
-
   describe '#accept_feedback' do
     let(:report) { create :report }
     let(:jacob) { create :responder, :jacob }
@@ -38,6 +27,16 @@ describe Report do
       ->{
         report.accept_feedback from: jacob, body: 'You done good'
       }.should change { report.logs.count }.by(1)
+    end
+  end
+
+  describe 'leaving notes on a completed report' do
+    let(:report) { create :report, :completed }
+    let(:rachel) { report.responder }
+
+    it 'does not reopen the report' do
+      ->{ rachel.respond "He was still there, this morning." }.
+      should_not change(report, :status).from('completed')
     end
   end
 end
