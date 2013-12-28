@@ -1,7 +1,7 @@
 class Report < ActiveRecord::Base
   has_many :dispatches
   has_many :logs
-
+  # validates :state, within: ['unassigned', 'assigned', 'deleted']
   # after_commit :tell_jacob
 
   def tell_jacob

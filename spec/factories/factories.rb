@@ -11,6 +11,19 @@ FactoryGirl.define do
     nature  { Faker::Company.bs }
 
     trait(:unassigned) {}
+
+    trait(:completed) do
+
+      after(:create) do |report|
+        joe = create :responder
+        report.dispatch! joe
+        joe.respond 'yes'
+        joe.respond 'I met him, his name is Francis'
+        joe.respond 'He is currently homeless and tripping'
+        joe.respond 'done, took him to Buckley'
+      end
+    end
+
     trait(:assigned) do
       after(:create) do |report|
         report.dispatch!(create :responder)
@@ -51,4 +64,3 @@ FactoryGirl.define do
     association :report, factory: [:report, :assigned]
   end
 end
-
