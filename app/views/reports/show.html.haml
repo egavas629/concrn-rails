@@ -47,9 +47,8 @@
 
 
     %li.list-group-item.metaphone
-      - placeholders = ['Subject has been delivered to Azkaban...', 'Hold on a minute, I am washing my face...', 'Is now a good time to mention my relationship with the Subject?']
       = simple_form_for @metaphone do |f|
         .row
-          .col-md-12= f.input :body, as: :string, label: false, placeholder: placeholders.sample
+          .col-md-12= f.input :body, as: :string, label: false, placeholder: 'Enter details...'
           = f.input :author_id, as: :hidden, input_html: { value: current_user.id }
           = f.input :report_id, as: :hidden, input_html: { value: @report.id }
