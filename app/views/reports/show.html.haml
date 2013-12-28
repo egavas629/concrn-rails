@@ -6,7 +6,7 @@
 .row
   %ul.list-group.col-md-4
     %li.list-group-item
-      .list-group-item-text.pull-right.btn=link_to "Move to History", report_path(@report, {report: {status: 'closed'}}), method: 'PUT'
+      .list-group-item-text.pull-right.btn=link_to "Move to History", historify_report_path(@report), method: 'PUT', remote: true
       %h4.list-group-item-heading Status
       .list-group-item-text=@report.status
 

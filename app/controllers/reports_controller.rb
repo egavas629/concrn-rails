@@ -12,7 +12,6 @@ class ReportsController < ApplicationController
   end
 
   def active
-    redirect_to edit_user_registration_path unless current_user.role == 'dispatcher'
     @reports = Report.accepted
   end
 
@@ -51,12 +50,13 @@ class ReportsController < ApplicationController
   def update
     @report = Report.find(params[:id])
     @report.update_attributes!(report_params)
+
     Pusher.trigger("reports" , "refresh", {})
   end
 
   def historify
-    @report = Report.find(params[:id]).update_attributes(status: "completed")
-    redirect_to action: 'index'
+    Report.find(params[:id]).update_attributes(status: "completed")
+    Pusher.trigger("reports" , "refresh", {})
   end
 
 
