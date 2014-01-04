@@ -19,7 +19,7 @@ gem 'pusher'
 gem 'foreman'
 gem 'resque'
 gem 'resque-scheduler', :require => "resque_scheduler"
-
+gem 'geocoder'
 
 
 group :development, :test do

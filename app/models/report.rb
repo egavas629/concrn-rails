@@ -6,7 +6,7 @@ class Report < ActiveRecord::Base
   RaceEthnicity = ['Hispanic or Latino', 'American Indian or Alaska Native', 'Asian', 
     'Black or African American', 'Native Hawaiian or Pacific Islander', 'White', 'Other/Unknown']
   CrisisSetting = ['Public Space', 'Workplace', 'School', 'Home', 'Other']
-  CrisisObservation = ['At risk of harm', 'Under the influence', 'Anxious', 'Depressed', 
+  CrisisObservation = ['At-risk of harm', 'Under the influence', 'Anxious', 'Depressed', 
     'Aggarvated', 'Threatening']
   # validates :state, within: ['unassigned', 'assigned', 'deleted']
   # after_commit :tell_jacob
