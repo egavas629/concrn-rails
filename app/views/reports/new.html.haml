@@ -1,0 +1,22 @@
+%h2 Create a report
+
+= simple_form_for(@blank_report) do |f|
+  %h4 Location
+  = f.input :address
+  %h4 Reporting Party Information
+  = f.input :name, label: "Contact Name" 
+  = f.input :phone, label: "Contact Phone No." 
+  / = f.decimal  "long",         precision: 10, scale: 6
+  / = f.decimal  "lat",          precision: 10, scale: 6
+  / = f.input :status default: "pending"
+  %h4 Patient Description
+  = f.input :gender, collection: Report::Gender
+  = f.input :age, collection: Report::AgeGroups
+  = f.input :race, collection: Report::RaceEthnicity
+  = f.input :setting, collection: Report::CrisisSetting
+  %h4 Crisis Description
+  = f.input :observations, as: :check_boxes, collection: Report::CrisisObservation
+  = f.input :nature, label: "Additional Description" 
+  = f.submit 'Submit Report'
+
+  / = f.text     "feedback"
