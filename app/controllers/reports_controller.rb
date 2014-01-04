@@ -7,7 +7,7 @@ class ReportsController < ApplicationController
   end
 
   def new
-    @report = Report.new
+    @blank_report = Report.new
   end
 
   def index
