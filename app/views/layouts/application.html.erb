@@ -29,8 +29,8 @@
               <ul class="nav navbar-nav">
                 <li <%= "class=active" if params[:action] == 'index'%> ><a href="<%= reports_path %>">Dispatch</a></li>
                 <li <%= "class=active" if params[:action] == 'active'%> ><a href="<%= active_reports_path%>">Active</a></li>
-                <li <%= "class=active" if params[:controller] == 'responders'%> ><a href="<%= responders_path %>">Responders</a></li>
                 <li <%= "class=active" if params[:action] == 'history'%> ><a href="<%= history_reports_path %>">History</a></li>
+                <li <%= "class=active" if params[:controller] == 'responders'%> ><a href="<%= responders_path %>">Responders</a></li>
               </ul>
             <% end %>
             <div class='navbar-right'>

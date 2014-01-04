@@ -41,9 +41,9 @@ ActiveRecord::Schema.define(version: 20131226050728) do
     t.datetime "updated_at"
     t.string   "name"
     t.string   "phone"
-    t.decimal  "long",               precision: 10, scale: 6
-    t.decimal  "lat",                precision: 10, scale: 6
-    t.string   "status",                                      default: "pending"
+    t.decimal  "long",         precision: 10, scale: 6
+    t.decimal  "lat",          precision: 10, scale: 6
+    t.string   "status",                                default: "pending"
     t.text     "nature"
     t.string   "age"
     t.string   "gender"
@@ -53,7 +53,6 @@ ActiveRecord::Schema.define(version: 20131226050728) do
     t.string   "observations"
     t.text     "feedback"
     t.string   "neighborhood"
-    t.integer  "reporting_party_id"
   end
 
   create_table "users", force: true do |t|
