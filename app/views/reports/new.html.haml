@@ -19,4 +19,6 @@
   = f.input :nature, label: "Additional Description" 
   = f.submit 'Submit Report'
 
-  / = f.text     "feedback"
+/ = :address(@location.address)
+/ = :lat(@location.latitude)
+/ = :long(@location.longitude)
