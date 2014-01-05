@@ -56,6 +56,7 @@ class ReportsController < ApplicationController
     @report.update_attributes!(report_params)
 
     Pusher.trigger("reports" , "refresh", {})
+    render json: {success: true}
   end
 
   def historify
