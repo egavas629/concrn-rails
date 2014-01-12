@@ -6,7 +6,7 @@
 .row
   %ul.list-group.col-md-4
     %li.list-group-item
-      .list-group-item-text.pull-right.btn=link_to "Move to History", report_path(@report, {report: {status: 'closed'}}), method: 'PUT'
+      .list-group-item-text.pull-right.btn=link_to "Move to History", historify_report_path(@report), method: 'PUT', remote: true
       %h4.list-group-item-heading Status
       .list-group-item-text=@report.status
 
@@ -28,11 +28,27 @@
       .list-group-item-text="#{@report.age} #{@report.race} #{@report.gender}"
       .list-group-item-text=@report.nature ? "\"#{@report.nature}\"" : "<Nature Not Provided>"
 
-  .col-md-8
+
+
+  %ul.list.group.col-md-8
     %li.list-group-item
       %h4.list-group-item-heading Transcript
-      - @report.logs.each do |log|
-        .row
+      - @report.logs.each_with_index do |log, i|
+        %div{class: "row log-entry#{' dark' if i.odd?}"}
           .col-md-1= log.created_at.strftime('%H:%M')
-          .col-md-2= log.author.name
-          .col-md-9= log.body
+          .col-md-1= log.author.name
+          .col-md-6= log.body
+          - unless @report.unassigned? || log.broadcasted?
+            .col-md-3.forward-via-sms=link_to "SMS to #{@report.responder.name}", log_path(log), method: 'PUT'
+          - if log.broadcasted?
+            .col-md-3.sent-stamp= "sent to #{@report.responder.name} (#{log.updated_at.strftime('%H:%M')})"
+
+
+
+
+    %li.list-group-item.metaphone
+      = simple_form_for @metaphone do |f|
+        .row
+          .col-md-12= f.input :body, as: :string, label: false, placeholder: 'Enter details...'
+          = f.input :author_id, as: :hidden, input_html: { value: current_user.id }
+          = f.input :report_id, as: :hidden, input_html: { value: @report.id }

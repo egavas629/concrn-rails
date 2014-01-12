@@ -25,18 +25,11 @@ class Responder < User
   end
 
   def respond(body)
-    if latest_dispatch.pending? && body.match(/no/i)
-      give_feedback(body)
-      return latest_dispatch.reject!
-    end
+    give_feedback(body)
 
-    if latest_dispatch.accepted? && body.match(/done/i)
-      latest_dispatch.complete!
-      give_feedback(body)
-      return
-    end
-
-    latest_dispatch.accept! && give_feedback(body)
+    latest_dispatch.accept! unless latest_dispatch.accepted? || latest_dispatch.completed?
+    latest_dispatch.reject! if latest_dispatch.pending? && body.match(/no/i)
+    latest_dispatch.complete! if latest_dispatch.accepted? && body.match(/done/i)
   end
 
   def dispatch_to(report)

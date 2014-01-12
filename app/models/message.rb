@@ -1,11 +1,11 @@
 class Message
-  def self.send(body, opts={})
-    Telephony.message to: opts[:to], body: body
+  def self.send(body, to: to)
+    Telephony.message body: body, to: to
   end
 
   def self.receive(body, opts={})
     responder = Responder.where(phone: opts[:from]).first
-    send("#{opts[:from]} (Unknown)", to: "6507876770") unless responder
+    send("#{opts[:from]}: #{opts[:body]}", to: "6507876770") unless responder
     responder.respond(body)
   end
 end

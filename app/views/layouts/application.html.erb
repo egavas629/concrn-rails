@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>concrn</title>
+  <title>Concrn</title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "//js.pusher.com/2.1/pusher.min.js" %>
 
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="<%= asset_path("concrn-favicon.png")%>" />
 
 </head>
 <body>
@@ -16,6 +17,7 @@
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <img src="<%= asset_path("mobile-menu-05.png")%>">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -27,10 +29,11 @@
           <% if user_signed_in? %>
             <% if current_user.role == 'dispatcher' %>
               <ul class="nav navbar-nav">
-                <li <%= "class=active" if params[:action] == 'index'%> ><a href="<%= reports_path %>">Dispatch</a></li>
-                <li <%= "class=active" if params[:action] == 'active'%> ><a href="<%= active_reports_path%>">Active</a></li>
-                <li <%= "class=active" if params[:controller] == 'responders'%> ><a href="<%= responders_path %>">Responders</a></li>
-                <li <%= "class=active" if params[:action] == 'history'%> ><a href="<%= history_reports_path %>">History</a></li>
+                <li ><a href="<%= reports_path %>">Dispatch</a></li>
+                <li ><a href="<%= active_reports_path%>">Active</a></li>
+                <li ><a href="<%= history_reports_path %>">History</a></li>
+                <li ><a href="<%= responders_path %>">Responders</a></li>
+                <li ><a href="<%= new_report_path %>">Create Report</a></li>
               </ul>
             <% end %>
             <div class='navbar-right'>

@@ -1,0 +1,24 @@
+// Place all the styles related to the logs controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+$brand-lowlight: #c3c6cc;
+$brand-shade: lighten($brand-lowlight, 12);
+$brand-highlight: red;
+
+.log-entry {
+  min-height: 25px;
+
+  .forward-via-sms {
+    display: none;
+  }
+
+  .sent-stamp { color: $brand-highlight }
+
+  &.dark { background: $brand-shade; }
+
+  &:hover {
+    background: $brand-lowlight;
+    .forward-via-sms {display: inline;}
+  }
+}

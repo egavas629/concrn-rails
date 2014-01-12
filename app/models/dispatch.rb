@@ -51,10 +51,6 @@ class Dispatch < ActiveRecord::Base
     end
   end
 
-  def close!
-    update_attributes!(status: 'closed')
-  end
-
   private
 
   def thank_responder

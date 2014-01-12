@@ -1,12 +1,22 @@
 class Report < ActiveRecord::Base
-  belongs_to :responder
   has_many :dispatches
   has_many :logs
-
+  Gender = ['Male', 'Female', 'Other']
+  AgeGroups = ['Youth (0-17)', 'Young Adult (18-34)', 'Adult (35-64)', 'Senior (65+)']
+  RaceEthnicity = ['Hispanic or Latino', 'American Indian or Alaska Native', 'Asian', 
+    'Black or African American', 'Native Hawaiian or Pacific Islander', 'White', 'Other/Unknown']
+  CrisisSetting = ['Public Space', 'Workplace', 'School', 'Home', 'Other']
+  CrisisObservation = ['At-risk of harm', 'Under the influence', 'Anxious', 'Depressed', 
+    'Aggarvated', 'Threatening']
+  # validates :state, within: ['unassigned', 'assigned', 'deleted']
   # after_commit :tell_jacob
 
   def tell_jacob
     Message.send responder_synopsis, to: '6502481396'
+  end
+
+  def responder
+    current_dispatch.responder if dispatched?
   end
 
   def self.unassigned
@@ -30,10 +40,6 @@ class Report < ActiveRecord::Base
 
   def self.deleted
     where(status: "deleted")
-  end
-
-  def unassigned?
-    dispatches.none? || dispatches.all?(&:rejected?)
   end
 
   def self.completed
@@ -95,8 +101,17 @@ class Report < ActiveRecord::Base
     end
   end
 
+  def dispatch!(responder)
+    dispatches.create!(responder: responder) if unassigned?
+    # Only one responder, for now: only unassigned reports are eligible for dispatch.
+  end
+
   def dispatched?
-    dispatch.present?
+    dispatches.any?
+  end
+
+  def unassigned?
+    !dispatched? || dispatches.all?(&:rejected?)
   end
 
   def status
