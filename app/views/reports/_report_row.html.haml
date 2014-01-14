@@ -22,6 +22,9 @@
       - if report.observations?
         %dt Observations
         %dd= report.observations
+    - if report.image.present?
+      %a{:target => "_blank", :href => report.image.url(:original)}
+        %img{:src => report.image.url(:thumbnail)}
   %td
     = report.address
     %br/
