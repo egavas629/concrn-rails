@@ -21,6 +21,7 @@ gem 'resque'
 gem 'resque-scheduler', :require => "resque_scheduler"
 gem 'geocoder'
 
+gem 'paperclip'
 
 group :development, :test do
   gem 'quiet_assets'

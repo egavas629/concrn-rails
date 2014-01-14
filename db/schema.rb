@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131226050728) do
+ActiveRecord::Schema.define(version: 20140114061100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,9 +41,9 @@ ActiveRecord::Schema.define(version: 20131226050728) do
     t.datetime "updated_at"
     t.string   "name"
     t.string   "phone"
-    t.decimal  "long",         precision: 10, scale: 6
-    t.decimal  "lat",          precision: 10, scale: 6
-    t.string   "status",                                default: "pending"
+    t.decimal  "long",               precision: 10, scale: 6
+    t.decimal  "lat",                precision: 10, scale: 6
+    t.string   "status",                                      default: "pending"
     t.text     "nature"
     t.string   "age"
     t.string   "gender"
@@ -53,6 +53,10 @@ ActiveRecord::Schema.define(version: 20131226050728) do
     t.string   "observations"
     t.text     "feedback"
     t.string   "neighborhood"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
   end
 
   create_table "users", force: true do |t|

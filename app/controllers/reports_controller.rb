@@ -72,7 +72,7 @@ class ReportsController < ApplicationController
 
   def report_params
     report_attributes = [:name, :phone, :lat, :long, :status, :nature,
-      :setting, :observations, :age, :gender, :race, :address, :neighborhood]
+      :setting, :observations, :age, :gender, :race, :address, :neighborhood, :image]
 
     params.require(:report).permit report_attributes
   end
