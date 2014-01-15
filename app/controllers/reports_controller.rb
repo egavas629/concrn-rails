@@ -53,6 +53,7 @@ class ReportsController < ApplicationController
 
   def update
     @report = Report.find(params[:id])
+    @report.image_data = report_params.delete(:image) if report_params[:image].present?
     @report.update_attributes!(report_params)
 
     Pusher.trigger("reports" , "refresh", {})
