@@ -21,15 +21,6 @@ class Report < ActiveRecord::Base
     current_dispatch.responder if dispatched?
   end
 
-  def image_data=(data_value)
-    StringIO.open(Base64.strict_decode64(data_value)) do |data|
-      data.class.class_eval { attr_accessor :original_filename, :content_type }
-      data.original_filename = "temp#{DateTime.now.to_i}.png"
-      data.content_type = "image/jpg"
-      self.image = data
-    end
-  end
-
   def self.unassigned
     find_by_sql(<<-SQL)
       SELECT r.*, count(distinct d.id) as ad_count, count(distinct dr.id) as dr_count FROM reports r

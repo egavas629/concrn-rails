@@ -52,12 +52,20 @@ class ReportsController < ApplicationController
   end
 
   def update
+    begin
     @report = Report.find(params[:id])
-    @report.image_data = report_params.delete(:image) if report_params[:image].present?
-    @report.update_attributes!(report_params)
+    update_params = report_params
+    if update_params[:image]
+      bytes = Base64.decode64(update_params.delete(:image))
+      update_params[:image] = StringIO.new(bytes)
+    end
+    @report.update_attributes!(update_params)
 
     Pusher.trigger("reports" , "refresh", {})
     render json: {success: true}
+    rescue
+      binding.pry
+    end
   end
 
   def historify
