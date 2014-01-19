@@ -51,6 +51,15 @@ class ReportsController < ApplicationController
     redirect_to action: 'history'
   end
 
+  def upload
+    @report = Report.find(params[:id])
+    update_params = report_params
+    @report.update_attributes!(update_params)
+
+    Pusher.trigger("reports" , "refresh", {})
+    render json: {success: true}
+  end
+
   def update
     begin
     @report = Report.find(params[:id])

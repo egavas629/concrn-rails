@@ -24,7 +24,7 @@
         %dd= report.observations
     - if report.image.present?
       %a{:target => "_blank", :href => report.image.url(:original)}
-        %img{:src => report.image.url(:thumbnail)}
+        %img{:src => report.image.url(:thumb)}
   %td
     = report.address
     %br/
