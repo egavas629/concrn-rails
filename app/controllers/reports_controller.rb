@@ -54,7 +54,9 @@ class ReportsController < ApplicationController
   def upload
     @report = Report.find(params[:id])
     update_params = report_params
-    @report.update_attributes!(update_params)
+    @report.update_attributes(update_params)
+    p "Report#upload", @report.image_file_name
+    @report.save
 
     Pusher.trigger("reports" , "refresh", {})
     render json: {success: true}
