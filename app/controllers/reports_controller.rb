@@ -51,12 +51,32 @@ class ReportsController < ApplicationController
     redirect_to action: 'history'
   end
 
-  def update
+  def upload
     @report = Report.find(params[:id])
-    @report.update_attributes!(report_params)
+    update_params = report_params
+    @report.update_attributes(update_params)
+    p "Report#upload", @report.image_file_name
+    @report.save
 
     Pusher.trigger("reports" , "refresh", {})
     render json: {success: true}
+  end
+
+  def update
+    begin
+    @report = Report.find(params[:id])
+    update_params = report_params
+    if update_params[:image]
+      bytes = Base64.decode64(update_params.delete(:image))
+      update_params[:image] = StringIO.new(bytes)
+    end
+    @report.update_attributes!(update_params)
+
+    Pusher.trigger("reports" , "refresh", {})
+    render json: {success: true}
+    rescue
+      binding.pry
+    end
   end
 
   def historify

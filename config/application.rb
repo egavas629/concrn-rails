@@ -22,5 +22,16 @@ module Streetmom
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+    config.paperclip_defaults = {
+      :storage => :s3,
+      :s3_credentials => {
+        :bucket => "concrn",
+        :access_key_id => "AKIAJBC3OEJ6ORK2V4XQ",
+        :secret_access_key => "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"
+      },
+      :s3_host_alias => "concrn.s3.amazonaws.com",
+      :url => ":s3_domain_url",
+      :path => '/:class/:attachment/:id_partition/:style/:filename'
+    }
   end
 end

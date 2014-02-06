@@ -10,6 +10,7 @@ Streetmom::Application.routes.draw do
 
     member do
       put 'historify'
+      post 'upload'
     end
   end
 
