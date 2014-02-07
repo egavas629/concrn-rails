@@ -66,13 +66,36 @@
         </div>
       </div>
       <div class="image-space">
-        <col><img class="col-img" src="<%= asset_path("concrn-app-01.png")%>"></col>
-        <col><img class="col-img" src="<%= asset_path("concrn-app-02.png")%>"></col>
-        <col><img class="col-img" src="<%= asset_path("concrn-app-03.png")%>"></col>
-        <p class='indent'>
-          <col><img class="col-img" src="<%= asset_path("concrn-app-04.png")%>"></col>
-          <col><img class="col-img" src="<%= asset_path("concrn-app-05.png")%>"></col>
-        </p>      
+        <col>
+          <figure class='fig-img'>
+            <img class="col-img" src="<%= asset_path("concrn-app-01.png")%>" text='test'>
+            <figcaption class='figcap'>Open Concrn in iOS to report a crisis location!</figcaption>
+          </figure>
+        </col>
+        <col>
+          <figure class='fig-img'>
+            <img class="col-img" src="<%= asset_path("concrn-app-02.png")%>" text='test'>
+            <figcaption class='figcap'>You can enter additional details...</figcaption>
+          </figure>
+        </col>
+        <col>
+          <figure class='fig-img'>
+            <img class="col-img" src="<%= asset_path("concrn-app-03.png")%>" text='test'>
+            <figcaption class='figcap'>and even call 911 at anytime.</figcaption>
+          </figure>
+        </col>
+        <col>
+          <figure class='fig-img-ind'>
+            <img class="col-img" src="<%= asset_path("concrn-app-04.png")%>" text='test'>
+            <figcaption class='figcap'>For instance, select a gender...</figcaption>
+          </figure>
+        </col>
+        <col>
+          <figure class='fig-img'>
+            <img class="col-img" src="<%= asset_path("concrn-app-05.png")%>" text='test'>
+            <figcaption class='figcap'>and update your crisis as a detailed report.</figcaption>
+          </figure>
+        </col>  
       </div>
     <% end%>
     <div class="container main">
@@ -84,7 +107,7 @@
       <% end %>
       <%= yield %>
       <footer>
-        <p>&copy; Civilian Response Network (2014)</p>
+        <p>&copy; Concrn (2014)</p>
       </footer>
     </div> <!-- /container -->
 </body>

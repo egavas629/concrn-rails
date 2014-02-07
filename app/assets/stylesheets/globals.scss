@@ -55,17 +55,26 @@ tr.freshness-semi-stale {
 
 .image-space {
   //background: url("/assets/concrn-logo-small.png") no-repeat;
-  height: 1221px;
+  height: 1237px;
   padding-left: 113px;
 }
  
 .col-img {
   padding: 37px;
+  padding-bottom: 15px;
 }
 
-.indent {
-  padding-left: 190px;
+.fig-img {
+  display:inline-block;
 }
-// .container.img {
-//   padding: 10px;
-// }
+
+.fig-img-ind {
+  display:inline-block;
+  padding-left: 200px;
+}
+
+.figcap {
+  text-align:center;
+  caption-side:bottom;
+  font-size: 14pt;
+}
