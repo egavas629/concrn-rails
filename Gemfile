@@ -24,11 +24,6 @@ gem 'geocoder'
 gem 'aws-sdk'
 gem 'paperclip'
 
-
-group :development do
-  gem 'jazz_hands'
-end
-
 group :development, :test do
   gem 'quiet_assets'
   gem 'faker'
