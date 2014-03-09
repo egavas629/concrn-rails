@@ -14,6 +14,8 @@ Streetmom::Application.routes.draw do
     end
   end
 
+  resources :contacts
+
   resources :logs
 
   resources :responders, only: %w(index update) do
