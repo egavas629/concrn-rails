@@ -34,7 +34,7 @@
     - if report.unassigned?
       = simple_form_for(Dispatch.new) do |f|
         = f.hidden_field :report_id, value: report.id
-        =f.association :responder, collection: Responder.available, label_method: :name, value_method: :id, label: false, prompt: "Responders..."
+        =f.association :responder, collection: report.agency.responders.available, label_method: :name, value_method: :id, label: false, prompt: "Responders..."
         =f.submit("Assign Responder")
     - else
       = render partial: "dispatches/dispatch", locals: { dispatch: report.current_dispatch }
@@ -42,7 +42,7 @@
         %dt Dispatched
         %dd= time_ago_in_words(report.current_dispatch.created_at)
     - if params[:action] == "index"
-      = form_tag(historify_report_path(id: report.id), :method => :put) do 
+      = form_tag(historify_report_path(id: report.id), :method => :put) do
         = submit_tag("Move to history")
     - if !report.deleted?
       = form_for(report, :method => :delete) do |f|

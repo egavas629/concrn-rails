@@ -16,31 +16,35 @@ class ReportsController < ApplicationController
   end
 
   def active
-    @reports = Report.accepted
+    @reports = current_user.reports.accepted
   end
 
   def history
-    @reports = Report.completed
+    @reports = current_user.reports.completed
   end
 
   def deleted
-    @reports = Report.deleted
+    @reports = current_user.reports.deleted
   end
 
   def create
-    begin
-      @report = Report.create(report_params)
-      if @report.save
-        Pusher.trigger("reports" , "refresh", {})
-        render json: @report
-      else
-        render json: @report
-      end
-    rescue Exception => e
-      Rails.logger.error e.message
-      e.backtrace.each do |b|
-        Rails.logger.error b
-      end
+    @report = Report.new(report_params)
+    p current_user.agency
+    p current_user.agency
+    p current_user.agency
+    p current_user.agency
+    p current_user.agency
+    @report.agency = current_user.agency
+
+    if @report.save
+      Pusher.trigger("reports" , "refresh", {})
+      @unassigned_reports = current_user.reports.unassigned
+      @pending_reports = current_user.reports.pending
+      render json: @report
+    else
+      @unassigned_reports = current_user.reports.unassigned
+      @pending_reports = current_user.reports.pending
+      render json: @report
     end
   end
 
