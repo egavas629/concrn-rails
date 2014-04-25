@@ -11,10 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140309230342) do
+ActiveRecord::Schema.define(version: 20140425041720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "agencies", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "contacts", force: true do |t|
     t.datetime "created_at"
@@ -58,10 +64,12 @@ ActiveRecord::Schema.define(version: 20140309230342) do
     t.string   "observations"
     t.text     "feedback"
     t.string   "neighborhood"
+    t.integer  "reporting_party_id"
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
+    t.integer  "agency_id"
   end
 
   create_table "users", force: true do |t|
@@ -81,6 +89,7 @@ ActiveRecord::Schema.define(version: 20140309230342) do
     t.string   "phone"
     t.string   "role",                   default: "responder"
     t.string   "availability",           default: "unavailable"
+    t.integer  "agency_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

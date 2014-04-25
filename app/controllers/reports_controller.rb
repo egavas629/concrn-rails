@@ -11,8 +11,8 @@ class ReportsController < ApplicationController
   end
 
   def index
-    @unassigned_reports = Report.unassigned
-    @pending_reports = Report.pending
+    @unassigned_reports = current_user.reports.unassigned
+    @pending_reports = current_user.reports.pending
   end
 
   def active
