@@ -27,7 +27,13 @@ gem 'paperclip'
 group :development, :test do
   gem 'quiet_assets'
   gem 'faker'
-  gem 'rspec-rails'
   gem 'factory_girl_rails'
+end
+
+group :test do
+  gem 'rspec-rails'
   gem 'rspec-mocks'
+
+  gem 'cucumber-rails', :require => false
+  gem 'database_cleaner'
 end
