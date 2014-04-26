@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :report do
+  factory(:report) do
     name    { Faker::Name.name }
     phone   { '6504242429462' }
     lat     { 37.920556 + (rand() * (rand() > 0.5 ? -1 : 1)) }
@@ -9,11 +9,11 @@ FactoryGirl.define do
     gender  { ["Male", "Female"].sample }
     race    { "Caucasian" }
     nature  { Faker::Company.bs }
+    agency
 
     trait(:unassigned) {}
 
     trait(:completed) do
-
       after(:create) do |report|
         joe = create :responder
         report.dispatch! joe
@@ -30,37 +30,5 @@ FactoryGirl.define do
         report.current_dispatch.accept!
       end
     end
-  end
-
-  factory :responder do
-    email         { Faker::Internet.email }
-    phone         { '6504242429462' }
-    password 'password'
-    name          { Faker::Name.name }
-    availability  { 'available' }
-
-    trait(:jacob) do
-     name "Jacob"
-     phone '6502481396'
-    end
-  end
-
-  factory :dispatch do
-    association :responder
-    association :report
-
-    trait(:accepted) do
-      after(:create) {|d| d.reject! }
-    end
-
-    trait(:rejected) do
-      after(:create) {|d| d.accept! }
-    end
-  end
-
-  factory :log do
-    body { Faker::Lorem.sentence }
-    association :author, factory: :responder
-    association :report, factory: [:report, :assigned]
   end
 end

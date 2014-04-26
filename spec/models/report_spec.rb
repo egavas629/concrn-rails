@@ -8,17 +8,6 @@ describe Report do
     describe '.completed'
   end
 
-  describe '#unassigned?' do
-    let(:responder) { create :responder }
-    let(:report) { create :report }
-
-    xit 'returns true until a responder is dispatched to the report' do
-      ->{
-        responder.dispatch_to report
-      }.should change(report, :unassigned?).from(true).to(false)
-    end
-  end
-
   describe '#accept_feedback' do
     let(:report) { create :report }
     let(:jacob) { create :responder, :jacob }
