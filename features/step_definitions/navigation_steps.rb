@@ -1,5 +1,3 @@
-require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "paths"))
-
 Given /^I am on (.+)$/ do |page_name|
   visit path_to(page_name)
 end
@@ -23,3 +21,4 @@ end
 When /^I fill in '([^\"]*)' for '([^\"]*)'$/ do |value, field|
   fill_in(field.gsub(' ', '_'), :with => value)
 end
+

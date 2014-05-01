@@ -32,10 +32,14 @@
       %img{src: "http://maps.googleapis.com/maps/api/staticmap?center=#{report.lat},#{report.long}&zoom=17&size=200x200&sensor=false&markers=size:mid%7Ccolor:blue%7C#{report.lat},#{report.long}%7C"}
   %td{class: "report-#{report.id}-dispatch"}
     - if report.unassigned?
-      = simple_form_for(Dispatch.new) do |f|
-        = f.hidden_field :report_id, value: report.id
-        =f.association :responder, collection: report.agency.responders.available, label_method: :name, value_method: :id, label: false, prompt: "Responders..."
-        =f.submit("Assign Responder")
+      - available_responders = report.agency.responders.available
+      - if available_responders.any?
+        = simple_form_for(Sortie.new) do |f|
+          = f.hidden_field :report_id, value: report.id
+          = f.collection_check_boxes :responders, available_responders, :id, :name
+          = f.submit("Assign Responder")
+      - else
+        = "No responders are available for #{current_user.agency.name}!"
     - else
       = render partial: "dispatches/dispatch", locals: { dispatch: report.current_dispatch }
       %dl

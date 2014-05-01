@@ -1,33 +1,19 @@
-def create_reports
-    p 'Seeding Reports...'
+def reports_for(agency)
+    puts 'Seeding Reports...'
     Report.destroy_all
 
-    2.times do
-      address = Faker::Address
-      Report.create({
-        name: Faker::Name.name,
-        phone: Responder.all.sample.phone,
-        lat: 37.920556 + (rand() * (rand() > 0.5 ? -1 : 1)),
-        long: 122.416667 + (rand() * (rand() > 0.5 ? -1 : 1)),
-        address: address.street_address,
-        age: "Young Adult",
-        gender: ["Male", "Female"].sample,
-        race: "Caucasian",
-        nature: Faker::Company.bs
-        })
-    end
+    10.times { FactoryGirl.create :report, agency: agency }
 end
 
-def create_accounts
-    p 'Seeding Teammates...'
+def agency_with_accounts
+    puts 'Seeding Teammates...'
     User.destroy_all
-    Dispatcher.create!(name: 'Dan', email: 'dan@example.com', password: 'password')
-    Dispatcher.create!(name: 'Doug', email: 'doug@concrn.com', password: 'password')
 
-    Responder.create!(name: 'Jacob', email: 'jacobcsavage@gmail.com', password: 'password', phone: '6502481396')
-    Responder.create!(name: 'Gavin', email: 'quavmo@gmail.com', password: 'password', phone: '6507876770')
-    Responder.create!(name: 'Tommy', email: 'vajrapani666@gmail.com', password: 'password', phone: '(209) 559-2459')
+    dispatcher = FactoryGirl.create :dispatcher, name: 'Dan', email: 'dan@example.com', password: 'password'
+    20.times { FactoryGirl.create :responder, agency: dispatcher.agency }
+
+    dispatcher.agency
 end
 
-create_accounts
-create_reports
+
+reports_for agency_with_accounts

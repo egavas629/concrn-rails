@@ -31,6 +31,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'selenium-webdriver'
   gem 'rspec-rails'
   gem 'rspec-mocks'
 
