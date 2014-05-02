@@ -20,7 +20,7 @@ class ReportsController < ApplicationController
   end
 
   def history
-    @reports = current_user.reports.completed
+    @reports = current_user.agency.reports.where(status: 'completed').page(params[:page])  
   end
 
   def deleted

@@ -20,9 +20,10 @@ gem 'foreman'
 gem 'resque'
 gem 'resque-scheduler', :require => "resque_scheduler"
 gem 'geocoder'
-
+gem 'bullet', group: :development
 gem 'aws-sdk'
 gem 'paperclip'
+gem 'kaminari'
 
 group :development, :test do
   gem 'quiet_assets'
