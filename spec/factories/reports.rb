@@ -8,7 +8,8 @@ FactoryGirl.define do
     age     { "Young Adult" }
     gender  { ["Male", "Female"].sample }
     race    { "Caucasian" }
-    nature  { Faker::Company.bs }
+    setting { %w(Workplace School Public).sample }
+    nature  { %w(Anxious Intoxicated).sample }
     agency
 
     trait(:unassigned) {}

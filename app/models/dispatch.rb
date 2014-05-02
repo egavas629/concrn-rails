@@ -66,7 +66,7 @@ class Dispatch < ActiveRecord::Base
   end
 
   def alert_responder
-    Message.send report.responder_synopsis, to: responder.phone
+    report.responder_synopses.each { |synopsis| Message.send synopsis, to: responder.phone }
   end
 
   def notify_reporter

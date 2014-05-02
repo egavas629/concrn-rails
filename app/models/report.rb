@@ -12,12 +12,6 @@ class Report < ActiveRecord::Base
   CrisisSetting = ['Public Space', 'Workplace', 'School', 'Home', 'Other']
   CrisisObservation = ['At-risk of harm', 'Under the influence', 'Anxious', 'Depressed',
     'Aggarvated', 'Threatening']
-  # validates :state, within: ['unassigned', 'assigned', 'deleted']
-  # after_commit :tell_jacob
-
-  def tell_jacob
-    Message.send responder_synopsis, to: '6502481396'
-  end
 
   def responder
     current_dispatch.responder if dispatched?
@@ -67,18 +61,14 @@ class Report < ActiveRecord::Base
     current_dispatch && current_dispatch.completed?
   end
 
-  def responder_synopsis
-    <<-SMS
-    CRISIS REPORT:
-    Reporter:
-    #{name}
-    #{phone}
-    Details:
-    #{address}
-    #{race}/#{gender}/#{age}
-    #{setting}
-    #{nature}
-    SMS
+  def responder_synopses
+    [
+      address,
+      "Reporter: #{name}, #{phone}",
+      "#{race}/#{gender}/#{age}",
+      setting,
+      nature
+    ]
   end
 
   def current_dispatch
