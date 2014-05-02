@@ -1,5 +1,3 @@
-raise 'Do NOT seed this Database!' unless Rails.env.development?
-
 def create_reports
     p 'Seeding Reports...'
     Report.destroy_all
