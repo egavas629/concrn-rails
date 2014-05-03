@@ -24,6 +24,7 @@ gem 'bullet', group: :development
 gem 'aws-sdk'
 gem 'paperclip'
 gem 'kaminari'
+gem 'jquery-ui-rails'
 
 group :development, :test do
   gem 'quiet_assets'

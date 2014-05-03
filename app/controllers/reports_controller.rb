@@ -24,8 +24,10 @@ class ReportsController < ApplicationController
   end
 
   def filter
-    @reports = Report.where(report_params).order('created_at desc')
-    @report  = Report.find(params[:report][:id])
+    @reports  = ReportFilter.new(params['filter'], current_user.agency_id).query if params['filter'].present?
+
+    report_id = params[:report][:id] if params[:report]
+    @report   = Report.find(report_id) if report_id.present?
 
     respond_to do |format|
       format.js

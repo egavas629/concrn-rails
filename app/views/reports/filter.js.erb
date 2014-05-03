@@ -1,3 +1,9 @@
-<% if @reports.present? %>
+<% if defined?(@report) %>
+  $('.pagination').hide();
   $("tr#report_<%= @report.id %>").closest('table').html("<%= escape_javascript(render :partial => 'reports/report_table', :locals => { :reports => @reports } ) %>");
+<% elsif @reports.present? %>
+  $('.pagination').hide();
+  $("table").html("<%= escape_javascript(render :partial => 'reports/report_table', :locals => { :reports => @reports } ) %>");
+<% else %>
+  $('tbody').html('No Reports');
 <% end %>
