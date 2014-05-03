@@ -27,9 +27,6 @@
         %img{:src => report.image.url(:thumb)}
   %td
     = report.address
-    %br/
-    %a{href: "http://maps.google.com/?ll=#{report.lat},#{report.long}", target: "_blank"}
-      %img{src: "http://maps.googleapis.com/maps/api/staticmap?center=#{report.lat},#{report.long}&zoom=17&size=200x200&sensor=false&markers=size:mid%7Ccolor:blue%7C#{report.lat},#{report.long}%7C"}
   %td{class: "report-#{report.id}-dispatch"}
     - if report.unassigned?
       = simple_form_for(Dispatch.new) do |f|
