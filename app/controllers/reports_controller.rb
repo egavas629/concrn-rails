@@ -20,7 +20,16 @@ class ReportsController < ApplicationController
   end
 
   def history
-    @reports = current_user.agency.reports.where(status: 'completed').page(params[:page])  
+    @reports = current_user.agency.reports.where(status: 'completed').page(params[:page])
+  end
+
+  def filter
+    @reports = Report.where(report_params).order('created_at desc')
+    @report  = Report.find(params[:report][:id])
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   def deleted

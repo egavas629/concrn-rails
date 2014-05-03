@@ -15,4 +15,5 @@
   - else
     %tbody
       - reports.each do |report|
-        = render "report_row", report: report
+        = content_tag_for :tr, report, class: "freshness-#{report.freshness}" do
+          = render "report_row", report: report

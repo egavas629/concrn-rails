@@ -1,0 +1,3 @@
+<% if @reports.present? %>
+  $("tr#report_<%= @report.id %>").closest('table').html("<%= escape_javascript(render :partial => 'reports/report_table', :locals => { :reports => @reports } ) %>");
+<% end %>
