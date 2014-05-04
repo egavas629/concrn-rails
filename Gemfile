@@ -25,6 +25,7 @@ gem 'aws-sdk'
 gem 'paperclip'
 gem 'kaminari'
 gem 'jquery-ui-rails'
+gem 'rails_12factor', group: :production
 
 group :development, :test do
   gem 'quiet_assets'

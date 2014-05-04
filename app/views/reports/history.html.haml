@@ -1,9 +1,11 @@
 %h2 History
 = link_to "Deleted Reports", deleted_reports_path
-= simple_form_for 'filter', url: filter_reports_path, remote: true do |f|
-  = f.input :start_date, input_html: {class: 'date'}
-  = f.input :end_date, input_html: {class: 'date'}
-  = f.button :submit
+.row
+  = simple_form_for 'filter', url: filter_reports_path, remote: true do |f|
+    .col-sm-2= f.input :start_date, input_html: {class: 'date col-sm-2'}, label: 'Start'
+    .col-sm-2= f.input :end_date, input_html: {class: 'date col-sm-2'}, label: 'End'
+    .col-sm-2= f.button :submit, 'Search Dates', style: 'margin-top:25px;'
+%hr
 = render partial: "report_table", locals: { reports: @reports }
 = paginate @reports
 
