@@ -12,13 +12,31 @@
         %th Current Status
     %tbody
       - @responders.each do |responder|
-        %tr
+        = content_tag_for :tr, responder do
           %th= responder.name
-          %td= responder.phone
+          %td.phone= responder.phone
           %td= link_to responder.email, "mailto:#{responder.email}"
           %td= responder.completed_count
           %td= responder.rejected_count
-          %td= responder.availability
+          %td= check_box_tag 'availability', nil, responder.available?, 'data-update' => responder_path(responder)
           %td= responder.status
 - else
   %p.notice It appears there are no responders
+
+:javascript
+  $("[name='availability']").bootstrapSwitch({
+    onColor: 'success',
+    onSwitchChange: function(event, state){
+      var responderAvailability = state ? 'available' : 'unavailable',
+      responderPhone = $(this).closest('tr').find('.phone').text(),
+      path = $(this).data('update');
+      $.ajax({
+        url: path,
+        type: 'PUT',
+        data: {responder: {availability: responderAvailability}},
+        success: function(data){
+          console.log(data);
+        }
+      });
+    }
+  });

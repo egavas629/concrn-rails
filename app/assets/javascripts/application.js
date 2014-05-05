@@ -15,4 +15,5 @@
 //= require jquery.ui.datepicker
 //= require turbolinks
 //= require twitter/bootstrap
+//= require bootstrap-switch.min
 //= require_tree .

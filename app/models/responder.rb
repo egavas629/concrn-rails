@@ -1,6 +1,6 @@
 class Responder < User
   default_scope -> { where(role: 'responder') }
-  has_many :reports
+  has_many :reports, through: :dispatches
   has_many :dispatches
   validates_presence_of :phone
 
@@ -42,6 +42,14 @@ class Responder < User
 
   def rejected_count
     dispatches.where(status: "rejected").count
+  end
+
+  def available?
+    availability == 'available'
+  end
+
+  def unavailable?
+    availability == 'unavailable'
   end
 
   def status

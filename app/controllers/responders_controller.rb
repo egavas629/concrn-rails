@@ -13,9 +13,13 @@ class RespondersController < ApplicationController
   end
 
   def update
-    @responder = Responder.where(phone: NumberSanitizer.sanitize(params[:id])).first
-    Pusher.trigger("reports" , "refresh", {})
+    if request.xhr?
+      @responder = Responder.find(params[:id])
+    else
+      @responder = Responder.where(phone: NumberSanitizer.sanitize(params[:id])).first
+    end
     @responder.update_attributes(responder_params)
+    Pusher.trigger("reports" , "refresh", {}) unless request.xhr?
     render json: @responder
   end
 
