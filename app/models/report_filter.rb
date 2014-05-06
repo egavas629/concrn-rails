@@ -13,6 +13,9 @@ class ReportFilter
     @end_date   = Date.parse(end_date).end_of_day if end_date.present?
   end
 
+  # NOTE
+  # (in block after) elsif defined?(@responder_params)....
+  # Needed compact once for edge case but cant repeat so feel free to take out
   def query
     if defined?(@start_date) && defined?(@end_date)
       agencies_completed_reports.where('created_at >= ? and created_at <= ?', @start_date, @end_date).order('created_at desc')
@@ -21,13 +24,7 @@ class ReportFilter
     elsif defined?(@end_date)
       agencies_completed_reports.where('created_at <= ?', @end_date).order('created_at desc')
     elsif defined?(@responder_params) && @responder_params.present?
-      reports_ary = []
-      Responder.where(@responder_params).map(&:reports).each do |reports|
-        reports.each do |report|
-          reports_ary << report if report.present? && report.completed?
-        end
-      end
-      reports_ary.uniq.sort { |a,b| b.created_at <=> a.created_at }
+      Responder.where(@responder_params).map(&:reports).flatten.compact.sort { |a,b| b.created_at <=> a.created_at }
     else
       agencies_completed_reports.where(@params).order('created_at desc')
     end
