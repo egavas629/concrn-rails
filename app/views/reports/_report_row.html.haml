@@ -25,7 +25,7 @@
     %a{:target => "_blank", :href => report.image.url(:original)}
       %img{:src => report.image.url(:thumb)}
 %td
-  = report.address
+  = link_to report.address, report.google_maps_address
 %td{class: "report-#{report.id}-dispatch"}
   - if report.unassigned?
     = simple_form_for(Dispatch.new) do |f|
