@@ -38,6 +38,9 @@ class ReportsController < ApplicationController
     @reports = current_user.reports.deleted
   end
 
+  # Needed to comment out PUSH and json for it to redirect to index
+  # Then just moved it to js in case mobile needs it
+
   def create
     @report = Report.new(report_params)
     p current_user.agency
@@ -47,15 +50,20 @@ class ReportsController < ApplicationController
     p current_user.agency
     @report.agency = current_user.agency
 
-    if @report.save
-      Pusher.trigger("reports" , "refresh", {})
-      @unassigned_reports = current_user.reports.unassigned
-      @pending_reports = current_user.reports.pending
-      render json: @report
-    else
-      @unassigned_reports = current_user.reports.unassigned
-      @pending_reports = current_user.reports.pending
-      render json: @report
+    respond_to do |format|
+      if @report.save
+        @unassigned_reports = current_user.reports.unassigned
+        @pending_reports = current_user.reports.pending
+        format.html {redirect_to action: 'index'}
+        format.js do
+          Pusher.trigger("reports" , "refresh", {})
+          render json: @report
+        end
+      else
+        @unassigned_reports = current_user.reports.unassigned
+        @pending_reports = current_user.reports.pending
+        render json: @report
+      end
     end
   end
 
