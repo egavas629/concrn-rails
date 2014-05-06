@@ -15,6 +15,11 @@
       .list-group-item-text=@report.created_at
 
     %li.list-group-item
+      %h4.list-group-item-heading Reporting Party
+      .list-group-item-text=@report.name
+      .list-group-item-text=@report.phone
+
+    %li.list-group-item
       %h4.list-group-item-heading Address
       .list-group-item-text=@report.address
 
@@ -25,7 +30,7 @@
 
   %ul.list.group.col-md-8
     %li.list-group-item
-      %h4.list-group-item-heading= "Transcript with #{@report.name} @ #{@report.phone}"
+      %h4.list-group-item-heading= "Transcript#{' with ' + @report.responder.name + ' @ ' + @report.responder.phone if @report.responder.present?}"
       - @report.logs.each_with_index do |log, i|
         %div{class: "row log-entry#{' dark' if i.odd?}"}
           .col-md-1= log.created_at.strftime('%H:%M')
