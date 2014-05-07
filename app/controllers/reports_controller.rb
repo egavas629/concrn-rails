@@ -85,18 +85,20 @@ class ReportsController < ApplicationController
     render json: {success: true}
   end
 
+  # To allow photo upload commented below out and all good.
+
   def update
     begin
     @report = Report.find(params[:id])
-    update_params = report_params
-    if update_params[:image]
-      bytes = Base64.decode64(update_params.delete(:image))
-      update_params[:image] = StringIO.new(bytes)
-    end
-    @report.update_attributes!(update_params)
+    # update_params = report_params
+    # if update_params[:image]
+    #   bytes = Base64.decode64(update_params.delete(:image))
+    #   update_params[:image] = StringIO.new(bytes)
+    # end
+    @report.update_attributes!(report_params)
 
     Pusher.trigger("reports" , "refresh", {})
-    render json: {success: true}
+    render :back
     rescue
       binding.pry
     end
@@ -111,6 +113,16 @@ class ReportsController < ApplicationController
   def show
     @report = Report.find(params[:id])
     @metaphone = Log.new
+  end
+
+  def download
+    report = Report.find(params[:id])
+    file = open(report.image.url)
+    send_data file.read, filename:    report.image_file_name,
+                         type:        report.image_content_type,
+                         disposition: 'attachment',
+                         stream:      'true',
+                         buffer_size: '4096'
   end
 
   def report_params

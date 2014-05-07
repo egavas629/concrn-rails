@@ -28,6 +28,17 @@
       .list-group-item-text="#{@report.age} #{@report.race} #{@report.gender}"
       .list-group-item-text=@report.nature ? "\"#{@report.nature}\"" : "<Nature Not Provided>"
 
+    %li.list-group-item
+      %h4.list-group-item-heading Files
+      - if @report.image.present?
+        .list-group-item-text= link_to "Download #{@report.image_file_name}", download_report_path(@report)#, remote: true
+      - else
+        .list-group-item-text
+          = simple_form_for @report do |f|
+            = f.input_field :image
+            %br
+            = f.button :submit, 'Add File'
+
   %ul.list.group.col-md-8
     %li.list-group-item
       %h4.list-group-item-heading= "Transcript#{' with ' + @report.responder.name + ' @ ' + @report.responder.phone if @report.responder.present?}"
@@ -40,9 +51,6 @@
             .col-md-3.forward-via-sms=link_to "SMS to #{@report.responder.name}", log_path(log), method: 'PUT'
           - if log.broadcasted?
             .col-md-3.sent-stamp= "sent to #{@report.responder.name} (#{log.updated_at.strftime('%H:%M')})"
-
-
-
 
     %li.list-group-item.metaphone
       = simple_form_for @metaphone do |f|
