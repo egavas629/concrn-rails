@@ -7,7 +7,7 @@ class ReportsController < ApplicationController
   end
 
   def new
-    @blank_report = Report.new
+    @report = Report.new
   end
 
   def index
@@ -60,9 +60,11 @@ class ReportsController < ApplicationController
           render json: @report
         end
       else
-        @unassigned_reports = current_user.reports.unassigned
-        @pending_reports = current_user.reports.pending
-        render json: @report
+        # @unassigned_reports = current_user.reports.unassigned
+        # @pending_reports = current_user.reports.pending
+
+        format.html {render action: :new}
+        format.js {render json: @report}
       end
     end
   end
