@@ -26,7 +26,7 @@ gem 'paperclip'
 gem 'kaminari'
 gem 'jquery-ui-rails'
 gem 'rails_12factor', group: :production
-gem 'phone'
+gem 'phony_rails'
 
 group :development, :test do
   gem 'quiet_assets'
