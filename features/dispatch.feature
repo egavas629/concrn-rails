@@ -1,4 +1,4 @@
-@selenium
+@selenium @pending
 Feature: Dispatch some Responders
   Dispatchers should be able to dispatch responders to an open report
   Reports should require at least one Responder to be dispatched
