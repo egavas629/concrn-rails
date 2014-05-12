@@ -82,7 +82,6 @@ class ReportsController < ApplicationController
   # To allow photo upload commented below out and all good.
 
   def update
-    begin
     @report = Report.find(params[:id])
     # update_params = report_params
     # if update_params[:image]
@@ -93,9 +92,6 @@ class ReportsController < ApplicationController
 
     Pusher.trigger("reports" , "refresh", {})
     render :back
-    rescue
-      binding.pry
-    end
   end
 
   def historify
