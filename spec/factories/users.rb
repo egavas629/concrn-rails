@@ -5,7 +5,6 @@ FactoryGirl.define do
     password      { 'password' }
     name          { Faker::Name.name }
     availability  { 'unavailable' }
-    agency
   end
 
   factory :responder do
@@ -14,7 +13,6 @@ FactoryGirl.define do
     password      { 'password' }
     name          { Faker::Name.name }
     availability  { 'available' }
-    agency
 
     trait(:jacob) do
      name "Jacob"

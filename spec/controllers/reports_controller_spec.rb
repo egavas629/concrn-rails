@@ -5,14 +5,24 @@ describe ReportsController do
     let(:report_data) { attributes_for(:report) }
     let(:user) { create(:responder, :jacob) }
 
-    before do
-      sign_in user
+    describe "signed in" do
+      before do
+        sign_in user
+      end
+
+      it "creates the report" do
+        expect {
+          post :create, :report => report_data
+        }.to change(Report, :count).by(1)
+      end
     end
 
-    it "creates the report" do
-      expect {
-        post :create, :report => report_data
-      }.to change(Report, :count).by(1)
+    describe "signed out" do
+      it "creates the report" do
+        expect {
+          post :create, :report => report_data
+        }.to change(Report, :count).by(1)
+      end
     end
   end
 end

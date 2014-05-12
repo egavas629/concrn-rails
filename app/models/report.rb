@@ -1,6 +1,4 @@
 class Report < ActiveRecord::Base
-  validates_presence_of :agency
-  belongs_to :agency
   has_many :dispatches
   has_many :logs
 

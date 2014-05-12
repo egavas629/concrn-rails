@@ -1,13 +1,10 @@
-Given(/^there is an Agency called '(.*)'$/) do |agency_name|
-  FactoryGirl.create :agency, name: agency_name
-end
 
 Given(/^there is (\d) unassigned report$/) do |quantity|
-  quantity.to_i.times { FactoryGirl.create :report, agency: current_user.agency }
+  quantity.to_i.times { FactoryGirl.create :report }
 end
 
 Given(/^there are (\d+) available responders$/) do |quantity|
-  quantity.to_i.times { FactoryGirl.create :responder, agency: current_user.agency }
+  quantity.to_i.times { FactoryGirl.create :responder }
 end
 
 Given(/^I am not signed in$/) do
@@ -24,7 +21,6 @@ Then(/^I should see Reports for Las Vegas$/) do
   end
 end
 
-Given(/^I have an account with '(.*)' as '(.*)':('.*)$/) do |agency_name, user_email, password|
-  agency = Agency.where(name: agency_name).pop
-  user = FactoryGirl.create :dispatcher, email: user_email, agency: agency, password: password
+Given(/^I have an account with login info as '(.*)':('.*)$/) do |user_email, password|
+  user = FactoryGirl.create :dispatcher, email: user_email, password: password
 end
