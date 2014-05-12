@@ -4,6 +4,12 @@
 @import "twitter/bootstrap/_variables";
 @import "twitter/bootstrap/_mixins";
 
+.bleed {
+  background-repeat: none;
+  background-size: cover;
+  width: 100%;
+}
+
 .navbar.home {
   position: absolute;
   background: none;
@@ -13,12 +19,10 @@
   }
 }
 
-.drop-main {
+.bleed.drop-main {
   padding-top: 75px;
-  background: url("/assets/hero-large.png") no-repeat;
-  background-size: cover;
+  background-image: url("/assets/hero-large.png");
   height: 465px;
-  width: 100%;
 }
 
 .jumbohome {
@@ -39,5 +43,27 @@
     @include make-lg-column(6);
     font-weight: $light-weight;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.bleed.praying {
+  background-image: url('/assets/home/praying.png');
+  height: 500px;
+}
+
+.praying {
+  &.over-header {
+    text-transform: uppercase;
+    margin: $large-gap 0 $small-gap;
+    color: $blue;
+  }
+  &.heading {
+    text-transform: uppercase;
+    margin: $small-gap 0 $medium-gap;
+    font-size: $fs-large;
+    font-weight: $semibold-weight;
+  }
+  &.copy {
+    margin-top: $xlarge-gap;
   }
 }
