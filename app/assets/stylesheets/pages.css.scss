@@ -8,6 +8,9 @@
   position: absolute;
   background: none;
   box-shadow: none;
+  .navbar-brand {
+    background-image: url('/assets/concrn-logo-small-white.png');
+  }
 }
 
 .drop-main {

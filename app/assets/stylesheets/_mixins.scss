@@ -24,4 +24,8 @@ $fs-medium: modular-scale(1rem, 0, $base-ratio);
 $fs-large: modular-scale(1rem, 1, $base-ratio);
 $fs-xlarge: modular-scale(1rem, 2, $base-ratio);
 
-
+$xlarge-gap: modular-scale(1em, 2, $base-ratio);
+$large-gap: modular-scale(1em, 1, $base-ratio);
+$medium-gap: modular-scale(1em, 0, $base-ratio);
+$small-gap: modular-scale(1em, -1, $base-ratio);
+$xsmall-gap: modular-scale(1em, -2, $base-ratio);
