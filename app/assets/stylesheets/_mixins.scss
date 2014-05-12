@@ -1,0 +1,32 @@
+
+$blue: #5594cf;
+$white: #fff;
+$grey1: #f2f2f2;
+$grey2: #e1e4e4;
+$grey3: #cccdce;
+$grey4: #8c8d8e;
+$grey5: #616265;
+$grey6: #212121;
+
+$ultralight-weight: 100;
+$light-weight: 200;
+$semibold-weight: 600;
+$extrabold-weight: 900;
+
+$proxima-nova-font: "ProximaNova", Lucida Sans, Trebuchet, sans-serif;
+
+$base-ratio: 1.618; /* perfect fifth */
+$line-height-ratio: 1.4;
+
+$root-fs: 18px;
+$fs-xsmall: modular-scale(1rem, -2, $base-ratio);
+$fs-small: modular-scale(1rem, -1, $base-ratio);
+$fs-medium: modular-scale(1rem, 0, $base-ratio);
+$fs-large: modular-scale(1rem, 1, $base-ratio);
+$fs-xlarge: modular-scale(1rem, 2, $base-ratio);
+
+$xlarge-gap: modular-scale(1em, 2, $base-ratio);
+$large-gap: modular-scale(1em, 1, $base-ratio);
+$medium-gap: modular-scale(1em, 0, $base-ratio);
+$small-gap: modular-scale(1em, -1, $base-ratio);
+$xsmall-gap: modular-scale(1em, -2, $base-ratio);

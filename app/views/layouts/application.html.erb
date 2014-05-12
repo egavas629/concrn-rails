@@ -4,16 +4,13 @@
   <title>Concrn</title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "//js.pusher.com/2.1/pusher.min.js" %>
-
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="<%= asset_path("concrn-favicon.png")%>" />
-
 </head>
 <body>
-
-    <div class="navbar navbar-fixed-top" role="navigation">
+    <%= conditional_nav_tag do %>
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -23,7 +20,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/"><img src="<%= asset_path("concrn-logo-small.png")%>" alt="Concrn"></a>
+          <a class="navbar-brand" href="/"></a>
         </div>
         <div class="navbar-collapse collapse drop-nav">
           <% if user_signed_in? %>
@@ -52,53 +49,8 @@
           <% end %>
         </div><!--/.navbar-collapse -->
       </div>
-    </div>
-    <% if params[:controller]  == "pages" &&  params[:action] == "home" %>
-      <div class="drop-main">
-        <div class="jumbotron">
-          <div class="container">
-            <h1>Get the help you need</h1>
-            <p class="subtitle-copy">Use our app to report incidents of crisis and distress
-            and receive on-site support from compassionate trained responders.</p>
-            <p>
-            <a class="btn btn-primary btn-lg" href="http://signup.concrn.com" role="button">Interested? Get updates.</a>
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="image-space">
-        <col>
-          <figure class='fig-img'>
-            <img class="col-img" src="<%= asset_path("concrn-app-01.png")%>" text='test'>
-            <figcaption class='figcap'>Open Concrn in iOS to report a crisis location!</figcaption>
-          </figure>
-        </col>
-        <col>
-          <figure class='fig-img'>
-            <img class="col-img" src="<%= asset_path("concrn-app-02.png")%>" text='test'>
-            <figcaption class='figcap'>You can enter additional details...</figcaption>
-          </figure>
-        </col>
-        <col>
-          <figure class='fig-img'>
-            <img class="col-img" src="<%= asset_path("concrn-app-03.png")%>" text='test'>
-            <figcaption class='figcap'>and even call 911 at anytime.</figcaption>
-          </figure>
-        </col>
-        <col>
-          <figure class='fig-img-ind'>
-            <img class="col-img" src="<%= asset_path("concrn-app-04.png")%>" text='test'>
-            <figcaption class='figcap'>For instance, select a gender...</figcaption>
-          </figure>
-        </col>
-        <col>
-          <figure class='fig-img'>
-            <img class="col-img" src="<%= asset_path("concrn-app-05.png")%>" text='test'>
-            <figcaption class='figcap'>and update your crisis as a detailed report.</figcaption>
-          </figure>
-        </col>  
-      </div>
-    <% end%>
+    <% end %>
+    <%= yield :before_grid %>
     <div class="container main">
       <% if notice %>
           <p class="alert alert-success"><%= notice %></p>

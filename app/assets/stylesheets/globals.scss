@@ -1,3 +1,27 @@
+@import "bourbon";
+@import "mixins";
+@import "fonts";
+@import "nav";
+@import "pages";
+
+html, body {
+  font-family: $proxima-nova-font;
+  font-size: $root-fs;
+}
+
+input, select, textarea {
+  font-family: $proxima-nova-font;
+}
+
+.heading-xlarge {
+  font-size: $fs-xlarge;
+}
+
+.caps {
+  text-transform: uppercase;
+}
+
+
 .container.main {
   padding-top: 70px;
 }
@@ -34,23 +58,6 @@ tr.freshness-semi-stale {
 //   li.active {
 //     background: magenta;
 //   }
-}
-
-.drop-main {
-  padding-top: 75px;
-  .jumbotron {
-    background: url("/assets/hero-large.png") no-repeat;
-    background-size: cover;
-    height: 433px;
-    padding-top: 120px;
-    h1 {
-      text-shadow: 2px 2px 0px rgba(255, 255, 255, 1);
-    }
-    .subtitle-copy {
-      width: 450px;
-      text-shadow: 1px 2px 0px rgba(255, 255, 255, 1);
-    }
-  }
 }
 
 .image-space {

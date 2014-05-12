@@ -1,3 +1,73 @@
 // Place all the styles related to the pages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "twitter/bootstrap/_variables";
+@import "twitter/bootstrap/_mixins";
+
+.bleed {
+  background-repeat: none;
+  background-size: cover;
+  width: 100%;
+}
+
+.navbar.home {
+  position: absolute;
+  background: none;
+  box-shadow: none;
+  .navbar-brand {
+    background-image: url('/assets/concrn-logo-small-white.png');
+  }
+}
+
+.bleed.drop-main {
+  padding-top: 75px;
+  background-image: url("/assets/hero-large.png");
+  height: 465px;
+  @media(max-width: $screen-xs) {
+    padding-top: 0;
+    height: 500px;
+  }
+}
+
+.jumbohome {
+  &.container {
+    padding-top: 100px;
+    color: $white;
+  }
+
+  &.over-header {
+    font-weight: $ultralight-weight;
+    font-size: $fs-large;
+  }
+  &.heading {
+    text-transform: uppercase;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  }
+  &.copy {
+    @include make-lg-column(6);
+    font-weight: $light-weight;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.bleed.praying {
+  background-image: url('/assets/home/praying.png');
+  height: 500px;
+}
+
+.praying {
+  &.over-header {
+    text-transform: uppercase;
+    margin: $large-gap 0 $small-gap;
+    color: $blue;
+  }
+  &.heading {
+    text-transform: uppercase;
+    margin: $small-gap 0 $medium-gap;
+    font-size: $fs-large;
+    font-weight: $semibold-weight;
+  }
+  &.copy {
+    margin-top: $xlarge-gap;
+  }
+}

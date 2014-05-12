@@ -28,6 +28,8 @@ gem 'jquery-ui-rails'
 gem 'rails_12factor', group: :production
 gem 'phony_rails'
 
+gem 'bourbon'
+
 group :development, :test do
   gem 'quiet_assets'
   gem 'faker'
