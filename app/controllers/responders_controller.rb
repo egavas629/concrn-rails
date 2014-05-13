@@ -12,6 +12,11 @@ class RespondersController < ApplicationController
     end
   end
 
+  def show
+    @responder = Responder.find(params[:id])
+    render
+  end
+
   def update
     if request.xhr?
       @responder = Responder.find(params[:id])

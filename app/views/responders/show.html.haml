@@ -1,0 +1,41 @@
+%h1.name= "#{@responder.name} (Responder)"
+%label.pull-right
+  Availability
+  %br
+  = check_box_tag 'availability', nil, @responder.available?, 'data-update' => responder_path(@responder)
+%br
+%br
+%br
+.phone.pull-right= @responder.phone
+%br
+.email.pull-right= link_to @responder.email, "mailto:#{@responder.email}"
+%table.table.table-condensed
+  %thead
+    %th Date
+    %th Address
+    %th Status
+  %tbody
+    - @responder.dispatches.each do |dispatch|
+      - report = dispatch.report
+      = content_tag_for :tr, report, class: report.table_status do
+        %td= report.created_at.strftime('%-m-%-d-%y')
+        %td= report.address
+        %td= report.status
+
+:javascript
+  $("[name='availability']").bootstrapSwitch({
+    onColor: 'success',
+    onSwitchChange: function(event, state){
+      var responderAvailability = state ? 'available' : 'unavailable',
+      responderPhone = $(this).closest('tr').find('.phone').text(),
+      path = $(this).data('update');
+      $.ajax({
+        url: path,
+        type: 'PUT',
+        data: {responder: {availability: responderAvailability}},
+        success: function(data){
+          console.log(data);
+        }
+      });
+    }
+  });

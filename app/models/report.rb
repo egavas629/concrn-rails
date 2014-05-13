@@ -1,7 +1,7 @@
 class Report < ActiveRecord::Base
   has_many :dispatches
   has_many :logs
-  
+
   # Comment out style gives options to upload other types of files
   has_attached_file :image #, :styles => { :medium => "600x600>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
 
@@ -123,6 +123,21 @@ class Report < ActiveRecord::Base
 
   def google_maps_address
     "https://maps.google.com/?q=#{address}"
+  end
+
+  def table_status
+    case status
+    when 'rejected'
+      'danger'
+    when 'pending'
+      'warning'
+    when 'accepted'
+      'active'
+    when 'completed'
+      'info'
+    when 'deleted'
+      'danger'
+    end
   end
 
 end

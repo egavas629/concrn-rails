@@ -13,7 +13,7 @@
     %tbody
       - @responders.each do |responder|
         = content_tag_for :tr, responder do
-          %th= responder.name
+          %th= link_to responder.name, responder
           %td.phone= responder.phone
           %td= link_to responder.email, "mailto:#{responder.email}"
           %td= responder.completed_count
