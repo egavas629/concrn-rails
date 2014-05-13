@@ -7,7 +7,7 @@ class ReportsController < ApplicationController
   end
 
   def new
-    @report = Report.new
+    @blank_report = Report.new
   end
 
   def index
@@ -43,19 +43,18 @@ class ReportsController < ApplicationController
 
   def create
     @report = Report.new(report_params)
-
     respond_to do |format|
       if @report.save
-        format.html { 
-          redirect_to action: 'index' 
-        }
         format.js do
           Pusher.trigger("reports" , "refresh", {})
           render json: @report
         end
+        format.html { 
+          redirect_to action: 'index' 
+        }
       else
-        format.html {render action: :new}
         format.js {render json: @report}
+        format.html {render action: :new}
       end
     end
   end

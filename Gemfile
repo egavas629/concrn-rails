@@ -26,7 +26,6 @@ gem 'paperclip'
 gem 'kaminari'
 gem 'jquery-ui-rails'
 gem 'rails_12factor', group: :production
-gem 'phony_rails'
 
 gem 'bourbon'
 
