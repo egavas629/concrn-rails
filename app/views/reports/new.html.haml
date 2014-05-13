@@ -5,10 +5,7 @@
   = f.input :address
   %h4 Reporting Party Information
   = f.input :name, label: "Contact Name" 
-  = f.input :phone, label: "Contact Phone No." 
-  /= f.decimal  Location::latitude        precision: 10, scale: 6
-  /= f.decimal  Location::longitude          precision: 10, scale: 6
-  /= f.input :status default: "pending"
+  = f.input :phone, label: "Contact Phone No.", placeholder: "4158575309", type: "tel", maxlength: "10", required: true, hint: "10-digit US numbers only"
   %h4 Patient Description
   = f.input :gender, collection: Report::Gender
   = f.input :age, collection: Report::AgeGroups
