@@ -5,7 +5,7 @@
   = f.input :address
   %h4 Reporting Party Information
   = f.input :name, label: "Contact Name"
-  = f.input :phone, label: "Contact Phone No.", placeholder: '1(555) 555-5555'
+  = f.input :phone, label: "Contact Phone No.", placeholder: '555 555 5555'
   /= f.decimal  Location::latitude        precision: 10, scale: 6
   /= f.decimal  Location::longitude          precision: 10, scale: 6
   /= f.input :status default: "pending"

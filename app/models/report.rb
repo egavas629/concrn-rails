@@ -1,3 +1,5 @@
+require 'phone'
+
 class Report < ActiveRecord::Base
   has_many :dispatches
   has_many :logs
@@ -5,7 +7,7 @@ class Report < ActiveRecord::Base
   # Comment out style gives options to upload other types of files
   has_attached_file :image #, :styles => { :medium => "600x600>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
 
-  validates_plausible_phone :phone, presence: true, country_code: 'US'
+  validate :phone_number
 
   Gender = ['Male', 'Female', 'Other']
   AgeGroups = ['Youth (0-17)', 'Young Adult (18-34)', 'Adult (35-64)', 'Senior (65+)']
@@ -125,6 +127,10 @@ class Report < ActiveRecord::Base
 
   def google_maps_address
     "https://maps.google.com/?q=#{address}"
+  end
+
+  def phone_number
+    errors.add(:phone, 'number is not valid, please use the correct format.') unless Phoner::Phone.valid?("+1#{phone}")
   end
 
 end
