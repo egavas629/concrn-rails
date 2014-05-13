@@ -171,7 +171,6 @@ GEM
       cocaine (~> 0.5.3)
       mime-types
     pg (0.17.0)
-    phone (1.2.3)
     polyglot (0.3.3)
     posix-spawn (0.3.8)
     pry (0.9.12.6)
@@ -334,7 +333,6 @@ DEPENDENCIES
   kaminari
   paperclip
   pg
-  phone
   pusher
   quiet_assets
   rails (= 4.0.0)
