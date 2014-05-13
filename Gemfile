@@ -34,6 +34,8 @@ group :development, :test do
   gem 'quiet_assets'
   gem 'faker'
   gem 'factory_girl_rails'
+
+  gem 'jazz_hands'
 end
 
 group :test do

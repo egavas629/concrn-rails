@@ -10,7 +10,6 @@ FactoryGirl.define do
     race    { "Caucasian" }
     setting { %w(Workplace School Public).sample }
     nature  { %w(Anxious Intoxicated).sample }
-    agency
 
     trait(:unassigned) {}
 

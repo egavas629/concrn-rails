@@ -11,20 +11,20 @@ class ReportsController < ApplicationController
   end
 
   def index
-    @unassigned_reports = current_user.reports.unassigned
-    @pending_reports = current_user.reports.pending
+    @unassigned_reports = Report.unassigned
+    @pending_reports = Report.pending
   end
 
   def active
-    @reports = current_user.reports.accepted
+    @reports = Report.accepted
   end
 
   def history
-    @reports = current_user.agency.reports.where(status: 'completed').page(params[:page])
+    @reports = Report.where(status: 'completed').page(params[:page])
   end
 
   def filter
-    @reports  = ReportFilter.new(params['filter'], current_user.agency_id).query if params['filter'].present?
+    @reports  = ReportFilter.new(params['filter']).query if params['filter'].present?
 
     report_id = params[:report][:id] if params[:report]
     @report   = Report.find(report_id) if report_id.present?
@@ -35,7 +35,7 @@ class ReportsController < ApplicationController
   end
 
   def deleted
-    @reports = current_user.reports.deleted
+    @reports = Report.deleted
   end
 
   # Needed to comment out PUSH and json for it to redirect to index
@@ -43,26 +43,17 @@ class ReportsController < ApplicationController
 
   def create
     @report = Report.new(report_params)
-    p current_user.agency
-    p current_user.agency
-    p current_user.agency
-    p current_user.agency
-    p current_user.agency
-    @report.agency = current_user.agency
 
     respond_to do |format|
       if @report.save
-        @unassigned_reports = current_user.reports.unassigned
-        @pending_reports = current_user.reports.pending
-        format.html {redirect_to action: 'index'}
+        format.html { 
+          redirect_to action: 'index' 
+        }
         format.js do
           Pusher.trigger("reports" , "refresh", {})
           render json: @report
         end
       else
-        # @unassigned_reports = current_user.reports.unassigned
-        # @pending_reports = current_user.reports.pending
-
         format.html {render action: :new}
         format.js {render json: @report}
       end
@@ -72,7 +63,7 @@ class ReportsController < ApplicationController
   def destroy
     @report = Report.find(params[:id])
     @report.status = "deleted"
-    @report.save
+    @report.update_attribute(:status, "deleted")
     redirect_to action: 'history'
   end
 
@@ -90,7 +81,6 @@ class ReportsController < ApplicationController
   # To allow photo upload commented below out and all good.
 
   def update
-    begin
     @report = Report.find(params[:id])
     # update_params = report_params
     # if update_params[:image]
@@ -101,9 +91,6 @@ class ReportsController < ApplicationController
 
     Pusher.trigger("reports" , "refresh", {})
     render :back
-    rescue
-      binding.pry
-    end
   end
 
   def historify
