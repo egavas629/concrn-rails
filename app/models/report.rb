@@ -7,6 +7,8 @@ class Report < ActiveRecord::Base
 
   validates_plausible_phone :phone, presence: true, country_code: 'US'
 
+  before_validation :set_phone
+
   Gender = ['Male', 'Female', 'Other']
   AgeGroups = ['Youth (0-17)', 'Young Adult (18-34)', 'Adult (35-64)', 'Senior (65+)']
   RaceEthnicity = ['Hispanic or Latino', 'American Indian or Alaska Native', 'Asian',
@@ -125,6 +127,10 @@ class Report < ActiveRecord::Base
 
   def google_maps_address
     "https://maps.google.com/?q=#{address}"
+  end
+
+  def set_phone
+    self.phone = "1#{phone}" unless phone.first == '1'
   end
 
 end
