@@ -2,8 +2,8 @@
   .digits= "#{report.created_at.strftime("%I:%M %p")}"
   .words= "(#{time_ago_in_words(report.created_at)} ago)"
   .show_link= link_to("Show Details", report)
-%th= link_to report.name, filter_reports_path(report: {id: report.id}, filter: {name: report.name}), remote: true, method: :post
-%td= link_to report.phone, filter_reports_path(report: {id: report.id}, filter: {phone: report.phone}), remote: true, method: :post
+%td= link_to report.name, reporter_path(report, name: report.name)
+%td= link_to report.phone, reporter_path(report, phone: report.phone)
 %td
   %dl
     %dt Age

@@ -16,6 +16,8 @@ Streetmom::Application.routes.draw do
     end
   end
 
+  resources :reporter, only: %w(show)
+
   resources :contacts
 
   resources :logs
