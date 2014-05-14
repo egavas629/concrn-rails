@@ -21,9 +21,6 @@
     - if report.observations?
       %dt Observations
       %dd= report.observations
-  - if report.image.present?
-    %a{:target => "_blank", :href => report.image.url(:original)}
-      %img{:src => report.image.url, :style => 'width:100px;height:auto;'}
 %td
   = link_to report.address, report.google_maps_address
 %td{class: "report-#{report.id}-dispatch"}

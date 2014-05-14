@@ -15,6 +15,7 @@
       %th Date
       %th Address
       %th Status
+      %th
     %tbody
       - @responder.dispatches.each do |dispatch|
         - report = dispatch.report
@@ -22,6 +23,7 @@
           %td= report.created_at.strftime('%-m-%-d-%y')
           %td= report.address
           %td= report.status
+          %td= link_to 'Details', report_path(report)
 - else
   %strong Responder has not yet to be dispatched to a report.
 :javascript
