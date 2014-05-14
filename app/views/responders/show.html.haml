@@ -25,19 +25,32 @@
 - else
   %strong Responder has not yet to be dispatched to a report.
 :javascript
-  $("[name='availability']").bootstrapSwitch({
-    onColor: 'success',
-    onSwitchChange: function(event, state){
-      var responderAvailability = state ? 'available' : 'unavailable',
-      responderPhone = $('.phone').text(),
-      path = $(this).data('update');
-      $.ajax({
-        url: path,
-        type: 'PUT',
-        data: {responder: {availability: responderAvailability}},
-        success: function(data){
-          console.log(data);
-        }
-      });
-    }
-  });
+  $("[name=availability]").on('change', function(){
+     var responderAvailability = this.checked ? 'available' : 'unavailable',
+     responderPhone = $(this).closest('tr').find('.phone').text(),
+     path = $(this).data('update');
+     $.ajax({
+       url: path,
+       type: 'PUT',
+       data: {responder: {availability: responderAvailability}},
+       success: function(data){
+         console.log(data);
+       }
+     });
+   })
+   // $("[name='availability']").bootstrapSwitch({
+   //   onColor: 'success',
+   //   onSwitchChange: function(event, state){
+   //     var responderAvailability = state ? 'available' : 'unavailable',
+   //     responderPhone = $(this).closest('tr').find('.phone').text(),
+   //     path = $(this).data('update');
+   //     $.ajax({
+   //       url: path,
+   //       type: 'PUT',
+   //       data: {responder: {availability: responderAvailability}},
+   //       success: function(data){
+   //         console.log(data);
+   //       }
+   //     });
+   //   }
+   // });
