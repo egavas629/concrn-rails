@@ -78,6 +78,6 @@ class Dispatch < ActiveRecord::Base
   end
 
   def acknowledge_acceptance
-    Message.send "You have been assigned to the crisis at #{report.address}.", to: responder.phone
+    Message.send "You have been assigned to an incident at #{report.address}.", to: responder.phone
   end
 end
