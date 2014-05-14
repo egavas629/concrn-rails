@@ -12,5 +12,6 @@
  *= require jquery.ui.datepicker
  *= require twitter/bootstrap
  *= require bootstrap-switch.min
+ *= require ./bootstrap-overrides
  *= require globals
  */
