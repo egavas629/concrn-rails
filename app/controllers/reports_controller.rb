@@ -49,8 +49,8 @@ class ReportsController < ApplicationController
           Pusher.trigger("reports" , "refresh", {})
           render json: @report
         end
-        format.html { 
-          redirect_to action: 'index' 
+        format.html {
+          redirect_to action: 'index'
         }
       else
         format.js {render json: @report}
@@ -89,7 +89,7 @@ class ReportsController < ApplicationController
     @report.update_attributes!(report_params)
 
     Pusher.trigger("reports" , "refresh", {})
-    render :back
+    redirect_to :back
   end
 
   def historify
@@ -114,7 +114,7 @@ class ReportsController < ApplicationController
   end
 
   def report_params
-    report_attributes = [:name, :phone, :lat, :long, :status, :nature,
+    report_attributes = [:name, :phone, :lat, :long, :status, :nature, :delete_image,
       :setting, :observations, :age, :gender, :race, :address, :neighborhood, :image]
 
     params.require(:report).permit report_attributes

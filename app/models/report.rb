@@ -1,9 +1,15 @@
 class Report < ActiveRecord::Base
+
+  attr_accessor :delete_image
+
   has_many :dispatches
   has_many :logs
 
   # Comment out style gives options to upload other types of files
   has_attached_file :image #, :styles => { :medium => "600x600>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
+
+  before_validation { image.clear if delete_image == '1' }
+
 
   Gender = ['Male', 'Female', 'Other']
   AgeGroups = ['Youth (0-17)', 'Young Adult (18-34)', 'Adult (35-64)', 'Senior (65+)']

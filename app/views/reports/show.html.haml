@@ -31,7 +31,10 @@
     %li.list-group-item
       %h4.list-group-item-heading Files
       - if @report.image.present?
-        .list-group-item-text= link_to "Download #{@report.image_file_name}", download_report_path(@report)#, remote: true
+        .list-group-item-text= link_to "Download #{@report.image_file_name}", download_report_path(@report)
+        %br
+        .list-group-item-text= link_to "Remove File", report_path(@report, "report[delete_image]" => '1'), method: :put
+        %small Can only have 1 file per report
       - else
         .list-group-item-text
           = simple_form_for @report do |f|
