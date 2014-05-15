@@ -27,7 +27,7 @@ class ReportFilter
 private
 
   def completed_reports
-    Report.where(status: 'completed')
+    Report.completed
   end
 
 end
