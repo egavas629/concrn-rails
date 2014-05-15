@@ -20,18 +20,7 @@ class ReportsController < ApplicationController
   end
 
   def history
-    @reports = Report.where(status: 'completed').page(params[:page])
-  end
-
-  def filter
-    @reports  = ReportFilter.new(params['filter']).query if params['filter'].present?
-
-    report_id = params[:report][:id] if params[:report]
-    @report   = Report.find(report_id) if report_id.present?
-
-    respond_to do |format|
-      format.js
-    end
+    @reports = ReportFilter.new(params).query.page(params[:page])
   end
 
   def deleted
