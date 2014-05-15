@@ -20,7 +20,11 @@ class ReportsController < ApplicationController
   end
 
   def history
-    @reports = ReportFilter.new(params).query.page(params[:page])
+    if params[:show_all]
+      @reports = ReportFilter.new(params).query
+    else
+      @reports = ReportFilter.new(params).query.page(params[:page])
+    end
   end
 
   def deleted
