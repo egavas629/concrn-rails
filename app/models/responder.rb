@@ -59,6 +59,11 @@ class Responder < User
     "last: #{last_dispatch.status}"
   end
 
+  def set_password
+    self.password              = 'password'
+    self.password_confirmation = 'password'
+  end
+
   private
 
   def latest_dispatch

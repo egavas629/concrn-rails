@@ -21,7 +21,7 @@ Streetmom::Application.routes.draw do
 
   resources :logs
 
-  resources :responders, only: %w(index update show) do
+  resources :responders do
     collection do
       get 'by_phone'
     end
