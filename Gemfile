@@ -27,6 +27,7 @@ gem 'kaminari'
 gem 'jquery-ui-rails'
 gem 'rails_12factor', group: :production
 
+gem 'angularjs-rails'
 gem 'bourbon'
 
 group :development, :test do
