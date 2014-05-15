@@ -48,6 +48,7 @@ class Report < ActiveRecord::Base
 
   def self.completed
     joins("LEFT JOIN dispatches on dispatches.report_id=reports.id")
+      .where("reports.status != 'deleted'")
       .where("reports.status = 'completed' OR dispatches.status = 'completed'")
       .order("reports.created_at desc")
   end
