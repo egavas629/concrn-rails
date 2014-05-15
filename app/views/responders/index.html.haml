@@ -1,4 +1,6 @@
-%h2 Responders
+.row
+  %h2.col-sm-2 Responders
+  .col-sm-2.col-sm-offset-8= link_to 'New Responder', new_responder_path, class: 'btn btn-primary'
 - if @responders.any?
   %table.table
     %thead
