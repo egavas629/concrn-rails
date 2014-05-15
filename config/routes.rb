@@ -6,7 +6,6 @@ Streetmom::Application.routes.draw do
       get 'active'
       get 'history'
       get 'deleted'
-      post 'filter'
     end
 
     member do
