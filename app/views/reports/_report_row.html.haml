@@ -22,7 +22,7 @@
       %dt Observations
       %dd= report.observations
 %td
-  = link_to report.address, report.google_maps_address
+  = link_to report.address, report.google_maps_address, target: '_blank'
 %td{class: "report-#{report.id}-dispatch"}
   - if report.unassigned?
     = simple_form_for(Dispatch.new) do |f|
