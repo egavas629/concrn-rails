@@ -3,7 +3,7 @@
     %h1.name= "#{@responder.name} (Responder)"
   .col-md-5.col-md-offset-2
     %label
-      Availability
+      Available
       %br
       = check_box_tag 'availability', nil, @responder.available?, 'data-update' => responder_path(@responder)
     %br
