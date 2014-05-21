@@ -3,8 +3,8 @@ development:
   encoding: unicode
   database: streetmom_development
   pool: 5
-  username: streetmom
-  password:
+  # username: streetmom
+  # password:
   host: localhost
 
 test: &test

@@ -1,0 +1,9 @@
+%dl
+  %dt Responders
+  - report.dispatches.each do |dispatch|
+    %dd
+      = link_to dispatch.responder.name, responder_path(dispatch.responder)
+      = '(Pending)' if dispatch.pending?
+  %dl
+    %dt Dispatched
+    %dd= time_ago_in_words(report.dispatches.order('created_at DESC').last.created_at)

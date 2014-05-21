@@ -2,15 +2,17 @@ class Report < ActiveRecord::Base
 
   attr_accessor :delete_image, :status
 
+  # RELATIONS #
   has_many :dispatches
   has_many :logs
+  has_many :responders, :through => :dispatches
 
-  # Comment out style gives options to upload other types of files
-  has_attached_file :image #, :styles => { :medium => "600x600>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
+  # CALLBACKS #
+  has_attached_file :image
 
   before_validation { image.clear if delete_image == '1' }
 
-
+  # CONSTANTS #
   Gender = ['Male', 'Female', 'Other']
   AgeGroups = ['Youth (0-17)', 'Young Adult (18-34)', 'Adult (35-64)', 'Senior (65+)']
   RaceEthnicity = ['Hispanic or Latino', 'American Indian or Alaska Native', 'Asian',
@@ -19,10 +21,7 @@ class Report < ActiveRecord::Base
   CrisisObservation = ['At-risk of harm', 'Under the influence', 'Anxious', 'Depressed',
     'Aggarvated', 'Threatening']
 
-  def responder
-    current_dispatch.responder if dispatched?
-  end
-
+  # CLASS METHODS #
   def self.unassigned
     find_by_sql(<<-SQL)
       SELECT r.*, count(distinct d.id) as ad_count, count(distinct dr.id) as dr_count FROM reports r
@@ -53,38 +52,13 @@ class Report < ActiveRecord::Base
       .order("reports.created_at desc")
   end
 
-  def pending?
-    current_dispatch && current_dispatch.pending?
+  # INSTANCE METHODS #
+  def accepted_responders
+    responders.joins(:dispatches).where(:dispatches => {report_id: id, status: 'accepted'})
   end
 
-  def accepted?
-    current_dispatch && current_dispatch.accepted?
-  end
-
-  def completed?
-    current_dispatch && current_dispatch.completed?
-  end
-
-  def responder_synopses
-    [
-      address,
-      "Reporter: #{name}, #{phone}",
-      "#{race}/#{gender}/#{age}",
-      setting,
-      nature
-    ]
-  end
-
-  def current_dispatch
-    dispatches.last
-  end
-
-  def reporter_synopsis
-    <<-SMS
-    CRISIS RESPONSE:
-    #{current_dispatch.responder.name} is on the way.
-    #{current_dispatch.responder.phone}
-    SMS
+  def accepted_dispatches
+    dispatches.accepted.order('created_at DESC')
   end
 
   def freshness
@@ -105,7 +79,7 @@ class Report < ActiveRecord::Base
   end
 
   def dispatched?
-    dispatches.any?
+    dispatches.keep_if {|i| i.responder.present? }.size > 0
   end
 
   def unassigned?

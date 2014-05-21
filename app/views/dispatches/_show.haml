@@ -1,8 +1,0 @@
-%dl
-  %dt Responder Name
-  %dd= link_to dispatch.responder.name, responder_path(dispatch.responder)
-  %dt Phone
-  %dd= dispatch.responder.phone
-%dl
-  %dt Dispatched
-  %dd= time_ago_in_words(dispatch.created_at)

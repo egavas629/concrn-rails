@@ -16,7 +16,7 @@ describe LogsController do
 
   describe '#update' do
     let!(:log) { create :log }
-    let(:responder_phone) { log.report.responder.phone }
+    let(:responder_phone) { log.report.accepted_responders.first.phone }
     let(:params) { {"id"=>log.to_param} }
     let(:request) { put :update, params }
 
