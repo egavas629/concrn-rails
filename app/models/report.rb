@@ -1,6 +1,6 @@
 class Report < ActiveRecord::Base
 
-  attr_accessor :delete_image
+  attr_accessor :delete_image, :status
 
   has_many :dispatches
   has_many :logs
@@ -117,8 +117,12 @@ class Report < ActiveRecord::Base
     valid_dispatch.present? ? valid_dispatch.status : "unassigned"
   end
 
+  def delete!
+    update_attribute(:status, "deleted")
+  end
+
   def deleted?
-    attributes["status"] == "deleted"
+    status == "deleted"
   end
 
   def accept_feedback(opts={})
@@ -129,19 +133,14 @@ class Report < ActiveRecord::Base
     "https://maps.google.com/?q=#{address}"
   end
 
+# TODO: Write CSS rules for actual statuses, and get rid of this method.
   def table_status
-    case status
-    when 'rejected'
-      'danger'
-    when 'pending'
-      'warning'
-    when 'accepted'
-      'active'
-    when 'completed'
-      'info'
-    when 'deleted'
-      'danger'
-    end
+    {
+      'rejected'  => 'danger',
+      'pending'   => 'warning',
+      'accepted'  => 'active',
+      'completed' => 'info',
+      'deleted'   => 'danger'
+    }.fetch(status)
   end
-
 end

@@ -33,26 +33,22 @@ class ReportsController < ApplicationController
 
   def create
     @report = Report.new(report_params)
+
     respond_to do |format|
       if @report.save
-        format.js do
-          Pusher.trigger("reports" , "refresh", {})
-          render json: @report
-        end
-        format.html {
-          redirect_to action: 'index'
-        }
+        Pusher.trigger('reports' , 'refresh', {})
+        format.js { render json: @report }
+        format.html { redirect_to action: 'index' }
       else
-        format.js {render json: @report}
-        format.html {render action: :new}
+        format.js { render json: @report }
+        format.html { render action: :new }
       end
     end
   end
 
   def destroy
     @report = Report.find(params[:id])
-    @report.status = "deleted"
-    @report.update_attribute(:status, "deleted")
+    @report.delete!
     redirect_to action: 'history'
   end
 
