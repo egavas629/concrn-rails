@@ -39,7 +39,8 @@ tr.freshness-semi-stale {
 .navbar {
   background: white;
   box-shadow: 0 1px 1px rgba(0,0,0,0.37);
-  position: relative; 
+  position: relative;
+  margin-bottom: 5px; 
   
   .navbar-brand {
     padding: 6px 15px;
@@ -50,10 +51,25 @@ tr.freshness-semi-stale {
     padding-bottom: 0px;
   }
 
+  .navbar-nav {
+    float: left;
+    margin: 0;
+    padding-left: 20px;
+    padding-top: 2px;
+  }
+
+  .navbar-text {
+    margin-top: 17px;
+  }
+  
 //   li.active {
 //     background: magenta;
 //   }
 }
+
+.navbar-fixed-top {
+  border-width: 0 0 6px;
+  }
 
 .image-space {
   //background: url("/assets/concrn-logo-small.png") no-repeat;

@@ -16,13 +16,16 @@
   background: none;
   box-shadow: none;
   .navbar-brand {
-    background-image: url('/assets/concrn-logo-small-white.png');
+    background-image: url('/assets/concrn-logo-small.png');
+  }
+  .navbar-text {
+    color: white;
   }
 }
 
 .bleed.drop-main {
   padding-top: 75px;
-  background-image: url("/assets/home/hero-large.png");
+  background-image: url("/assets/home/city-crop.png");
   height: 465px;
   @media(max-width: $screen-xs) {
     padding-top: 0;
