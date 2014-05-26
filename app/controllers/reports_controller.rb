@@ -67,15 +67,11 @@ class ReportsController < ApplicationController
 
   def update
     @report = Report.find(params[:id])
-    # update_params = report_params
-    # if update_params[:image]
-    #   bytes = Base64.decode64(update_params.delete(:image))
-    #   update_params[:image] = StringIO.new(bytes)
-    # end
     @report.update_attributes!(report_params)
 
     Pusher.trigger("reports" , "refresh", {})
-    redirect_to :back
+    format.js { render json: {success: true} }
+    format.html { redirect_to :back }
   end
 
   def historify
