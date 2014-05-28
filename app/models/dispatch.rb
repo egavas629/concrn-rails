@@ -8,6 +8,7 @@ class Dispatch < ActiveRecord::Base
   validates_presence_of :responder
 
   # SCOPE #
+  default_scope { order(:created_at) }
   scope :accepted,     -> { where(status: 'accepted') }
   scope :not_rejected, -> { where.not(status: 'rejected') }
 
