@@ -107,11 +107,12 @@ class Report < ActiveRecord::Base
 # TODO: Write CSS rules for actual statuses, and get rid of this method.
   def table_status
     {
-      'rejected'  => 'danger',
-      'pending'   => 'warning',
-      'accepted'  => 'active',
-      'completed' => 'info',
-      'deleted'   => 'danger'
+      'rejected'      => 'danger',
+      'pending'       => 'warning',
+      'accepted'      => 'active',
+      'completed'     => 'info',
+      'deleted'       => 'danger',
+      'unassigned'    => 'warning'
     }.fetch(status)
   end
 end
