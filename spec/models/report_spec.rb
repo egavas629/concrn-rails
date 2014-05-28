@@ -21,7 +21,7 @@ describe Report do
 
   describe 'leaving notes on a completed report' do
     let(:report) { create :report, :completed }
-    let(:rachel) { report.responder }
+    let(:rachel) { report.responders.first }
 
     it 'does not reopen the report' do
       ->{ rachel.respond "He was still there, this morning." }.

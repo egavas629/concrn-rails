@@ -32,10 +32,6 @@ class Responder < User
     latest_dispatch.accept! unless latest_dispatch.accepted? || latest_dispatch.completed?
   end
 
-  def dispatch_to(report)
-    Dispatch.create!(report: report, responder: self)
-  end
-
   def completed_count
     dispatches.where(status: "completed").count
   end

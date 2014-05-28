@@ -1,6 +1,6 @@
 class DispatchesController < ApplicationController
   def create
-    if responder.dispatch_to(report)
+    if report.dispatch! responder
       flash[:notice] = "#{responder.name} has been dispatched to help #{report.name}."
       redirect_to reports_path
     end

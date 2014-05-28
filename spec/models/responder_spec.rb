@@ -1,12 +1,14 @@
 require 'spec_helper'
 
 describe Responder do
-  describe '#dispatch_to' do
-    let(:report) { create :report, :unassigned }
-    let(:responder) { create :responder }
-
-    it 'changes the status of the given report' do
-      -> { responder.dispatch_to report }.should change(report, :status)
-    end
-  end
+  describe('.available')
+  describe('#make_available!')
+  describe('#phone=(new_phone)')
+  describe('#respond(body)')
+  describe('#completed_count')
+  describe('#rejected_count')
+  describe('#available?')
+  describe('#unavailable?')
+  describe('#status')
+  describe('#set_password')
 end

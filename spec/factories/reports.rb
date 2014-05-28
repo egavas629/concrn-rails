@@ -27,7 +27,7 @@ FactoryGirl.define do
     trait(:assigned) do
       after(:create) do |report|
         report.dispatch!(create :responder)
-        report.last.dispatch.accept!
+        report.dispatches.last.accept!
       end
     end
   end
