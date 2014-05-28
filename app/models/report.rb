@@ -34,11 +34,11 @@ class Report < ActiveRecord::Base
   end
 
   def self.pending
-    joins(:dispatches).where(status: "pending").where(dispatches: {status: "pending"}).order("created_at desc")
+    joins(:dispatches).where(status: "pending").where(dispatches: {status: "pending"}).order("created_at desc").uniq
   end
 
   def self.accepted
-    joins(:dispatches).where(status: "pending").where(dispatches: {status: "accepted"}).order("created_at desc")
+    joins(:dispatches).where(status: "pending").where(dispatches: {status: "accepted"}).order("created_at desc").uniq
   end
 
   def self.deleted
