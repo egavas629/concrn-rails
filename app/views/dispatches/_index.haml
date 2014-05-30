@@ -1,6 +1,6 @@
 %dl
   %dt Responders
-  - report.dispatches.each do |dispatch|
+  - report.dispatches.joins(:responder).each do |dispatch|
     %dd
       = link_to dispatch.responder.name, responder_path(dispatch.responder)
       = '(Pending)' if dispatch.pending?
