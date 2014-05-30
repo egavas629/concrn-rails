@@ -49,7 +49,7 @@ class ReportsController < ApplicationController
   def destroy
     @report = Report.find(params[:id])
     @report.delete!
-    redirect_to action: 'history'
+    redirect_to action: :index
   end
 
   def upload
