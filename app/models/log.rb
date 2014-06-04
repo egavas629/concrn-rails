@@ -8,15 +8,6 @@ class Log < ActiveRecord::Base
 
   # INSTANCE METHODS #
   def broadcast
-    puts report.accepted_responders
-    puts report.accepted_responders
-    puts report.accepted_responders
-    puts report.accepted_responders
-    puts report.accepted_responders
-    puts report.accepted_responders
-    puts report.accepted_responders
-    puts report.accepted_responders
-    puts report.accepted_responders
     message_sent = false
 
     report.accepted_responders.each do |responder|
