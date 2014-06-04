@@ -42,6 +42,7 @@
             %br
             = f.button :submit, 'Add File'
 
+<<<<<<< HEAD
   %ul.list.group.col-md-8
     %li.list-group-item
       %h4.list-group-item-heading
@@ -67,6 +68,8 @@
           .col-md-12= f.input :body, as: :string, label: false, placeholder: 'Enter details...'
           = f.input :author_id, as: :hidden, input_html: { value: current_user.id }
           = f.input :report_id, as: :hidden, input_html: { value: @report.id }
+
+  %ul.list.group.col-md-8= render partial: "reports/logroll"
 
 = link_to 'Delete', report_path(@report), method: :delete,
   confirm: 'Are you sure you want to delete the report?', class: 'btn btn-danger'
