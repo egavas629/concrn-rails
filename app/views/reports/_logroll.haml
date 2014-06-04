@@ -1,24 +1,27 @@
-%li.list-group-item
-  %h4.list-group-item-heading
-    .row
-      .col-sm-12
-        %span{style: 'float:left;'}
-          Transcript
-          = ' with ' unless @report.unassigned?
-        %span.text-right{style: 'float:right;'}= "#{@report.responders.map { |i| i.name + ' @ ' + i.phone }.join('<br>') }".html_safe
-  - @report.logs.each_with_index do |log, i|
-    %div{class: "row log-entry#{' dark' if i.odd?}"}
-      .col-md-1= log.created_at.strftime('%H:%M')
-      .col-md-1= log.author.name
-      .col-md-6= log.body
-      - unless @report.unassigned? || log.broadcasted?
-        .col-md-3.forward-via-sms=link_to "Send SMS", log_path(log), method: 'PUT'
-      - if log.broadcasted?
-        .col-md-3.sent-stamp= "Sent (#{log.updated_at.strftime('%H:%M')})"
+.logroll
+  %li.list-group-item
+    %h4.list-group-item-heading
+      .row
+        .col-sm-6
+          = "Transcript#{' with ' if @report.accepted? }"
+        .col-sm-6
+          %span{style: 'float:right;'}
+            - @report.accepted_responders.each do |responder|
+              .responder{style: 'float:right;'}= "#{responder.name} @ #{responder.phone}"
+              %br
+    - @report.logs.each_with_index do |log, i|
+      %div{class: "row log-entry#{' dark' if i.odd?}"}
+        .col-md-1= log.created_at.strftime('%H:%M')
+        .author{class: "col-md-1", style: "width: auto; white-space: nowrap;"}= log.author.name
+        .body{class: "col-md-6"}= log.body
+        - unless @report.unassigned? || log.broadcasted?
+          .col-md-2.forward-via-sms{style: 'float:right;'}=link_to "Send SMS", log_path(log), method: 'PUT'
+        - if log.broadcasted?
+          .col-md-2.sent-stamp{style: 'float:right;'}= "Sent (#{log.updated_at.strftime('%H:%M')})"
 
-%li.list-group-item.metaphone
-  = simple_form_for @metaphone do |f|
-    .row
-      .col-md-12= f.input :body, as: :string, label: false, placeholder: 'Enter details...'
-      = f.input :author_id, as: :hidden, input_html: { value: current_user.id }
-      = f.input :report_id, as: :hidden, input_html: { value: @report.id }
+  %li.list-group-item.metaphone
+    = simple_form_for @metaphone do |f|
+      .row
+        .col-md-12= f.input :body, as: :string, label: false, placeholder: 'Enter details...'
+        = f.input :author_id, as: :hidden, input_html: { value: current_user.id }
+        = f.input :report_id, as: :hidden, input_html: { value: @report.id }

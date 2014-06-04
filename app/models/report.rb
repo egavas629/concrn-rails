@@ -82,6 +82,10 @@ class Report < ActiveRecord::Base
     !dispatched? || dispatches.all?(&:rejected?)
   end
 
+  def accepted?
+    accepted_responders.any?
+  end
+
   def archived?
     status == 'archived'
   end

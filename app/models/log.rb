@@ -8,11 +8,22 @@ class Log < ActiveRecord::Base
 
   # INSTANCE METHODS #
   def broadcast
+    puts report.accepted_responders
+    puts report.accepted_responders
+    puts report.accepted_responders
+    puts report.accepted_responders
+    puts report.accepted_responders
+    puts report.accepted_responders
+    puts report.accepted_responders
+    puts report.accepted_responders
+    puts report.accepted_responders
     message_sent = false
+
     report.accepted_responders.each do |responder|
       Message.send(body, to: responder.phone) && message_sent = true
     end
-    self.update_attribute(:sent_at, Time.now) if message_sent
+
+    self.touch(:sent_at) if message_sent
   end
 
   def broadcasted?
