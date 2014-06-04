@@ -4,7 +4,7 @@
   %h4 Location
   = f.input :address
   %h4 Reporting Party Information
-  = f.input :name, label: "Contact Name" 
+  = f.input :name, label: "Contact Name"
   = f.input :phone, label: "Contact Phone No.", placeholder: "4158575309", type: "tel", maxlength: "10", required: true, hint: "10-digit US numbers only"
   %div.form-group
     %label.control-label{for: "isPerson"} Is this report concerning a person?
@@ -15,9 +15,9 @@
     = f.input :age, collection: Report::AgeGroups
     = f.input :race, collection: Report::RaceEthnicity
     = f.input :setting, collection: Report::CrisisSetting
-    %h4 Crisis Description
+    %h4 Incident Description
     = f.input :observations, as: :check_boxes, collection: Report::CrisisObservation
-  = f.input :nature, label: "Additional Description" 
+  = f.input :nature, label: "Additional Description"
   = f.submit 'Submit Report', class: 'btn btn-primary'
 
 / = @location.address

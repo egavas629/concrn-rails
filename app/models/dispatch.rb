@@ -66,7 +66,7 @@ class Dispatch < ActiveRecord::Base
   end
 
   def thank_reporter
-    Message.send "Crisis resolved, thanks for being concrned!", to: report.phone
+    Message.send "Report resolved, thanks for being concrned!", to: report.phone
   end
 
   def acknowledge_rejection
@@ -93,7 +93,7 @@ class Dispatch < ActiveRecord::Base
 
   def reporter_synopsis
     <<-SMS
-    CRISIS RESPONSE:
+    INCIDENT RESPONSE:
     #{responder.name} is on the way.
     #{responder.phone}
     SMS
