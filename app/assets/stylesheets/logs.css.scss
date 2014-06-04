@@ -7,18 +7,5 @@ $brand-shade: lighten($brand-lowlight, 12);
 $brand-highlight: red;
 
 .log-entry {
-  min-height: 25px;
-
-  .forward-via-sms {
-    display: none;
-  }
-
-  .sent-stamp { color: $brand-highlight }
-
-  &.dark { background: $brand-shade; }
-
-  &:hover {
-    background: $brand-lowlight;
-    .forward-via-sms {display: inline;}
-  }
+  margin-bottom: 7px;
 }

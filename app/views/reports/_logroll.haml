@@ -10,14 +10,14 @@
               .responder{style: 'float:right;'}= "#{responder.name} @ #{responder.phone}"
               %br
     - @report.logs.each_with_index do |log, i|
-      %div{class: "row log-entry#{' dark' if i.odd?}"}
+      %div{class: "row log-entry"}
         .col-md-1= log.created_at.strftime('%H:%M')
         .author{class: "col-md-1", style: "width: auto; white-space: nowrap;"}= log.author.name
         .body{class: "col-md-6"}= log.body
         - unless @report.unassigned? || log.broadcasted?
-          .col-md-2.forward-via-sms{style: 'float:right;'}=link_to "Send SMS", log_path(log), method: 'PUT'
+          .col-md-2.forward-via-sms{style: 'width: auto; float:right; '}=link_to "Send SMS", log_path(log), method: 'PUT'
         - if log.broadcasted?
-          .col-md-2.sent-stamp{style: 'float:right;'}= "Sent (#{log.updated_at.strftime('%H:%M')})"
+          .col-md-2.sent-stamp{style: 'width: auto; float:right;'}= "Sent (#{log.updated_at.strftime('%H:%M')})"
 
   %li.list-group-item.metaphone
     = simple_form_for @metaphone do |f|
