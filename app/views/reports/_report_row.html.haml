@@ -8,25 +8,25 @@
 %td= link_to report.phone, reporter_path(report, phone: report.phone)
 
 %td
-  - if report.age?
-    %dt Age
-    %dd= report.age
   - if report.gender?
     %dt Gender
     %dd= report.gender
+  - if report.age?
+    %dt Age
+    %dd= report.age
   - if report.race?
     %dt Race
     %dd= report.race
 
 %td
-  = report.nature
-  %dl
-    - if report.setting?
-      %dt Setting
-      %dd= report.setting
-    - if report.observations?
-      %dt Observations
-      %dd= report.observations
+  - if report.nature?
+    %dd=report.nature
+  - if report.setting?
+    %dt Setting
+    %dd= report.setting
+  - if report.observations?
+    %dt Observations
+    %dd= report.observations
 
 %td= link_to report.address, report.google_maps_address, target: '_blank'
 

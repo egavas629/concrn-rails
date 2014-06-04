@@ -18,7 +18,7 @@
     %h4 Crisis Description
     = f.input :observations, as: :check_boxes, collection: Report::CrisisObservation
   = f.input :nature, label: "Additional Description" 
-  = f.submit 'Submit Report'
+  = f.submit 'Submit Report', class: 'btn', style: 'background-color:#428bca; color:white;'
 
 / = @location.address
 / = :lat(@location.latitude)
