@@ -8,23 +8,23 @@
 %td= link_to report.phone, reporter_path(report, phone: report.phone)
 
 %td
-  - if report.gender?
+  - if report.gender.present?
     %dt Gender
     %dd= report.gender
-  - if report.age?
+  - if report.age.present?
     %dt Age
     %dd= report.age
-  - if report.race?
+  - if report.race.present?
     %dt Race
     %dd= report.race
 
 %td
-  - if report.nature?
+  - if report.nature.present?
     %dd=report.nature
-  - if report.setting?
+  - if report.setting.present?
     %dt Setting
     %dd= report.setting
-  - if report.observations?
+  - if report.observations.present?
     %dt Observations
     %dd= report.observations
 
