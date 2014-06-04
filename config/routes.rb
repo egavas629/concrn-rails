@@ -9,7 +9,6 @@ Streetmom::Application.routes.draw do
     end
 
     member do
-      put 'historify'
       post 'upload'
       get 'download' => 'reports#download', :as => :download
     end

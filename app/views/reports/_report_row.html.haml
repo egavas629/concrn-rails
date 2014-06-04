@@ -8,11 +8,13 @@
 %td= link_to report.phone, reporter_path(report, phone: report.phone)
 
 %td
-  %dl
+  - if report.age?
     %dt Age
     %dd= report.age
+  - if report.gender?
     %dt Gender
     %dd= report.gender
+  - if report.race?
     %dt Race
     %dd= report.race
 
@@ -31,11 +33,3 @@
 %td{class: "report-#{report.id}-dispatch"}
   = render partial: "dispatches/create", locals: { report: report }
   = render partial: "dispatches/index", locals: { report: report } if report.dispatches.present?
-
-  - if params[:action] == "index"
-    = form_tag(historify_report_path(id: report.id), :method => :put) do
-      = submit_tag("Move to history")
-
-  - if !report.deleted?
-    = form_for(report, :method => :delete) do |f|
-      = f.submit("Delete")

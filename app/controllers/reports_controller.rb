@@ -24,10 +24,6 @@ class ReportsController < ApplicationController
     @reports = params[:show_all] ? reports : reports.page(params[:page])
   end
 
-  def deleted
-    @reports = Report.deleted
-  end
-
   # Needed to comment out PUSH and json for it to redirect to index
   # Then just moved it to js in case mobile needs it
 
@@ -48,7 +44,7 @@ class ReportsController < ApplicationController
 
   def destroy
     @report = Report.find(params[:id])
-    @report.delete!
+    @report.destroy!
     redirect_to action: :index
   end
 
@@ -68,17 +64,12 @@ class ReportsController < ApplicationController
   def update
     @report = Report.find(params[:id])
     @report.update_attributes!(report_params)
-
     Pusher.trigger("reports" , "refresh", {})
-    format.js { render json: {success: true} }
-    format.html { redirect_to :back }
+    respond_to do |format|
+      format.js { render json: {success: true} }
+      format.html { redirect_to :back }
+    end
   end
-
-  def historify
-    Report.find(params[:id]).update_attributes(status: "completed")
-    Pusher.trigger("reports" , "refresh", {})
-  end
-
 
   def show
     @report = Report.find(params[:id])

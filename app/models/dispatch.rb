@@ -6,6 +6,7 @@ class Dispatch < ActiveRecord::Base
   # VALIDATIONS #
   validates_presence_of :report
   validates_presence_of :responder
+  validates_inclusion_of :status, in: %w(pending accepted rejected)
 
   # SCOPE #
   default_scope { order(:created_at) }
@@ -55,6 +56,7 @@ class Dispatch < ActiveRecord::Base
     if update_attributes!(status: 'completed')
       thank_responder
       thank_reporter
+      report.complete!
     end
   end
 

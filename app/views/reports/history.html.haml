@@ -8,7 +8,6 @@
     .col-sm-2= f.button :submit, 'Search Dates', style: 'margin-top:25px;'
     .col-sm-2= link_to 'Show All', history_reports_path(start_date: params[:start_date],
       end_date: params[:end_date], order: params[:order], show_all: true), class: 'btn btn-primary'
-    .col-sm-2= link_to 'Deleted Reports', deleted_reports_path, class: 'btn btn-warning'
 %hr
 = render partial: "report_table", locals: { reports: @reports }
 
@@ -20,7 +19,6 @@
     $('.date').datepicker({
       dateFormat: 'M d, yy'
     })
-
   };
 
   $(document).ready(ready);

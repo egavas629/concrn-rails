@@ -1,10 +1,10 @@
 class Report < ActiveRecord::Base
 
-  attr_accessor :delete_image, :status
+  attr_accessor :delete_image
 
   # RELATIONS #
-  has_many :dispatches
-  has_many :logs
+  has_many :dispatches, dependent: :destroy
+  has_many :logs,       dependent: :destroy
   has_many :responders, :through => :dispatches
 
   # CALLBACKS #
@@ -39,14 +39,13 @@ class Report < ActiveRecord::Base
     joins(:dispatches).where(status: "pending").where(dispatches: {status: "accepted"}).order("created_at desc").uniq
   end
 
-  def self.deleted
-    where(status: "deleted")
+  def self.archived
+    where(status: "archived")
   end
 
   def self.completed
     joins("LEFT JOIN dispatches on dispatches.report_id=reports.id")
-      .where("reports.status != 'deleted'")
-      .where("reports.status = 'completed' OR dispatches.status = 'completed'")
+      .where("reports.status = 'archived' OR dispatches.status = 'completed'")
       .order("reports.created_at desc")
   end
 
@@ -83,17 +82,15 @@ class Report < ActiveRecord::Base
     !dispatched? || dispatches.all?(&:rejected?)
   end
 
-  def status
-    valid_dispatch = dispatches.not_rejected.latest
-    valid_dispatch.present? ? valid_dispatch.status : "unassigned"
+  def archived?
+    status == 'archived'
   end
 
-  def delete!
-    update_attribute(:status, "deleted")
-  end
-
-  def deleted?
-    status == "deleted"
+  def complete!
+    changes                = Hash.new
+    changes[:status]       = 'archived' unless archived?
+    changes[:completed_at] = Time.now if completed_at.nil?
+    update_attributes(changes)
   end
 
   def accept_feedback(opts={})
@@ -110,8 +107,7 @@ class Report < ActiveRecord::Base
       'rejected'      => 'danger',
       'pending'       => 'warning',
       'accepted'      => 'active',
-      'completed'     => 'info',
-      'deleted'       => 'danger',
+      'archived'      => 'info',
       'unassigned'    => 'warning'
     }.fetch(status)
   end
