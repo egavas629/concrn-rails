@@ -6,7 +6,6 @@ class Dispatch < ActiveRecord::Base
   # VALIDATIONS #
   validates_presence_of :report
   validates_presence_of :responder
-  validates_inclusion_of :status, in: %w(pending accepted rejected)
 
   # SCOPE #
   default_scope { order(:created_at) }
