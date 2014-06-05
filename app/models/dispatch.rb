@@ -11,6 +11,7 @@ class Dispatch < ActiveRecord::Base
   default_scope { order(:created_at) }
   scope :accepted,     -> { where(status: 'accepted') }
   scope :not_rejected, -> { where.not(status: 'rejected') }
+  scope :pending,      -> { where(status: 'pending') }
 
   # CALLBACKS #
   after_commit :alert_responder, on: :create

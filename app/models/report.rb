@@ -34,11 +34,16 @@ class Report < ActiveRecord::Base
   end
 
   def self.pending
-    joins(:dispatches).where(status: "pending").where(dispatches: {status: "pending"}).order("created_at desc").uniq
+    joins(:dispatches)
+    .where(status: "pending")
+    .where.not(id: accepted.map(&:id)).uniq
   end
 
   def self.accepted
-    joins(:dispatches).where(status: "pending").where(dispatches: {status: "accepted"}).order("created_at desc").uniq
+    joins(:dispatches)
+    .where(status: "pending")
+    .merge(Dispatch.accepted)
+    .order("created_at desc")
   end
 
   def self.archived
@@ -96,7 +101,7 @@ class Report < ActiveRecord::Base
     changes                = Hash.new
     changes[:status]       = 'archived' unless archived?
     changes[:completed_at] = Time.now if completed_at.nil?
-    update_attributes(changes)
+    dispatches.pending.each {|i| i.update_attribute(:status, 'rejected')} if update_attributes(changes)
   end
 
   def accept_feedback(opts={})
