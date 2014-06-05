@@ -8,4 +8,4 @@
         = '(Pending)' if dispatch.pending?
     %dl
       %dt Dispatched
-      %dd= time_ago_in_words(report.dispatches.not_rejected.order('created_at DESC').last.created_at)
+      %dd= time_ago_in_words(report.dispatches.not_rejected.first.created_at)
