@@ -2,7 +2,7 @@ class DispatchesController < ApplicationController
   def create
     if report.dispatch! responder
       flash[:notice] = "#{responder.name} has been dispatched to help #{report.name}."
-      redirect_to reports_path
+      redirect_to :back
     end
   end
 
