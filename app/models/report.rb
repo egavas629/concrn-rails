@@ -21,39 +21,28 @@ class Report < ActiveRecord::Base
   CrisisSetting     = ['Public Space', 'Workplace', 'School', 'Home', 'Other']
   CrisisObservation = ['At-risk of harm', 'Under the influence', 'Anxious', 'Depressed', 'Aggarvated', 'Threatening']
 
-  # CLASS METHODS #
-  def self.unassigned
-    find_by_sql(<<-SQL)
-      SELECT r.*, count(distinct d.id) as ad_count, count(distinct dr.id) as dr_count FROM reports r
-        LEFT JOIN dispatches d on d.report_id=r.id
-        LEFT JOIN dispatches dr on dr.report_id=r.id AND dr.status='rejected'
-      WHERE r.status = 'pending'
-      GROUP BY r.id
-      HAVING count(distinct d.id) = count(distinct dr.id)
-    SQL
+  # SCOPE #
+  scope :accepted, -> do
+    joins(:dispatches).where(status: "pending")
+      .merge(Dispatch.accepted).order("created_at desc")
   end
 
-  def self.pending
-    joins(:dispatches)
-    .where(status: "pending")
-    .where.not(id: accepted.map(&:id)).uniq
-  end
+  scope :archived, -> { where(status: "archived") }
 
-  def self.accepted
-    joins(:dispatches)
-    .where(status: "pending")
-    .merge(Dispatch.accepted)
-    .order("created_at desc")
-  end
-
-  def self.archived
-    where(status: "archived")
-  end
-
-  def self.completed
+  scope :completed, -> do
     joins("LEFT JOIN dispatches on dispatches.report_id=reports.id")
       .where("reports.status = 'archived' OR dispatches.status = 'completed'")
       .order("reports.created_at desc")
+  end
+
+  scope :pending, -> do
+    joins(:dispatches).where(status: "pending")
+      .where.not(id: accepted.map(&:id)).uniq
+  end
+
+  scope :unassigned, -> do
+    includes(:dispatches).where(status: 'pending')
+      .where(dispatches: {report_id: nil})
   end
 
   # INSTANCE METHODS #

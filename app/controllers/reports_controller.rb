@@ -1,6 +1,7 @@
 class ReportsController < ApplicationController
-  before_filter :authenticate_user!, only: [:index]
-  before_filter :ensure_dispatcher, only: %w(index active history)
+  before_action :authenticate_user!, only: [:index]
+  before_action :ensure_dispatcher, only: %w(index active history)
+  before_action :available_responders, only: %w(index active)
 
   def ensure_dispatcher
     redirect_to edit_user_registration_path unless current_user.role == 'dispatcher'
@@ -83,6 +84,10 @@ class ReportsController < ApplicationController
                          disposition: 'attachment',
                          stream:      'true',
                          buffer_size: '4096'
+  end
+
+  def available_responders
+    @available_responders = Responder.available
   end
 
   def report_params
