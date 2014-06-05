@@ -10,6 +10,10 @@
       .list-group-item-text= @report.completed_at ? 'Completed' : @report.status.capitalize
 
     %li.list-group-item
+      %h4.list-group-item-heading Observations
+      .list-group-item-text=@report.observations.join(', ')
+
+    %li.list-group-item
       %h4.list-group-item-heading Reported at
       .list-group-item-text=@report.created_at
 

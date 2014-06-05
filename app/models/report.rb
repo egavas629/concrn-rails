@@ -1,6 +1,7 @@
 class Report < ActiveRecord::Base
 
   attr_accessor :delete_image
+  serialize :observations, Array
 
   # RELATIONS #
   has_many :dispatches, dependent: :destroy
@@ -11,6 +12,7 @@ class Report < ActiveRecord::Base
   has_attached_file :image
 
   before_validation { image.clear if delete_image == '1' }
+  before_validation { observations.delete_if(&:empty?) if observations_changed? }
 
   # CONSTANTS #
   Gender            = ['Male', 'Female', 'Other']

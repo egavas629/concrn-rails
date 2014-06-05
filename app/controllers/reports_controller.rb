@@ -29,7 +29,6 @@ class ReportsController < ApplicationController
 
   def create
     @report = Report.new(report_params)
-
     respond_to do |format|
       if @report.save
         Pusher.trigger('reports' , 'refresh', {})
@@ -87,8 +86,7 @@ class ReportsController < ApplicationController
   end
 
   def report_params
-    report_attributes = [:name, :phone, :lat, :long, :status, :nature, :delete_image,
-      :setting, :observations, :age, :gender, :race, :address, :neighborhood, :image]
+    report_attributes = [:name, :phone, :lat, :long, :status, :nature, :delete_image, :setting, {:observations => []}, :age, :gender, :race, :address, :neighborhood, :image]
 
     params.require(:report).permit report_attributes
   end

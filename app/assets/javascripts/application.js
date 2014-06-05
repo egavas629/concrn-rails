@@ -16,6 +16,4 @@
 //= require turbolinks
 //= require twitter/bootstrap
 //= require bootstrap-switch.min
-//= require angular
 //= require_tree .
-angular.module('concrnApp', []);

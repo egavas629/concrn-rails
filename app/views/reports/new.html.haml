@@ -1,15 +1,14 @@
 %h2 Create a report
-- def @blank_report.is_person; false; end
-= simple_form_for(@blank_report, html: {"ng-init" => "isPerson = false"}) do |f|
+= simple_form_for @blank_report do |f|
   %h4 Location
   = f.input :address
   %h4 Reporting Party Information
   = f.input :name, label: "Contact Name"
   = f.input :phone, label: "Contact Phone No.", placeholder: "4158575309", type: "tel", maxlength: "10", required: true, hint: "10-digit US numbers only"
   %div.form-group
-    %label.control-label{for: "isPerson"} Is this report concerning a person?
-    %input.form-control{"ng-model" => "isPerson", "type" => "checkbox"}
-  %div{"ng-show" => "isPerson"}
+    %label.control-label Is this report concerning a person?
+    %input#is-person.form-control{type: 'checkbox'}
+  %div#person-fields{style: 'display:none;'}
     %h4 Patient Description
     = f.input :gender, collection: Report::Gender
     = f.input :age, collection: Report::AgeGroups
@@ -23,3 +22,13 @@
 / = @location.address
 / = :lat(@location.latitude)
 / = :long(@location.longitude)
+:javascript
+  $('#is-person').on('change', function(){
+    var status;
+    if(this.checked){
+      status = 'show';
+    }else{
+      status = 'hide';
+    }
+    $('#person-fields')[status]();
+  })
