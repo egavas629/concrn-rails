@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :dispatcher do
     email         { Faker::Internet.email }
-    phone         { '6504242429462' }
+    phone         { '5103874543' }
     password      { 'password' }
     name          { Faker::Name.name }
     availability  { 'unavailable' }
@@ -9,7 +9,7 @@ FactoryGirl.define do
 
   factory :responder do
     email         { Faker::Internet.email }
-    phone         { '6504242429462' }
+    phone         { ['4242429462', '5103874543'].sample }
     password      { 'password' }
     name          { Faker::Name.name }
     availability  { 'available' }

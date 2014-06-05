@@ -28,4 +28,14 @@ describe Report do
       should_not change(report, :status).from('completed')
     end
   end
+
+  describe '#dispatch' do
+    let(:report) { create :report }
+    let(:jane) { create :responder }
+
+    it 'messages the potential responder' do
+      report.dispatch! jane
+      expect(Message).to receive(:send).with(anything, to: jane.phone)
+    end
+  end
 end
