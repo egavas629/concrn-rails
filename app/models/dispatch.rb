@@ -74,7 +74,11 @@ class Dispatch < ActiveRecord::Base
     Message.send "We appreciate your timely rejection. Your report is being re-submitted.", to: responder.phone
   end
 
-  def alert_responders
+  def alert_responder
+    puts '~~~~~~~~~~~~~~~~'
+    puts '~~~~~~~~~~~~~~~~'
+    puts '~~~~~~~~~~~~~~~~'
+    puts '~~~~~~~~~~~~~~~~'
     Message.send responder_synopsis, to: responder.phone
   end
 
