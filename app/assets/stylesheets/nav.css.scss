@@ -1,9 +1,52 @@
 .navbar {
+  background: white;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.37);
+  position: relative;
+  margin-bottom: 5px;
+
   .navbar-brand {
+    padding: 6px 15px;
     margin-top: $xsmall-gap;
     display: block;
     background: url('/assets/concrn-logo-small.png') no-repeat;
     height: 60px;
     width: 193px;
   }
+
+  .navbar-toggle {
+    margin-top: 15px;
+    padding-bottom: 0px;
+  }
+
+  .navbar-nav {
+    float: left;
+    margin: 0;
+    padding-left: 20px;
+    padding-top: 0px;
+  }
+
+  .navbar-text {
+    margin-top: 15px;
+  }
+
+}
+
+.navbar.home {
+  position: absolute;
+  background: none;
+  box-shadow: none;
+  .navbar-brand {
+    background-image: url('/assets/concrn-logo-small.png');
+  }
+  .navbar-text {
+    color: white;
+  }
+}
+
+.navbar-fixed-top {
+  border-width: 0 0 6px;
+}
+
+.drop-nav {
+  padding-top: 10px;
 }
