@@ -11,8 +11,8 @@
  *= require_self
  *= require jquery.ui.datepicker
  *= require twitter/bootstrap
- *= require ./bootstrap-overrides
  *= require globals
  *= require logs
  *= require responders
+
  */

@@ -1,3 +1,16 @@
-// Place all the styles related to the dispatches controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+tr.freshness-fresh {
+  background-color: #fbb;
+}
+
+tr.freshness-semi-fresh {
+  background-color: #ffb;
+}
+
+tr.freshness-semi-stale {
+  background-color: #ddd;
+}
+
+.btn-assign {
+  margin-bottom:10px;
+  margin-left:1px;
+}
