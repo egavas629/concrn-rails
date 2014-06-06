@@ -14,5 +14,6 @@
  *= require globals
  *= require logs
  *= require responders
+ *= require reports
 
  */

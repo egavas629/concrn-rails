@@ -86,6 +86,10 @@ class Report < ActiveRecord::Base
     status == 'archived'
   end
 
+  def completed?
+    status == 'completed'
+  end
+
   def complete!
     changes                = Hash.new
     changes[:status]       = 'archived' unless archived?

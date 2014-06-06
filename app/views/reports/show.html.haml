@@ -5,7 +5,8 @@
 .row
   %ul.list-group.col-md-4
     %li.list-group-item
-      .list-group-item-text.pull-right= link_to 'Archive', report_path(@report, report: {status: 'archived'}), style: 'margin-top:4px;', method: :put, class: 'btn btn-warning' unless @report.archived?
+      .btn-archive.list-group-item-text.pull-right= link_to 'Archive', report_path(@report, report: {status: 'archived'}), confirm: 'Are you sure you want to delete the report?', method: :put, class: 'btn btn-warning' unless @report.archived? or @report.completed?
+      .btn-complete.list-group-item-text.pull-right= link_to 'Complete', report_path(@report, report: {status: 'completed'}), confirm: 'Are you sure you want to complete the report?', method: :put, class: 'btn btn-success' unless @report.archived? or @report.completed?
       %h4.list-group-item-heading Status
       .list-group-item-text= @report.completed_at ? 'Completed' : @report.status.capitalize
 
