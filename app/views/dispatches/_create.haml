@@ -1,4 +1,4 @@
 = simple_form_for(Dispatch.new) do |f|
   = f.hidden_field :report_id, value: report.id
   = f.association :responder, collection: @available_responders, label_method: :name, value_method: :id, label: false, prompt: "Responders..."
-  = f.submit "Assign Responder", class: 'btn btn-primary', style: 'margin-bottom:10px; margin-left:1px'
+  = f.submit "Assign Responder", class: 'btn btn-primary btn-assign'
