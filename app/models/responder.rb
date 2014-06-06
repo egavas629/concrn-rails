@@ -15,8 +15,15 @@ class Responder < User
   scope :inactive, -> { where(active: false) }
 
   scope :available, -> do
-    joins(:dispatches).where(availability: 'available')
-      .where.not('dispatches.status = (?) OR dispatches.status = (?)', 'pending', 'active')
+    find_by_sql(%Q{
+      SELECT r.*, count(distinct d.id) as ad_count, count(distinct dr.id) as dr_count FROM users r
+        LEFT JOIN dispatches d on d.responder_id=r.id
+        LEFT JOIN dispatches dr on dr.responder_id=r.id AND dr.status not in ('pending', 'accepted')
+      WHERE r.role = 'responder'
+      AND r.availability = 'available'
+      GROUP BY r.id
+      HAVING count(distinct d.id) = count(distinct dr.id)
+    })
   end
 
   # INSTANCE METHODS #
