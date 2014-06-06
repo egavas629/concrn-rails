@@ -3,6 +3,7 @@
     %h1.name= "#{@responder.name} (Responder)"
   .col-md-5.col-md-offset-2
     - if @responder.active
+      %br
       %label
         Available
         %br
@@ -11,6 +12,7 @@
     %br
     .phone= @responder.phone
     .email= link_to @responder.email, "mailto:#{@responder.email}"
+%br
 - if @responder.dispatches.present?
   %table.table.table-condensed
     %thead
@@ -29,6 +31,7 @@
 - else
   %strong Responder has not yet to be dispatched to a report.
 .row
+  %br
   - status = @responder.active ? 'Deactivate' : 'Reactivate'
   .col-sm-2= link_to "#{status} Responder", responder_path(@responder, responder: {active: !@responder.active}), method: :put,
     class: 'btn btn-warning'
