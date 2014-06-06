@@ -14,19 +14,17 @@ Streetmom::Application.routes.draw do
     end
   end
 
-  resources :reporter, only: %w(show)
-
-  resources :contacts
-
-  resources :logs
-
   resources :responders, except: %w(edit) do
     collection do
       get 'by_phone'
+      get 'deactivated'
     end
   end
 
+  resources :contacts
   resources :dispatches, only: %w(create)
+  resources :logs
+  resources :reporter,   only: %w(show)
   resources :sms
 
   root 'pages#home'

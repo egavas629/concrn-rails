@@ -1,18 +1,25 @@
 class Responder < User
+  # RELATIONS #
   has_many :reports, through: :dispatches
   has_many :dispatches
+
+  # VALIDATIONS #
   validates_presence_of :phone
 
+  # CALLBACKS #
+  after_validation :make_unavailable!, :on => :update, if: :need_to_make_unavailable?
+
+  # SCOPES #
   default_scope -> { where(role: 'responder') }
+  scope :active,   -> { where(active: true) }
+  scope :inactive, -> { where(active: false) }
+
   scope :available, -> do
     joins(:dispatches).where(availability: 'available')
       .where.not('dispatches.status = (?) OR dispatches.status = (?)', 'pending', 'active')
   end
 
-  def make_available!
-    update_attributes(availability: 'available')
-  end
-
+  # INSTANCE METHODS #
   def phone=(new_phone)
     write_attribute :phone, NumberSanitizer.sanitize(new_phone)
   end
@@ -61,5 +68,13 @@ class Responder < User
 
   def give_feedback(body)
     latest_dispatch.report.accept_feedback(from: self, body: body)
+  end
+
+  def make_unavailable!
+    update_attribute(:availability, false)
+  end
+
+  def need_to_make_unavailable?
+    active_changed? && !active
   end
 end

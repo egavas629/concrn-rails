@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Responder do
   describe('.available')
-  describe('#make_available!')
   describe('#phone=(new_phone)')
   describe('#respond(body)')
   describe('#completed_count')

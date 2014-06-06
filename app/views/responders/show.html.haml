@@ -2,10 +2,12 @@
   .col-md-5
     %h1.name= "#{@responder.name} (Responder)"
   .col-md-5.col-md-offset-2
-    %label
-      Available
-      %br
-      = check_box_tag 'availability', nil, @responder.available?, 'data-update' => responder_path(@responder)
+    - if @responder.active
+      %label
+        Available
+        %br
+        = check_box_tag 'availability', nil, @responder.available?,
+          'data-update' => responder_path(@responder), disabled: !@responder.active
     %br
     .phone= @responder.phone
     .email= link_to @responder.email, "mailto:#{@responder.email}"
@@ -27,36 +29,6 @@
 - else
   %strong Responder has not yet to be dispatched to a report.
 .row
-  .col-sm-2= link_to 'Delete Responder', responder_path(@responder), method: :delete,
-    confirm: 'Are you sure you want to delete Responder?', class: 'btn btn-danger'
-
-:javascript
-  $("[name=availability]").on('change', function(){
-     var responderAvailability = this.checked ? 'available' : 'unavailable',
-     responderPhone = $(this).closest('tr').find('.phone').text(),
-     path = $(this).data('update');
-     $.ajax({
-       url: path,
-       type: 'PUT',
-       data: {responder: {availability: responderAvailability}},
-       success: function(data){
-         console.log(data);
-       }
-     });
-   })
-   // $("[name='availability']").bootstrapSwitch({
-   //   onColor: 'success',
-   //   onSwitchChange: function(event, state){
-   //     var responderAvailability = state ? 'available' : 'unavailable',
-   //     responderPhone = $(this).closest('tr').find('.phone').text(),
-   //     path = $(this).data('update');
-   //     $.ajax({
-   //       url: path,
-   //       type: 'PUT',
-   //       data: {responder: {availability: responderAvailability}},
-   //       success: function(data){
-   //         console.log(data);
-   //       }
-   //     });
-   //   }
-   // });
+  - status = @responder.active ? 'Deactivate' : 'Reactivate'
+  .col-sm-2= link_to "#{status} Responder", responder_path(@responder, responder: {active: !@responder.active}), method: :put,
+    class: 'btn btn-warning'

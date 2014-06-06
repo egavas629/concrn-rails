@@ -1,15 +1,22 @@
 class RespondersController < ApplicationController
+  before_action :find_responder, only: %w(destroy show update)
+  before_action :new_responder, only: %w(new create)
+
   def index
-    @responders = Responder.all
+    @responders = Responder.active
+  end
+
+  def deactivated
+    @responders = Responder.inactive
   end
 
   def new
-    @responder = Responder.new
+  end
+
+  def show
   end
 
   def create
-    @responder = Responder.new(responder_params)
-
     # NOTE: take out once we use password/responder login
     @responder.set_password
 
@@ -22,7 +29,6 @@ class RespondersController < ApplicationController
   end
 
   def destroy
-    @responder = Responder.find(params[:id])
     name = @responder.name
     if @responder.destroy
       flash[:notice] = "#{name}'s profile deleted"
@@ -34,7 +40,7 @@ class RespondersController < ApplicationController
   end
 
   def by_phone
-    @responder = Responder.where(phone: NumberSanitizer.sanitize(params[:phone])).first
+    @responder = Responder.find_by_phone(NumberSanitizer.sanitize(params[:phone]))
     if @responder
       render json: @responder
     else
@@ -42,23 +48,26 @@ class RespondersController < ApplicationController
     end
   end
 
-  def show
-    @responder = Responder.find(params[:id])
-    render
-  end
-
   def update
-    if request.xhr?
-      @responder = Responder.find(params[:id])
-    else
-      @responder = Responder.where(phone: NumberSanitizer.sanitize(params[:id])).first
-    end
     @responder.update_attributes(responder_params)
     Pusher.trigger("reports" , "refresh", {}) unless request.xhr?
-    render json: @responder
+    respond_to do |format|
+      format.json {render json: @responder}
+      format.html {render action: :show}
+    end
+  end
+
+  private
+
+  def new_responder
+    @responder = Responder.new(responder_params)
+  end
+
+  def find_responder
+    @responder = Responder.find(params[:id])
   end
 
   def responder_params
-    params.require(:responder).permit(:availability, :phone, :name, :email)
+    params.require(:responder).permit(:availability, :phone, :name, :email, :active)
   end
 end
