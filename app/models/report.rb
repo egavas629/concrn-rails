@@ -47,7 +47,7 @@ class Report < ActiveRecord::Base
 
   # INSTANCE METHODS #
   def accepted_responders
-    responders.joins(:dispatches).where(:dispatches => {report_id: id, status: 'accepted'})
+    responders.includes(:dispatches).where(:dispatches => {report_id: id, status: 'accepted'})
   end
 
   def accepted_dispatches
