@@ -2,10 +2,3 @@
 = render partial: "report_table", locals: { reports: @unassigned_reports }
 %h2 Pending
 = render partial: "report_table", locals: { reports: @pending_reports }
-
-:javascript
-   $(document).ready(function(){
-     $('.dispatch_status select').on('change', function(){
-       this.form.submit();
-     })
-   })
