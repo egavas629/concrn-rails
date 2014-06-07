@@ -30,11 +30,7 @@ class Report < ActiveRecord::Base
   scope :archived, -> { where(status: "archived") }
 
   scope :completed, -> do
-    # includes(:dispatches).where("reports.status = 'archived' OR dispatches.status = 'completed'")
-    # .order("reports.created_at DESC").references(:dispatches)
-    joins("LEFT JOIN dispatches on dispatches.report_id=reports.id")
-      .where("reports.status = 'archived' OR reports.status = 'completed'")
-      .order("reports.created_at desc").uniq
+    where("reports.status = 'archived' OR reports.status = 'completed'")
   end
 
   scope :pending, -> do
