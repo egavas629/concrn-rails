@@ -3,9 +3,9 @@ class ReportsController < ApplicationController
   before_action :ensure_dispatcher,    only: %w(index active history)
   before_action :available_responders, only: %w(index active)
   before_action :find_report,          only: %w(destroy update show download)
-  before_action :new_report,           only: %w(new create)
 
   def new
+    @report = Report.new
   end
 
   def index
@@ -24,6 +24,7 @@ class ReportsController < ApplicationController
 
   # Needed to comment out Pusher for it to redirect to index
   def create
+    @report = Report.new(report_params)
     respond_to do |format|
       if @report.save
         format.js { render json: @report }
@@ -81,10 +82,6 @@ class ReportsController < ApplicationController
 
   def find_report
     @report = Report.find(params[:id])
-  end
-
-  def new_report
-    @report = Report.new(report_params)
   end
 
   def ensure_dispatcher

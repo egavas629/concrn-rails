@@ -55,6 +55,26 @@ class Report < ActiveRecord::Base
     dispatches.accepted.order('created_at DESC')
   end
 
+
+  def current_status
+    if status == 'pending'
+      if accepted_dispatches.present?
+        'active'
+      elsif current_pending?
+        'pending'
+      else
+        'unassigned'
+      end
+    else
+      status
+    end
+  end
+
+  def current_pending?
+    Report.pending.include?(self)
+  end
+
+
   def freshness
     if created_at > 2.minutes.ago
       "fresh"
