@@ -31,7 +31,7 @@
 %td= link_to report.address, report.google_maps_address, target: '_blank'
 
 %td{class: "report-#{report.id}-dispatch"}
-  = render partial: "dispatches/create", locals: { report: report } unless report.archived?
+  = render partial: "dispatches/create", locals: { report: report } unless report.archived_or_completed?
   - if report.dispatches.present?
     = render partial: "dispatches/index", locals: { report: report }
   - elsif report.archived? && report.dispatches.empty?

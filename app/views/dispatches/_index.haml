@@ -5,8 +5,9 @@
     - non_rejected_dispatches.each do |dispatch|
       %dd
         = link_to dispatch.responder.name, responder_path(dispatch.responder)
-        = simple_form_for dispatch do |f|
-          = f.input :status, collection: %w(pending accepted rejected)
+        - unless report.archived_or_completed?
+          = simple_form_for dispatch do |f|
+            = f.input :status, collection: %w(pending accepted rejected)
     %dl
       %dt Dispatched
       %dd= time_ago_in_words(report.dispatches.not_rejected.first.created_at)

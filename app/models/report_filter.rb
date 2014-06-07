@@ -3,7 +3,7 @@ class ReportFilter
   def initialize(params)
     start_date  = params[:start_date]
     end_date    = params[:end_date]
-    
+
     order       = params[:order]
     order       = order.present? ? order : 'desc' && params[:order] = 'desc'
     @order      = "created_at #{order}"

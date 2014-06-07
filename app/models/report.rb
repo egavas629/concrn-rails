@@ -24,26 +24,27 @@ class Report < ActiveRecord::Base
   # SCOPE #
   scope :accepted, -> do
     includes(:dispatches).where(status: "pending")
-      .merge(Dispatch.accepted).order("reports.created_at desc").references(:dispatches)
+      .merge(Dispatch.accepted).order("reports.created_at DESC").references(:dispatches)
   end
 
   scope :archived, -> { where(status: "archived") }
 
   scope :completed, -> do
+    # includes(:dispatches).where("reports.status = 'archived' OR dispatches.status = 'completed'")
+    # .order("reports.created_at DESC").references(:dispatches)
     joins("LEFT JOIN dispatches on dispatches.report_id=reports.id")
-      .where("reports.status = 'archived' OR dispatches.status = 'completed'")
+      .where("reports.status = 'archived' OR reports.status = 'completed'")
       .order("reports.created_at desc").uniq
   end
 
   scope :pending, -> do
-    joins(:dispatches).where(status: "pending")
-      .where.not(id: accepted.map(&:id)).where('dispatches.status = (?)', 'pending').uniq
+    includes(:dispatches).where(status: "pending")
+      .where.not(id: accepted.map(&:id)).where('dispatches.status = (?)', 'pending').references(:dispatches)
   end
 
   scope :unassigned, -> do
     includes(:dispatches).where(status: 'pending')
       .where.not(id: pending.map(&:id).concat(accepted.map(&:id)))
-      # .where(dispatches: {report_id: nil})
   end
 
   # INSTANCE METHODS #
