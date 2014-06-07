@@ -32,7 +32,7 @@ class Report < ActiveRecord::Base
   scope :completed, -> do
     joins("LEFT JOIN dispatches on dispatches.report_id=reports.id")
       .where("reports.status = 'archived' OR dispatches.status = 'completed'")
-      .order("reports.created_at desc")
+      .order("reports.created_at desc").uniq
   end
 
   scope :pending, -> do
@@ -88,6 +88,10 @@ class Report < ActiveRecord::Base
 
   def completed?
     status == 'completed'
+  end
+
+  def archived_or_completed?
+    %w(archived completed).include?(status)
   end
 
   def complete!
