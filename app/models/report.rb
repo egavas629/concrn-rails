@@ -37,12 +37,13 @@ class Report < ActiveRecord::Base
 
   scope :pending, -> do
     joins(:dispatches).where(status: "pending")
-      .where.not(id: accepted.map(&:id)).uniq
+      .where.not(id: accepted.map(&:id)).where('dispatches.status = (?)', 'pending').uniq
   end
 
   scope :unassigned, -> do
     includes(:dispatches).where(status: 'pending')
-      .where(dispatches: {report_id: nil})
+      .where.not(id: pending.map(&:id).concat(accepted.map(&:id)))
+      # .where(dispatches: {report_id: nil})
   end
 
   # INSTANCE METHODS #

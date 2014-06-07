@@ -9,7 +9,6 @@ Streetmom::Application.routes.draw do
     end
 
     member do
-      post 'upload'
       get 'download' => 'reports#download', :as => :download
     end
   end
@@ -22,7 +21,7 @@ Streetmom::Application.routes.draw do
   end
 
   resources :contacts
-  resources :dispatches, only: %w(create)
+  resources :dispatches, only: %w(create update)
   resources :logs
   resources :reporter,   only: %w(show)
   resources :sms

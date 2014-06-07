@@ -1,14 +1,11 @@
 class ReportsController < ApplicationController
-  before_action :authenticate_user!, only: [:index]
-  before_action :ensure_dispatcher, only: %w(index active history)
+  before_action :authenticate_user!,   only: %w(index)
+  before_action :ensure_dispatcher,    only: %w(index active history)
   before_action :available_responders, only: %w(index active)
-
-  def ensure_dispatcher
-    redirect_to edit_user_registration_path unless current_user.role == 'dispatcher'
-  end
+  before_action :find_report,          only: %w(destroy update show download)
+  before_action :new_report,           only: %w(new create)
 
   def new
-    @blank_report = Report.new
   end
 
   def index
@@ -25,16 +22,13 @@ class ReportsController < ApplicationController
     @reports = params[:show_all] ? reports : reports.page(params[:page])
   end
 
-  # Needed to comment out PUSH and json for it to redirect to index
-  # Then just moved it to js in case mobile needs it
-
+  # Needed to comment out Pusher for it to redirect to index
   def create
-    @report = Report.new(report_params)
     respond_to do |format|
       if @report.save
-        Pusher.trigger('reports' , 'refresh', {})
         format.js { render json: @report }
-        format.html { redirect_to action: 'index' }
+        format.html { redirect_to action: :index }
+        # Pusher.trigger('reports' , 'refresh', {})
       else
         format.js { render json: @report }
         format.html { render action: :new }
@@ -43,26 +37,21 @@ class ReportsController < ApplicationController
   end
 
   def destroy
-    @report = Report.find(params[:id])
     @report.destroy!
     redirect_to action: :index
   end
 
-  def upload
-    @report = Report.find(params[:id])
-    update_params = report_params
-    @report.update_attributes(update_params)
-    p "Report#upload", @report.image_file_name
-    @report.save
-
-    Pusher.trigger("reports" , "refresh", {})
-    render json: {success: true}
-  end
-
-  # To allow photo upload commented below out and all good.
+  # def upload
+  #   update_params = report_params
+  #   @report.update_attributes(update_params)
+  #   p "Report#upload", @report.image_file_name
+  #   @report.save
+  #
+  #   Pusher.trigger("reports" , "refresh", {})
+  #   render json: {success: true}
+  # end
 
   def update
-    @report = Report.find(params[:id])
     @report.update_attributes!(report_params)
     Pusher.trigger("reports" , "refresh", {})
     respond_to do |format|
@@ -72,12 +61,10 @@ class ReportsController < ApplicationController
   end
 
   def show
-    @report = Report.find(params[:id])
     @metaphone = Log.new
   end
 
   def download
-    report = Report.find(params[:id])
     file = open(report.image.url)
     send_data file.read, filename:    report.image_file_name,
                          type:        report.image_content_type,
@@ -88,6 +75,20 @@ class ReportsController < ApplicationController
 
   def available_responders
     @available_responders = Responder.available
+  end
+
+  private
+
+  def find_report
+    @report = Report.find(params[:id])
+  end
+
+  def create_report
+    @report = Report.new(report_params)
+  end
+
+  def ensure_dispatcher
+    redirect_to edit_user_registration_path unless current_user.role == 'dispatcher'
   end
 
   def report_params
