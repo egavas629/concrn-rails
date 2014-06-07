@@ -83,7 +83,7 @@ class ReportsController < ApplicationController
     @report = Report.find(params[:id])
   end
 
-  def create_report
+  def new_report
     @report = Report.new(report_params)
   end
 
