@@ -13,6 +13,7 @@ class Report < ActiveRecord::Base
 
   before_validation { image.clear if delete_image == '1' }
   before_validation { observations.delete_if(&:empty?) if observations_changed? }
+  after_validation  { set_completed! if status_changed? }
 
   # CONSTANTS #
   Gender            = ['Male', 'Female', 'Other']
@@ -42,7 +43,7 @@ class Report < ActiveRecord::Base
 
   # INSTANCE METHODS #
   def accepted_responders
-    responders.includes(:dispatches).where(:dispatches => {report_id: id, status: 'accepted'})
+    responders.includes(:dispatches).where(:dispatches => {report_id: id, status: %w(accepted completed)})
   end
 
   def accepted_dispatches
@@ -110,10 +111,15 @@ class Report < ActiveRecord::Base
   end
 
   def complete!
-    changes                = Hash.new
-    changes[:status]       = 'archived' unless archived?
-    changes[:completed_at] = Time.now if completed_at.nil?
-    dispatches.pending.each {|i| i.update_attribute(:status, 'rejected')} if update_attributes(changes)
+    update_attribute(:status, 'completed')
+  end
+
+  def set_completed!
+    if %w(archived completed).include?(status)
+      update_attributes(completed_at: Time.now) unless completed_at.present?
+      dispatches.pending.each {|i| i.update_attribute(:status, 'rejected')}
+      accepted_dispatches.each {|i| i.update_attribute(:status, 'completed')}
+    end
   end
 
   def accept_feedback(opts={})
@@ -131,6 +137,7 @@ class Report < ActiveRecord::Base
       'pending'       => 'warning',
       'accepted'      => 'active',
       'archived'      => 'info',
+      'completed'     => 'success',
       'unassigned'    => 'warning'
     }.fetch(status)
   end
