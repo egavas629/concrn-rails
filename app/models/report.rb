@@ -23,8 +23,8 @@ class Report < ActiveRecord::Base
 
   # SCOPE #
   scope :accepted, -> do
-    joins(:dispatches).where(status: "pending")
-      .merge(Dispatch.accepted).order("created_at desc")
+    includes(:dispatches).where(status: "pending")
+      .merge(Dispatch.accepted).order("reports.created_at desc").references(:dispatches)
   end
 
   scope :archived, -> { where(status: "archived") }
