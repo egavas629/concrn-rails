@@ -23,19 +23,16 @@ class Report < ActiveRecord::Base
 
   # SCOPE #
   scope :accepted, -> do
-    includes(:dispatches).where(status: "pending")
-      .merge(Dispatch.accepted).order("reports.created_at DESC").references(:dispatches)
+    includes(:dispatches).where(status: "pending").merge(Dispatch.accepted)
+      .order("reports.created_at DESC").references(:dispatches)
   end
 
   scope :archived, -> { where(status: "archived") }
-
-  scope :completed, -> do
-    where("reports.status = 'archived' OR reports.status = 'completed'")
-  end
+  scope :completed, -> { where("reports.status = 'archived' OR reports.status = 'completed'") }
 
   scope :pending, -> do
-    includes(:dispatches).where(status: "pending")
-      .where.not(id: accepted.map(&:id)).where('dispatches.status = (?)', 'pending').references(:dispatches)
+    includes(:dispatches).where(status: "pending").where.not(id: accepted.map(&:id))
+      .where("dispatches.status = 'pending'").references(:dispatches)
   end
 
   scope :unassigned, -> do
