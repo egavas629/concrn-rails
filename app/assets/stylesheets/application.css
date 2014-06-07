@@ -15,5 +15,6 @@
  *= require logs
  *= require responders
  *= require reports
+ *= require devise
 
  */
