@@ -1,6 +1,5 @@
 class RespondersController < ApplicationController
   before_action :find_responder, only: %w(destroy show update)
-  before_action :new_responder, only: %w(new create)
 
   def index
     @responders = Responder.active
@@ -11,12 +10,14 @@ class RespondersController < ApplicationController
   end
 
   def new
+    @responder = Responder.new
   end
 
   def show
   end
 
   def create
+    @responder = Responder.new(responder_params)
     # NOTE: take out once we use password/responder login
     @responder.set_password
 
@@ -58,10 +59,6 @@ class RespondersController < ApplicationController
   end
 
   private
-
-  def new_responder
-    @responder = Responder.new(responder_params)
-  end
 
   def find_responder
     @responder = Responder.find(params[:id])
