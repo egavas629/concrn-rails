@@ -42,16 +42,6 @@ class ReportsController < ApplicationController
     redirect_to action: :index
   end
 
-  # def upload
-  #   update_params = report_params
-  #   @report.update_attributes(update_params)
-  #   p "Report#upload", @report.image_file_name
-  #   @report.save
-  #
-  #   Pusher.trigger("reports" , "refresh", {})
-  #   render json: {success: true}
-  # end
-
   def update
     @report.update_attributes!(report_params)
     Pusher.trigger("reports" , "refresh", {})

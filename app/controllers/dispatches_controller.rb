@@ -1,9 +1,11 @@
 class DispatchesController < ApplicationController
   def create
-    if report.dispatch! responder
+    if responder ? report.dispatch!(responder) : false
       flash[:notice] = "#{responder.name} has been dispatched to help #{report.name}."
-      redirect_to :back
+    else
+      flash[:alert] = "Error in dispatching, please select a user."
     end
+    redirect_to :back
   end
 
   def update
@@ -16,7 +18,8 @@ class DispatchesController < ApplicationController
   end
 
   def responder
-    Responder.find params.require(:dispatch).permit(:responder_id)[:responder_id]
+    id = params.require(:dispatch).permit(:responder_id)[:responder_id]
+    id.present? ? Responder.find(id) : false
   end
 
   def report
