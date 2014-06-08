@@ -3,7 +3,7 @@ class DispatchesController < ApplicationController
     if responder ? report.dispatch!(responder) : false
       flash[:notice] = "#{responder.name} has been dispatched to help #{report.name}."
     else
-      flash[:alert] = "Error in dispatching, please select a user."
+      flash[:alert] = "Please select a responder to dispatch."
     end
     redirect_to :back
   end
