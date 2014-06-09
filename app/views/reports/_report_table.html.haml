@@ -1,13 +1,18 @@
 %table.table
   %thead
     %tr
-      %th Date
+      %th
+        Date
+        = link_to "<span class='glyphicon glyphicon-chevron-#{params[:order] == 'asc' ? 'up' : 'down'}'></span>".html_safe,
+          history_reports_path(start_date: params[:start_date],
+          end_date: params[:end_date],
+          order: (['desc', 'asc'] - [params[:order]])[0]) if current_page?('/reports/history')
       %th Name
       %th Phone
-      %th Patient Description
-      %th Crisis Description
+      %th Client
+      %th Incident
       %th Location
-      %th Responder
+      %th Responders
   - if reports.none?
     %tbody
       %tr

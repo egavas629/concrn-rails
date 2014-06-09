@@ -1,14 +1,23 @@
 class Log < ActiveRecord::Base
-  default_scope -> { order :created_at }
-
+  # RELATIONS #
   belongs_to :report
   belongs_to :author, class_name: 'User'
 
+  # SCOPE #
+  default_scope -> { order :created_at }
+
+  # INSTANCE METHODS #
   def broadcast
-    touch(:updated_at) if Message.send(body, to: report.responder.phone)
+    message_sent = false
+
+    report.accepted_responders.each do |responder|
+      Message.send(body, to: responder.phone) && message_sent = true
+    end
+
+    self.touch(:sent_at) if message_sent
   end
 
   def broadcasted?
-    created_at != updated_at
+    sent_at.present?
   end
 end

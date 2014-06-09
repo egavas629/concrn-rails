@@ -1,0 +1,23 @@
+.row
+  .col-md-5
+    %h1.name= "#{@key_info} (Reporter)"
+- if @reports.present?
+  %table.table.table-condensed
+    %thead
+      %th Date
+      %th Address
+      %th Reporter Name
+      %th Reporter Phone
+      %th Status
+      %th
+    %tbody
+      - @reports.each do |report|
+        = content_tag_for :tr, report, class: report.table_status do
+          %td= report.created_at.strftime('%-m-%-d-%y')
+          %td= link_to report.address, reporter_path(report, address: report.address)
+          %td= link_to report.name, reporter_path(report, name: report.name)
+          %td= link_to report.phone, reporter_path(report, phone: report.phone)
+          %td= report.status
+          %td= link_to 'Details', report_path(report)
+- else
+  %strong Responder has not yet to be dispatched to a report.

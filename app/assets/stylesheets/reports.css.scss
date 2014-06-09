@@ -1,0 +1,47 @@
+.observation-checkboxes {
+
+  .checkbox {
+    width: 160px;
+    height: 24px;
+    font-weight: normal;
+    margin-left: 10px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    vertical-align:text-middle;
+    line-height: 22px;
+  }
+
+  .check_boxes {
+    .form-control {
+      margin-right: 10px;
+      width: 20px;
+    }
+  }
+
+  .form-control {
+    display: block;
+    height: 14px;
+    font-size: 14px;
+    padding-right: 10px;
+    line-height: 1.428571429;
+    color: #555555;
+    background-color: white;
+    background-image: none;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    vertical-align: text-middle;
+  }
+}
+
+.btn-complete {
+  margin-top: 4px;
+  padding-right: 15px;
+}
+
+.btn-archive {
+  margin-top: 4px;
+}
+
+.transcript-head {
+  margin-bottom: 7px;
+}

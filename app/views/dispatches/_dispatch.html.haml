@@ -1,5 +1,0 @@
-%dl
-  %dt Responder Name
-  %dd= link_to dispatch.responder.name, responder_path(dispatch.responder)
-  %dt Phone
-  %dd= link_to dispatch.responder.phone, filter_reports_path(report: {id: dispatch.report.id}, filter: {responder: {phone: dispatch.responder.phone}}), remote: true, method: :post

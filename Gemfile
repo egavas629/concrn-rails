@@ -26,13 +26,14 @@ gem 'paperclip'
 gem 'kaminari'
 gem 'jquery-ui-rails'
 gem 'rails_12factor', group: :production
-
+gem 'factory_girl_rails'
 gem 'bourbon'
+gem 'jquery-turbolinks'
 
 group :development, :test do
   gem 'quiet_assets'
   gem 'faker'
-  gem 'factory_girl_rails'
+
 
   gem 'jazz_hands'
 end

@@ -1,14 +1,19 @@
-%h2.page-header
-  %h1
-    = @report.neighborhood ? "Crisis in #{@report.neighborhood}" : "Reported"
-    %small="#{time_ago_in_words(@report.created_at)} ago:"
+%h2
+  = @report.neighborhood ? "Crisis in #{@report.neighborhood}" : "Reported"
+  %small="#{time_ago_in_words(@report.created_at)} ago:"
 
 .row
   %ul.list-group.col-md-4
     %li.list-group-item
-      .list-group-item-text.pull-right.btn=link_to "Move to History", historify_report_path(@report), method: 'PUT', remote: true
+      .btn-archive.list-group-item-text.pull-right= link_to 'Archive', report_path(@report, report: {status: 'archived'}), confirm: 'Are you sure you want to archive the report?', method: :put, class: 'btn btn-warning' unless @report.archived_or_completed?
+      .btn-complete.list-group-item-text.pull-right= link_to 'Complete', report_path(@report, report: {status: 'completed'}), confirm: 'Are you sure you want to complete the report?', method: :put, class: 'btn btn-success' unless @report.archived_or_completed?
+
       %h4.list-group-item-heading Status
-      .list-group-item-text=@report.status
+      .list-group-item-text= @report.current_status.capitalize
+
+    %li.list-group-item
+      %h4.list-group-item-heading Observations
+      .list-group-item-text=@report.observations.join(', ')
 
     %li.list-group-item
       %h4.list-group-item-heading Reported at
@@ -24,14 +29,17 @@
       .list-group-item-text=@report.address
 
     %li.list-group-item
-      %h4.list-group-item-heading Patient
+      %h4.list-group-item-heading Client
       .list-group-item-text="#{@report.age} #{@report.race} #{@report.gender}"
-      .list-group-item-text=@report.nature ? "\"#{@report.nature}\"" : "<Nature Not Provided>"
+      .list-group-item-text=@report.nature.present? ? "#{@report.nature}" : 'Nature Not Provided'
 
     %li.list-group-item
       %h4.list-group-item-heading Files
       - if @report.image.present?
-        .list-group-item-text= link_to "Download #{@report.image_file_name}", download_report_path(@report)#, remote: true
+        .list-group-item-text= link_to "Download #{@report.image_file_name}", download_report_path(@report)
+        %br
+        .list-group-item-text= link_to "Remove File", report_path(@report, "report[delete_image]" => '1'), method: :put
+        %small Can only have 1 file per report
       - else
         .list-group-item-text
           = simple_form_for @report do |f|
@@ -39,22 +47,7 @@
             %br
             = f.button :submit, 'Add File'
 
-  %ul.list.group.col-md-8
-    %li.list-group-item
-      %h4.list-group-item-heading= "Transcript#{' with ' + @report.responder.name + ' @ ' + @report.responder.phone if @report.responder.present?}"
-      - @report.logs.each_with_index do |log, i|
-        %div{class: "row log-entry#{' dark' if i.odd?}"}
-          .col-md-1= log.created_at.strftime('%H:%M')
-          .col-md-1= log.author.name
-          .col-md-6= log.body
-          - unless @report.unassigned? || log.broadcasted?
-            .col-md-3.forward-via-sms=link_to "SMS to #{@report.responder.name}", log_path(log), method: 'PUT'
-          - if log.broadcasted?
-            .col-md-3.sent-stamp= "sent to #{@report.responder.name} (#{log.updated_at.strftime('%H:%M')})"
+  %ul.list.group.col-md-8= render partial: "reports/logroll"
 
-    %li.list-group-item.metaphone
-      = simple_form_for @metaphone do |f|
-        .row
-          .col-md-12= f.input :body, as: :string, label: false, placeholder: 'Enter details...'
-          = f.input :author_id, as: :hidden, input_html: { value: current_user.id }
-          = f.input :report_id, as: :hidden, input_html: { value: @report.id }
+= link_to 'Delete', report_path(@report), method: :delete,
+  confirm: 'Are you sure you want to delete the report?', class: 'btn btn-danger'

@@ -1,10 +1,20 @@
 class Responder < User
-  default_scope -> { where(role: 'responder') }
+  # RELATIONS #
   has_many :reports, through: :dispatches
   has_many :dispatches
+
+  # VALIDATIONS #
   validates_presence_of :phone
 
-  def self.available
+  # CALLBACKS #
+  after_validation :make_unavailable!, :on => :update, if: :need_to_make_unavailable?
+
+  # SCOPES #
+  default_scope -> { where(role: 'responder') }
+  scope :active,   -> { where(active: true) }
+  scope :inactive, -> { where(active: false) }
+
+  scope :available, -> do
     find_by_sql(%Q{
       SELECT r.*, count(distinct d.id) as ad_count, count(distinct dr.id) as dr_count FROM users r
         LEFT JOIN dispatches d on d.responder_id=r.id
@@ -16,10 +26,7 @@ class Responder < User
     })
   end
 
-  def make_available!
-    update_attributes(availability: 'available')
-  end
-
+  # INSTANCE METHODS #
   def phone=(new_phone)
     write_attribute :phone, NumberSanitizer.sanitize(new_phone)
   end
@@ -27,13 +34,9 @@ class Responder < User
   def respond(body)
     give_feedback(body)
 
+    return latest_dispatch.reject! if latest_dispatch.pending? && body.match(/no/i)
+    return latest_dispatch.complete! if latest_dispatch.accepted? && body.match(/done/i)
     latest_dispatch.accept! unless latest_dispatch.accepted? || latest_dispatch.completed?
-    latest_dispatch.reject! if latest_dispatch.pending? && body.match(/no/i)
-    latest_dispatch.complete! if latest_dispatch.accepted? && body.match(/done/i)
-  end
-
-  def dispatch_to(report)
-    Dispatch.create!(report: report, responder: self)
   end
 
   def completed_count
@@ -59,6 +62,11 @@ class Responder < User
     "last: #{last_dispatch.status}"
   end
 
+  def set_password
+    self.password              = 'password'
+    self.password_confirmation = 'password'
+  end
+
   private
 
   def latest_dispatch
@@ -67,5 +75,13 @@ class Responder < User
 
   def give_feedback(body)
     latest_dispatch.report.accept_feedback(from: self, body: body)
+  end
+
+  def make_unavailable!
+    update_attribute(:availability, false)
+  end
+
+  def need_to_make_unavailable?
+    active_changed? && !active
   end
 end

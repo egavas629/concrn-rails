@@ -6,27 +6,24 @@ Streetmom::Application.routes.draw do
       get 'active'
       get 'history'
       get 'deleted'
-      post 'filter'
     end
 
     member do
-      put 'historify'
-      post 'upload'
       get 'download' => 'reports#download', :as => :download
     end
   end
 
-  resources :contacts
-
-  resources :logs
-
-  resources :responders, only: %w(index update show) do
+  resources :responders, except: %w(edit) do
     collection do
       get 'by_phone'
+      get 'deactivated'
     end
   end
 
-  resources :dispatches, only: %w(create)
+  resources :contacts
+  resources :dispatches, only: %w(create update)
+  resources :logs
+  resources :reporter,   only: %w(show)
   resources :sms
 
   root 'pages#home'

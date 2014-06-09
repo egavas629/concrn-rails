@@ -1,6 +1,3 @@
-// Place all the styles related to the pages controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
 @import "mixins";
 @import "twitter/bootstrap/_variables";
 @import "twitter/bootstrap/_mixins";
@@ -11,18 +8,9 @@
   width: 100%;
 }
 
-.navbar.home {
-  position: absolute;
-  background: none;
-  box-shadow: none;
-  .navbar-brand {
-    background-image: url('/assets/concrn-logo-small-white.png');
-  }
-}
-
 .bleed.drop-main {
   padding-top: 75px;
-  background-image: url("/assets/home/hero-large.png");
+  background-image: url("/assets/home/city-crop2.png");
   height: 465px;
   @media(max-width: $screen-xs) {
     padding-top: 0;

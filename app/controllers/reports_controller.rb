@@ -1,13 +1,11 @@
 class ReportsController < ApplicationController
-  before_filter :authenticate_user!, only: [:index]
-  before_filter :ensure_dispatcher, only: %w(index active history)
-
-  def ensure_dispatcher
-    redirect_to edit_user_registration_path unless current_user.role == 'dispatcher'
-  end
+  before_action :authenticate_user!,   only: %w(index)
+  before_action :ensure_dispatcher,    only: %w(index active history)
+  before_action :available_responders, only: %w(index active)
+  before_action :find_report,          only: %w(destroy update show download)
 
   def new
-    @blank_report = Report.new
+    @report = Report.new
   end
 
   def index
@@ -20,91 +18,44 @@ class ReportsController < ApplicationController
   end
 
   def history
-    @reports = Report.where(status: 'completed').page(params[:page])
+    reports = ReportFilter.new(params).query
+    @reports = params[:show_all] ? reports : reports.page(params[:page])
   end
 
-  def filter
-    @reports  = ReportFilter.new(params['filter']).query if params['filter'].present?
-
-    report_id = params[:report][:id] if params[:report]
-    @report   = Report.find(report_id) if report_id.present?
-
-    respond_to do |format|
-      format.js
-    end
-  end
-
-  def deleted
-    @reports = Report.deleted
-  end
-
-  # Needed to comment out PUSH and json for it to redirect to index
-  # Then just moved it to js in case mobile needs it
-
+  # Needed to comment out Pusher for it to redirect to index
   def create
     @report = Report.new(report_params)
     respond_to do |format|
       if @report.save
-        format.js do
-          Pusher.trigger("reports" , "refresh", {})
-          render json: @report
-        end
-        format.html { 
-          redirect_to action: 'index' 
-        }
+        format.js { render json: @report }
+        format.html { redirect_to action: :index }
+        # Pusher.trigger('reports' , 'refresh', {})
       else
-        format.js {render json: @report}
-        format.html {render action: :new}
+        format.js { render json: @report }
+        format.html { render action: :new }
       end
     end
   end
 
   def destroy
-    @report = Report.find(params[:id])
-    @report.status = "deleted"
-    @report.update_attribute(:status, "deleted")
-    redirect_to action: 'history'
+    @report.destroy!
+    redirect_to action: :index
   end
-
-  def upload
-    @report = Report.find(params[:id])
-    update_params = report_params
-    @report.update_attributes(update_params)
-    p "Report#upload", @report.image_file_name
-    @report.save
-
-    Pusher.trigger("reports" , "refresh", {})
-    render json: {success: true}
-  end
-
-  # To allow photo upload commented below out and all good.
 
   def update
-    @report = Report.find(params[:id])
-    # update_params = report_params
-    # if update_params[:image]
-    #   bytes = Base64.decode64(update_params.delete(:image))
-    #   update_params[:image] = StringIO.new(bytes)
-    # end
     @report.update_attributes!(report_params)
-
     Pusher.trigger("reports" , "refresh", {})
-    render :back
+    respond_to do |format|
+      format.js { render json: {success: true} }
+      format.html { redirect_to :back }
+    end
   end
-
-  def historify
-    Report.find(params[:id]).update_attributes(status: "completed")
-    Pusher.trigger("reports" , "refresh", {})
-  end
-
 
   def show
-    @report = Report.find(params[:id])
     @metaphone = Log.new
   end
 
   def download
-    report = Report.find(params[:id])
     file = open(report.image.url)
     send_data file.read, filename:    report.image_file_name,
                          type:        report.image_content_type,
@@ -113,9 +64,22 @@ class ReportsController < ApplicationController
                          buffer_size: '4096'
   end
 
+  def available_responders
+    @available_responders = Responder.available
+  end
+
+  private
+
+  def find_report
+    @report = Report.find(params[:id])
+  end
+
+  def ensure_dispatcher
+    redirect_to edit_user_registration_path unless current_user.role == 'dispatcher'
+  end
+
   def report_params
-    report_attributes = [:name, :phone, :lat, :long, :status, :nature,
-      :setting, :observations, :age, :gender, :race, :address, :neighborhood, :image]
+    report_attributes = [:name, :phone, :lat, :long, :status, :nature, :delete_image, :setting, {:observations => []}, :age, :gender, :race, :address, :neighborhood, :image]
 
     params.require(:report).permit report_attributes
   end
