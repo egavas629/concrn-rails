@@ -16,5 +16,6 @@
  *= require responders
  *= require reports
  *= require devise
+ *= require dispatches
 
  */

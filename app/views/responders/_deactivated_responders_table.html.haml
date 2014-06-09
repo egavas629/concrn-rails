@@ -7,8 +7,6 @@
         %th Email
         %th Completed
         %th Rejected
-        %th Available
-        %th Current Status
     %tbody
       - @responders.each do |responder|
         = content_tag_for :tr, responder do
@@ -17,8 +15,6 @@
           %td= link_to responder.email, "mailto:#{responder.email}"
           %td= responder.completed_count
           %td= responder.rejected_count
-          %td= check_box_tag 'availability', nil, responder.available?, 'data-update' => responder_path(responder)
-          %td= responder.status
 - else
   %p.notice
     %br There are no responders to show.
