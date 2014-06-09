@@ -1,7 +1,7 @@
 .row
   %h2.col-sm-2 Responders
   .table-top-button.col-sm-1.col-sm-offset-8= link_to 'New Responder', new_responder_path, class: 'btn btn-primary'
-= render 'responders_table'
+= render 'responders_table', deactivated: false, responders: @responders
 .row
   %br
   .col-sm-2= link_to 'Inactive Responders', deactivated_responders_path, class: 'btn btn-warning'

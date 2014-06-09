@@ -13,3 +13,6 @@
 
 # Ignore OS X garbage
 */**.DS_Store
+
+# Pow
+.powrc
