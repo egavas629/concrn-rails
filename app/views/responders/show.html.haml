@@ -5,8 +5,7 @@
     - if @responder.active
       %br
       %label
-        Available
-        %br
+        Available &nbsp
         = check_box_tag 'availability', nil, @responder.available?,
           'data-update' => responder_path(@responder), disabled: !@responder.active
     %br
@@ -29,7 +28,7 @@
           %td= report.status
           %td= link_to 'Details', report_path(report)
 - else
-  %strong Responder has not yet to be dispatched to a report.
+  %weak Responder has not been dispatched to a report yet.
 .row
   %br
   - status = @responder.active ? 'Deactivate' : 'Reactivate'

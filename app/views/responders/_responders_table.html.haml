@@ -1,4 +1,4 @@
-- if @responders.any?
+- if responders.any?
   %table.table
     %thead
       %tr
@@ -7,17 +7,20 @@
         %th Email
         %th Completed
         %th Rejected
-        %th Available
-        %th Current Status
+        - unless deactivated
+          %th Available
+          %th Current Status
     %tbody
-      - @responders.each do |responder|
+      - responders.each do |responder|
         = content_tag_for :tr, responder do
           %th= link_to responder.name, responder
           %td.phone= responder.phone
           %td= link_to responder.email, "mailto:#{responder.email}"
           %td= responder.completed_count
           %td= responder.rejected_count
-          %td= check_box_tag 'availability', nil, responder.available?, 'data-update' => responder_path(responder)
-          %td= responder.status
+          - unless deactivated
+            %td= check_box_tag 'availability', nil, responder.available?, 'data-update' => responder_path(responder)
+            %td= responder.status
 - else
-  %p.notice It appears there are no responders
+  %p.notice
+    %br There are no responders to show.
