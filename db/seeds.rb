@@ -8,7 +8,7 @@ def accounts
     puts 'Seeding Teammates...'
     User.destroy_all
 
-    dispatcher = FactoryGirl.create :dispatcher, name: 'Dan', email: 'dan@example.com', password: 'password'
+    dispatcher = FactoryGirl.create :dispatcher, name: 'Dispatcher Dan', email: 'dan@concrn.com', password: 'password'
     7.times { FactoryGirl.create :responder }
 end
 

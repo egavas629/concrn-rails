@@ -12,6 +12,15 @@
     .phone= @responder.phone
     .email= link_to @responder.email, "mailto:#{@responder.email}"
 %br
+%table.table.table-condensed
+  %thead
+    %th Date
+    %th Shift
+  %tbody
+    / %td= responder.availability_on_date('%-m-%-d-%y')
+    /   if end_date.different show 'to end_date'
+    / %td= responder.available_at_time('hh:mm') 'to' responder.unavailable_at_time('hh:mm')
+%br
 - if @responder.dispatches.present?
   %table.table.table-condensed
     %thead
