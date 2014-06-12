@@ -2,6 +2,7 @@ class Telephony
   OUTGOING_PHONE = ENV['SMS_PHONE'] || '(978) 566-1976'
 
   def self.message to: nil, body: 'Thanks!'
+    sleep 1 # Carriers are sloppy.
     client.account.messages.create(from: OUTGOING_PHONE, to: to, body: body)
   end
 

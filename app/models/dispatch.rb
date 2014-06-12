@@ -80,10 +80,7 @@ class Dispatch < ActiveRecord::Base
   end
 
   def alert_responder
-    responder_synopses.each do |snippet|
-      Message.send snippet, to: responder.phone
-      sleep 0.01
-    end
+    responder_synopses.each { |snippet| Message.send snippet, to: responder.phone }
   end
 
   def responder_synopses
