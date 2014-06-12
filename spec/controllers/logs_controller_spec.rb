@@ -21,7 +21,7 @@ describe LogsController do
     let(:request) { put :update, params }
 
     it 'forwards the log body to the appropriate responder' do
-      Message.should_receive(:send).with log.body, to: responder_phone
+      Telephony.should_receive(:send).with log.body, to: responder_phone
       request
     end
   end

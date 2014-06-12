@@ -1,17 +1,16 @@
 class DispatchMessanger
 
-  def initialize(responder, body=nil)
+  def initialize(responder)
     @responder = responder
-    @body      = body
     @dispatch  = responder.dispatches.latest
     @report    = @dispatch.report
   end
 
-  def respond
-    give_feedback
-    if @dispatch.pending? && @body.match(/no/i)
+  def respond(body)
+    give_feedback(body)
+    if @dispatch.pending? && body.match(/no/i)
       @dispatch.update_attributes!(status: 'rejected')
-    elsif @dispatch.accepted? && @body.match(/done/i)
+    elsif @dispatch.accepted? && body.match(/done/i)
       @dispatch.update_attributes!(status: 'completed')
     elsif !@dispatch.accepted? && !@dispatch.completed?
       @dispatch.update_attributes!(status: 'accepted')
@@ -50,8 +49,8 @@ private
     Telephony.send(body: "We appreciate your timely rejection. Your report is being re-submitted.", to: @responder.phone)
   end
 
-  def give_feedback
-    @report.logs.create!(author: @responder, body: @body)
+  def give_feedback(body)
+    @report.logs.create!(author: @responder, body: body)
   end
 
   def notify_reporter

@@ -2,7 +2,7 @@ class Telephony
   OUTGOING_PHONE = ENV['SMS_PHONE'] || '(978) 566-1976'
 
   def self.client
-    @client ||= Twilio::REST::Client.new ENV['TWILIO_SID'], ENV['TWILIO_TOKEN']
+    @client ||= Twilio::REST::Client.new(ENV['TWILIO_SID'], ENV['TWILIO_TOKEN'])
   end
 
   def self.send(to: nil, body: 'Thanks!')
@@ -11,8 +11,9 @@ class Telephony
   end
 
   def self.receive(body, opts={})
-    responder = Responder.where(phone: opts[:from]).first
+    responder = Responder.find_by_phone(opts[:from])
     send("#{opts[:from]}: #{opts[:body]}", to: "6507876770") unless responder
-    DispatchMessanger.new(responder, body)
+    messanger = DispatchMessanger.new(responder)
+    messanger.respond(body)
   end
 end
