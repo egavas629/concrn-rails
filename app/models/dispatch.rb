@@ -82,7 +82,7 @@ class Dispatch < ActiveRecord::Base
   def alert_responder
     responder_synopses.each do |snippet|
       Message.send snippet, to: responder.phone
-      sleep 1
+      sleep 0.01
     end
   end
 
