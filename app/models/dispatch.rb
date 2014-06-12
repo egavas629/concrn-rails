@@ -19,7 +19,7 @@ class Dispatch < ActiveRecord::Base
   scope :pending,      -> { where(status: 'pending') }
 
   # CALLBACKS #
-  after_commit :alert_responder, on: :create
+  after_create :alert_responder
 
   # CLASS METHODS #
   def self.latest
@@ -65,7 +65,7 @@ class Dispatch < ActiveRecord::Base
     end
   end
 
-  private
+
 
   def thank_responder
     Message.send "Thanks for your help. You are now available to be dispatched.", to: responder.phone
@@ -80,14 +80,10 @@ class Dispatch < ActiveRecord::Base
   end
 
   def alert_responder
-    puts '~~~~~~~~~~~~~~~~'
-    puts '~~~~~~~~~~~~~~~~'
-    puts '~~~~~~~~~~~~~~~~'
-    puts '~~~~~~~~~~~~~~~~'
-    Message.send responder_synopsis, to: responder.phone
+    responder_synopses.each { |snippet| Message.send snippet, to: responder.phone }
   end
 
-  def responder_synopsis
+  def responder_synopses
     [
       report.address,
       "Reporter: #{report.name}, #{report.phone}",
