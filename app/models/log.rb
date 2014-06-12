@@ -11,7 +11,7 @@ class Log < ActiveRecord::Base
     message_sent = false
 
     report.accepted_responders.each do |responder|
-      Telephony.send(body: body, to: responder.phone) && message_sent = true
+      Telephony.send(body, to: responder.phone) && message_sent = true
     end
 
     self.touch(:sent_at) if message_sent

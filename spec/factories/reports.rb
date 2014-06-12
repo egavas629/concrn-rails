@@ -12,7 +12,13 @@ FactoryGirl.define do
     observations { ['At-risk of harm', 'Under the influence', 'Anxious', 'Depressed', 'Aggarvated', 'Threatening'].sample(rand(6)) }
     nature  { Faker::Lorem.sentence }
 
-    trait(:unassigned) {}
+    trait(:pending) do
+      after(:create) do |report|
+        responder = create :responder
+        report.dispatch!(responder)
+        messanger = DispatchMessanger.new(responder)
+      end
+    end
 
     trait(:completed) do
       after(:create) do |report|
@@ -26,7 +32,7 @@ FactoryGirl.define do
       end
     end
 
-    trait(:assigned) do
+    trait(:accepted) do
       after(:create) do |report|
         responder = create :responder
         report.dispatch!(responder)

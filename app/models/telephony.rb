@@ -5,7 +5,7 @@ class Telephony
     @client ||= Twilio::REST::Client.new(ENV['TWILIO_SID'], ENV['TWILIO_TOKEN'])
   end
 
-  def self.send(to: nil, body: 'Thanks!')
+  def self.send(body='Thanks!', to: nil)
     sleep 1 # Carriers are sloppy.
     client.account.messages.create(from: OUTGOING_PHONE, to: to, body: body)
   end

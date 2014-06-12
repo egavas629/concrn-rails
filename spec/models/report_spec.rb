@@ -9,7 +9,7 @@ describe Report do
   end
 
   describe '#accept_feedback' do
-    let(:report) { create :report, :assigned }
+    let(:report) { create :report, :accepted }
     let(:jacob) { report.responders.first }
 
     it 'creates a new log' do
@@ -36,7 +36,7 @@ describe Report do
 
     # it 'messages the potential responder' do
     #   report.dispatch! jane
-    #   expect(Message).to receive(:send).with(anything, to: jane.phone)
+    #   expect(Telephony).to receive(:send).with(anything, to: jane.phone)
     # end
   end
 end
