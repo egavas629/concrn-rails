@@ -19,7 +19,8 @@ class Dispatch < ActiveRecord::Base
   scope :pending,      -> { where(status: 'pending') }
 
   # CALLBACKS #
-  after_create :notify_responder
+  after_create :messanger
+  after_update :messanger, if: :status_changed?
 
   # CLASS METHODS #
   def self.latest
@@ -43,8 +44,20 @@ class Dispatch < ActiveRecord::Base
     status == "rejected"
   end
 
-  def notify_responder
-    DispatchMessanger.new(responder).notify_responder
+private
+
+  def messanger
+    dispatch_messanger = DispatchMessanger.new(responder)
+    case status
+    when 'accepted'
+      dispatch_messanger.accept!
+    when 'completed'
+      dispatch_messanger.complete!
+    when 'pending'
+      dispatch_messanger.pending!
+    when 'rejected'
+      dispatch_messanger.reject!
+    end
   end
 
 end
