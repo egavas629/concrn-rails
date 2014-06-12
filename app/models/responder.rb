@@ -31,14 +31,6 @@ class Responder < User
     write_attribute :phone, NumberSanitizer.sanitize(new_phone)
   end
 
-  def respond(body)
-    give_feedback(body)
-
-    return latest_dispatch.reject! if latest_dispatch.pending? && body.match(/no/i)
-    return latest_dispatch.complete! if latest_dispatch.accepted? && body.match(/done/i)
-    latest_dispatch.accept! unless latest_dispatch.accepted? || latest_dispatch.completed?
-  end
-
   def completed_count
     dispatches.where(status: "completed").count
   end
@@ -57,9 +49,7 @@ class Responder < User
 
   def status
     return "unassigned" if dispatches.none?
-
-    last_dispatch = dispatches.order("created_at desc").first
-    "last: #{last_dispatch.status}"
+    "last: #{dispatches.latest.status}"
   end
 
   def set_password
@@ -68,14 +58,6 @@ class Responder < User
   end
 
   private
-
-  def latest_dispatch
-    dispatches.latest
-  end
-
-  def give_feedback(body)
-    latest_dispatch.report.accept_feedback(from: self, body: body)
-  end
 
   def make_unavailable!
     update_attribute(:availability, false)
