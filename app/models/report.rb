@@ -122,10 +122,6 @@ class Report < ActiveRecord::Base
     end
   end
 
-  def accept_feedback(opts={})
-    logs.create! author: opts[:from], body: opts[:body]
-  end
-
   def google_maps_address
     "https://maps.google.com/?q=#{address}"
   end
