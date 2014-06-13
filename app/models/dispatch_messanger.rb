@@ -31,7 +31,7 @@ class DispatchMessanger
   end
 
   def pending!
-    responder_synopses.each { |snippet| Telephony.send(snippet, to: @responder.phone) }
+    responder_synopses.each { |snippet| Telephony.send(snippet, @responder.phone) }
   end
 
   def reject!
@@ -42,11 +42,11 @@ class DispatchMessanger
 private
 
   def acknowledge_acceptance
-    Telephony.send("You have been assigned to an incident at #{@report.address}.", to: @responder.phone)
+    Telephony.send("You have been assigned to an incident at #{@report.address}.", @responder.phone)
   end
 
   def acknowledge_rejection
-    Telephony.send("We appreciate your timely rejection. Your report is being re-submitted.", to: @responder.phone)
+    Telephony.send("We appreciate your timely rejection. Your report is being re-submitted.", @responder.phone)
   end
 
   def give_feedback(body)
@@ -54,7 +54,7 @@ private
   end
 
   def notify_reporter
-    Telephony.send(reporter_synopsis, to: @report.phone)
+    Telephony.send(reporter_synopsis, @report.phone)
   end
 
   def reporter_synopsis
@@ -72,15 +72,15 @@ private
       "#{[@report.race, @report.gender, @report.age].delete_if(&:empty?).join('/')}",
       @report.setting,
       @report.nature
-    ]
+    ].delete_if(&:empty?)
   end
 
   def thank_responder
-    Telephony.send("Thanks for your help. You are now available to be dispatched.", to: @responder.phone)
+    Telephony.send("Thanks for your help. You are now available to be dispatched.", @responder.phone)
   end
 
   def thank_reporter
-    Telephony.send("Report resolved, thanks for being concrned!", to: @report.phone)
+    Telephony.send("Report resolved, thanks for being concrned!", @report.phone)
   end
 
   def update_dispatch
