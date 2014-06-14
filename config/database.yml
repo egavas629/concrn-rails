@@ -3,17 +3,17 @@ development:
   encoding: unicode
   database: streetmom_development
   pool: 5
-  # username: streetmom
-  # password:
-  # host: localhost
+  username: streetmom
+  password:
+  host: localhost
 
 test: &test
   adapter: postgresql
   encoding: unicode
   database: streetmom_test
   pool: 5
-  # username: streetmom
-  # password:
+  username: streetmom
+  password:
 
 production:
   adapter: postgresql
