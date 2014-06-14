@@ -6,7 +6,7 @@
       %br
       %label
         Available &nbsp
-        = check_box_tag 'availability', nil, @responder.available,
+        = check_box_tag 'availability', nil, @responder.availability,
           'data-update' => responder_path(@responder), disabled: !@responder.active
     %br
     .phone= @responder.phone
