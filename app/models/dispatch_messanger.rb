@@ -3,7 +3,7 @@ class DispatchMessanger
   def initialize(responder)
     @responder = responder
     @dispatch  = responder.dispatches.latest
-    @report    = @dispatch.report if @dispatch.present? && !@dispatch.completed?
+    @report    = @dispatch.report if @dispatch.present?
   end
 
   def respond(body)
