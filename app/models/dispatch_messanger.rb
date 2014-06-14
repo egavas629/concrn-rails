@@ -3,17 +3,29 @@ class DispatchMessanger
   def initialize(responder)
     @responder = responder
     @dispatch  = responder.dispatches.latest
-    @report    = @dispatch.report
+    @report    = @dispatch.report if @dispatch.present? && !@dispatch.completed?
   end
 
   def respond(body)
-    give_feedback(body)
-    if @dispatch.pending? && body.match(/no/i)
-      @dispatch.update_attributes!(status: 'rejected')
-    elsif @dispatch.accepted? && body.match(/done/i)
-      @dispatch.update_attributes!(status: 'completed')
-    elsif !@dispatch.accepted? && !@dispatch.completed?
-      @dispatch.update_attributes!(status: 'accepted')
+    if defined?(@report)
+      give_feedback(body)
+      if @dispatch.pending? && body.match(/no/i)
+        @dispatch.update_attributes!(status: 'rejected')
+      elsif @dispatch.accepted? && body.match(/done/i)
+        @dispatch.update_attributes!(status: 'completed')
+      elsif @responder.available && body.match(/break/i)
+        @responder.update_attributes!(availability: false)
+      elsif !@responder.available && body.match(/on/i)
+        @responder.update_attributes!(availability: true)
+      elsif !@dispatch.accepted? && !@dispatch.completed?
+        @dispatch.update_attributes!(status: 'accepted')
+      end
+    else
+      if @responder.available && body.match(/break/i)
+        @responder.update_attributes!(availability: false)
+      elsif !@responder.available && body.match(/on/i)
+        @responder.update_attributes!(availability: true)
+      end
     end
   end
 
