@@ -31,5 +31,13 @@ production:
   username: streetmom
   password:
 
+rangers:
+  adapter: postgresql
+  encoding: unicode
+  database: streetmom_rangers
+  pool: 5
+  username: streetmom
+  password:
+
 cucumber:
   <<: *test
