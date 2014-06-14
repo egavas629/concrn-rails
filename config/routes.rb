@@ -19,8 +19,6 @@ Streetmom::Application.routes.draw do
       get 'deactivated'
     end
   end
-
-  resources :contacts
   resources :dispatches, only: %w(create update)
   resources :logs
   resources :reporter,   only: %w(show)

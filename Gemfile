@@ -17,8 +17,6 @@ gem 'devise'
 gem 'twilio-ruby'
 gem 'pusher'
 gem 'foreman'
-gem 'resque'
-gem 'resque-scheduler', :require => "resque_scheduler"
 gem 'geocoder'
 gem 'bullet', group: :development
 gem 'aws-sdk'

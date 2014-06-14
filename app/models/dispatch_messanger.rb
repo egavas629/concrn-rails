@@ -68,11 +68,11 @@ private
   def responder_synopses
     [
       @report.address,
-      "Reporter: #{[@report.name, @report.phone].delete_if(&:empty?).join(', ')}",
-      "#{[@report.race, @report.gender, @report.age].delete_if(&:empty?).join('/')}",
+      "Reporter: #{[@report.name, @report.phone].delete_blank * ', '}",
+      "#{[@report.race, @report.gender, @report.age].delete_blank * '/'}",
       @report.setting,
       @report.nature
-    ].delete_if(&:empty?)
+    ].delete_blank
   end
 
   def thank_responder

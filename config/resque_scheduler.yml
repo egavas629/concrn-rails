@@ -1,9 +1,0 @@
-queue_documents_for_indexing:
-  cron: "* * * * *"
-  # you can use rufus-scheduler "every" syntax in place of cron if you prefer
-  # every: 1hr
-  # By default the job name (hash key) will be taken as worker class name.
-  # If you want to have a different job name and class name, provide the 'class' option
-  class: ExpirePendingDispatches
-  args:
-  description: "Expires Pending Dispatches"
