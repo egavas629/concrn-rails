@@ -4,7 +4,7 @@ FactoryGirl.define do
     phone         { '2133733979' }
     password      { 'password' }
     name          { Faker::Name.name }
-    availability  { 'unavailable' }
+    availability  { false }
   end
 
   factory :responder do
@@ -12,7 +12,7 @@ FactoryGirl.define do
     phone         { ['4242429462', '2133733979'].sample }
     password      { 'password' }
     name          { Faker::Name.name }
-    availability  { 'available' }
+    availability  { true }
 
     trait(:jacob) do
      name "Jacob"
