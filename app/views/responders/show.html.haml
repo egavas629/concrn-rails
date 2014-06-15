@@ -12,42 +12,9 @@
     .phone= @responder.phone
     .email= link_to @responder.email, "mailto:#{@responder.email}"
 %br
-%h3 Shift Table
-%table.table.table-condensed
-  %thead
-    %th Date
-    %th
-      Time
-      = "(24 hour, #{Time.now.localtime.zone})"
-  %tbody
-    - @responder.shifts.each do |shift|
-      %tr
-        %td
-          = shift.start_time.localtime.strftime('%-m-%-d-%y')
-          - if shift.end_time && shift.start_time.to_date != shift.end_time.to_date
-            to
-            = shift.end_time.localtime.strftime('%-m-%-d-%y')
-        %td= "#{shift.start_time.localtime.strftime('%H:%M')} to #{shift.end_time ? shift.end_time.localtime.strftime('%H:%M') : 'now'}"
-
+= render 'shift_table', shifts: @responder.shifts
 %br
-- if @responder.dispatches.present?
-  %table.table.table-condensed
-    %thead
-      %tr
-        %th Date
-        %th Address
-        %th Status
-        %th
-    %tbody
-      - @responder.dispatches.each do |dispatch|
-        - report = dispatch.report
-        = content_tag_for :tr, report, class: report.table_status do
-          %td= report.created_at.strftime('%-m-%-d-%y')
-          %td= report.address
-          %td= report.status
-          %td= link_to 'Details', report_path(report)
-- else
-  %weak Responder has not been dispatched to a report yet.
+= render 'dispatch_table', dispatches: @responder.dispatches
 .row
   %br
   - status = @responder.active ? 'Deactivate' : 'Reactivate'
