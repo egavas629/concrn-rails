@@ -14,22 +14,21 @@ class Responder < User
   default_scope -> { where(role: 'responder') }
   scope :active,   -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
+  scope :on_shift, -> { where(id: Shift.on_shift.map(&:responder_id)) }
 
   scope :available, -> do
     find_by_sql(%Q{
       SELECT r.*, count(distinct d.id) as ad_count, count(distinct dr.id) as dr_count FROM users r
         LEFT JOIN dispatches d on d.responder_id=r.id
         LEFT JOIN dispatches dr on dr.responder_id=r.id AND dr.status not in ('pending', 'accepted')
-      WHERE r.role = 'responder'
-      AND r.availability = true
       GROUP BY r.id
       HAVING count(distinct d.id) = count(distinct dr.id)
-    })
+    }) & on_shift
   end
 
   # INSTANCE METHODS #
   def on_shift?
-    shifts.where('start_time <= (?) AND end_time IS ?', Time.now, nil).count > 0
+    shifts.on_shift.count > 0
   end
 
   def phone=(new_phone)
