@@ -19,7 +19,10 @@
           %td= responder.completed_count
           %td= responder.rejected_count
           - unless deactivated
-            %td= check_box_tag 'availability', nil, responder.availability, 'data-update' => responder_path(responder)
+            - path = responder.on_shift? ? end_shift_responder_path(responder) : start_shift_responder_path(responder)
+            %td
+              = simple_form_for '', url: path, method: :post do |f|
+                = f.check_box :available, checked: responder.on_shift?, class: 'availability'
             %td= responder.status
 - else
   %p.notice

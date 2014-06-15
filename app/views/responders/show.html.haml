@@ -4,30 +4,40 @@
   .col-md-5.col-md-offset-2
     - if @responder.active
       %br
-      %label
-        Available &nbsp
-        = check_box_tag 'availability', nil, @responder.availability,
-          'data-update' => responder_path(@responder), disabled: !@responder.active
+      %label Available &nbsp
+      - path = @responder.on_shift? ? end_shift_responder_path(@responder) : start_shift_responder_path(@responder)
+      = simple_form_for '', url: path, method: :post do |f|
+        = f.check_box :available, checked: @responder.on_shift?, class: 'availability'
     %br
     .phone= @responder.phone
     .email= link_to @responder.email, "mailto:#{@responder.email}"
 %br
+%h3 Shift Table
 %table.table.table-condensed
   %thead
     %th Date
-    %th Shift
+    %th
+      Time
+      = "(24 hour, #{Time.now.localtime.zone})"
   %tbody
-    / %td= responder.availability_on_date('%-m-%-d-%y')
-    /   if end_date.different show 'to end_date'
-    / %td= responder.available_at_time('hh:mm') 'to' responder.unavailable_at_time('hh:mm')
+    - @responder.shifts.each do |shift|
+      %tr
+        %td
+          = shift.start_time.localtime.strftime('%-m-%-d-%y')
+          - if shift.end_time && shift.start_time.to_date != shift.end_time.to_date
+            to
+            = shift.end_time.localtime.strftime('%-m-%-d-%y')
+        %td= "#{shift.start_time.localtime.strftime('%H:%M')} to #{shift.end_time ? shift.end_time.localtime.strftime('%H:%M') : 'now'}"
+
 %br
 - if @responder.dispatches.present?
   %table.table.table-condensed
     %thead
-      %th Date
-      %th Address
-      %th Status
-      %th
+      %tr
+        %th Date
+        %th Address
+        %th Status
+        %th
     %tbody
       - @responder.dispatches.each do |dispatch|
         - report = dispatch.report

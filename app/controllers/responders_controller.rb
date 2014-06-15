@@ -65,6 +65,6 @@ class RespondersController < ApplicationController
   end
 
   def responder_params
-    params.require(:responder).permit(:availability, :phone, :name, :email, :active)
+    params.require(:responder).permit(:phone, :name, :email, :active)
   end
 end

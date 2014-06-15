@@ -2,6 +2,7 @@ class Responder < User
   # RELATIONS #
   has_many :reports, through: :dispatches
   has_many :dispatches
+  has_many :shifts
 
   # VALIDATIONS #
   validates_presence_of :phone
@@ -27,6 +28,10 @@ class Responder < User
   end
 
   # INSTANCE METHODS #
+  def on_shift?
+    shifts.where('start_time <= (?) AND end_time IS ?', Time.now, nil).count > 0
+  end
+
   def phone=(new_phone)
     write_attribute :phone, NumberSanitizer.sanitize(new_phone)
   end
@@ -52,7 +57,7 @@ class Responder < User
   private
 
   def make_unavailable!
-    update_attribute(:availability, false)
+    shifts.end!('web')
   end
 
   def need_to_make_unavailable?
