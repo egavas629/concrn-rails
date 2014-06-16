@@ -32,14 +32,12 @@ class DispatchMessanger
   def accept!
     acknowledge_acceptance
     notify_reporter
-    update_dispatch
   end
 
   def complete!
     @report.complete!
     thank_responder
     thank_reporter
-    update_dispatch
   end
 
   def pending!
@@ -48,7 +46,6 @@ class DispatchMessanger
 
   def reject!
     acknowledge_rejection
-    update_dispatch
   end
 
 private
@@ -93,9 +90,5 @@ private
 
   def thank_reporter
     Telephony.send("Report resolved, thanks for being concrned!", @report.phone)
-  end
-
-  def update_dispatch
-    Pusher.trigger("reports" , "refresh", @report)
   end
 end
