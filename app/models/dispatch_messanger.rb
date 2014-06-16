@@ -8,28 +8,25 @@ class DispatchMessanger
 
   def respond(body)
     feedback = true
-    if @responder.on_shift? && body.match(/break/i)
-
-      if @dispatch.nil? || @dispatch.completed? || @dispatch.pending?
-        @responder.shifts.end!('sms')
-        feedback = false
-      end
-      @dispatch.update_attributes!(status: 'rejected') if @dispatch && @dispatch.pending?
-
-    elsif !@responder.on_shift? && body.match(/on/i)
-      @responder.shifts.start!('sms')
-      feedback = false
-    elsif @dispatch.pending? && body.match(/no/i)
-      @dispatch.update_attributes!(status: 'rejected')
-    elsif @dispatch.accepted? && body.match(/done/i)
-      @dispatch.update_attributes!(status: 'completed')
+    if @responder.on_shift? && body[/break/i]
+      @responder.shifts.end!('sms') && feedback = false if non_breaktime
+      status = 'rejected' if @dispatch && @dispatch.pending?
+    elsif !@responder.on_shift? && body[/on/i]
+      @responder.shifts.start!('sms') && feedback = false
+    elsif @dispatch.pending? && body[/no/i]
+      status = 'rejected'
+    elsif @dispatch.accepted? && body[/done/i]
+      status = 'completed'
     elsif !@dispatch.accepted? && !@dispatch.completed?
-      @dispatch.update_attributes!(status: 'accepted')
+      status = 'accepted'
     end
+    @dispatch.update_attributes!(status: status)
     give_feedback(body) if feedback
   end
 
   def accept!
+    @dispatch.update_attribute(:accepted_at, Time.now)
+    @report.logs.create!(author: @responder, body: "Accepted the dispatch")
     acknowledge_acceptance
     notify_reporter
   end
@@ -60,6 +57,10 @@ private
 
   def give_feedback(body)
     @report.logs.create!(author: @responder, body: body)
+  end
+
+  def non_breaktime
+    @dispatch.nil? || @dispatch.completed? || @dispatch.pending?
   end
 
   def notify_reporter

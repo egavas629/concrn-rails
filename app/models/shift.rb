@@ -12,4 +12,9 @@ class Shift < ActiveRecord::Base
   def self.end!(type='web')
     first.update_attributes!(end_time: Time.now, end_via: type)
   end
+
+private
+  def refresh_responders
+    Pusher.trigger('responders', 'refresh', responder)
+  end
 end
