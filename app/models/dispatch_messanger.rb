@@ -26,7 +26,7 @@ class DispatchMessanger
 
   def accept!
     @dispatch.update_attribute(:accepted_at, Time.now)
-    @report.logs.create!(author: @responder, body: "Accepted the dispatch")
+    @report.logs.create!(author: @responder, body: "*** Accepted the dispatch ***")
     acknowledge_acceptance
     notify_reporter
   end
