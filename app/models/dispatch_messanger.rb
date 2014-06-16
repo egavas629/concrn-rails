@@ -77,14 +77,10 @@ private
 
   def reporter_synopsis
     if @report.accepted_dispatches.count > 1 && primary = @report.accepted_dispatches.first.responder
-      <<-SMS
-      #{@responder.name} - #{@responder.phone} is on the way to help #{primary.name}.
-      SMS
+      "#{@responder.name} - #{@responder.phone} is on the way to help #{primary.name}."
     else
-       <<-SMS
-      INCIDENT RESPONSE: #{@responder.name} is on the way. #{@responder.phone}
-      SMS
-
+      "INCIDENT RESPONSE: #{@responder.name} is on the way. #{@responder.phone}"
+    end
   end
 
   def responder_synopses
