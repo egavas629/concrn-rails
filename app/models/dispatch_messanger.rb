@@ -77,9 +77,7 @@ private
 
   def reporter_synopsis
     <<-SMS
-    INCIDENT RESPONSE:
-    #{@responder.name} is on the way.
-    #{@responder.phone}
+    INCIDENT RESPONSE: #{@responder.name} is on the way. #{@responder.phone}
     SMS
   end
 
