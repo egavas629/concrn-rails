@@ -19,7 +19,7 @@
             %td.author{style: "white-space: nowrap;"}
               %strong= link_to log.author.name, responder_path(log.author)
             %td.body= log.body
-            %td
+            %td{style: "white-space: nowrap;"}
               .forward-via-sms=link_to "Send SMS", log_path(log), method: 'PUT' unless @report.unassigned? || log.broadcasted?
               .sent-stamp= "Sent (#{log.updated_at.strftime('%H:%M')})" if log.broadcasted?
 

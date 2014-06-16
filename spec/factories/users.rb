@@ -9,7 +9,7 @@ FactoryGirl.define do
 
   factory :responder do
     email         { Faker::Internet.email }
-    phone         { ['4242429462', '2133733979'].sample }
+    phone         { ['5103874543', '2133733979'].sample }
     password      { 'password' }
     name          { Faker::Name.name }
     availability  { true }

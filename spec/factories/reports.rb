@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory(:report) do
     name    { Faker::Name.name }
-    phone   { ['4242429462', '2133733979'].sample }
+    phone   { ['5103874543', '2133733979'].sample }
     lat     { 37.920556 + (rand() * (rand() > 0.5 ? -1 : 1)) }
     long    { 122.416667 + (rand() * (rand() > 0.5 ? -1 : 1)) }
     address { Faker::Address.street_address }
