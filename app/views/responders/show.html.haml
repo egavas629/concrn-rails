@@ -2,33 +2,20 @@
   .col-md-5
     %h1.name= "#{@responder.name} (Responder)"
   .col-md-5.col-md-offset-2
-    - if @responder.active
-      %br
-      %label
-        Available &nbsp
-        = check_box_tag 'availability', nil, @responder.available?,
-          'data-update' => responder_path(@responder), disabled: !@responder.active
     %br
+    - if @responder.active
+      - path = @responder.on_shift? ? end_shift_responder_path(@responder) : start_shift_responder_path(@responder)
+      = simple_form_for '', url: path, method: :post do |f|
+        .availability
+          = f.check_box :available, class: "available", :label => false, :inline_label => true, checked: @responder.on_shift?
+          %strong Available
     .phone= @responder.phone
     .email= link_to @responder.email, "mailto:#{@responder.email}"
 %br
-- if @responder.dispatches.present?
-  %table.table.table-condensed
-    %thead
-      %th Date
-      %th Address
-      %th Status
-      %th
-    %tbody
-      - @responder.dispatches.each do |dispatch|
-        - report = dispatch.report
-        = content_tag_for :tr, report, class: report.table_status do
-          %td= report.created_at.strftime('%-m-%-d-%y')
-          %td= report.address
-          %td= report.status
-          %td= link_to 'Details', report_path(report)
-- else
-  %weak Responder has not been dispatched to a report yet.
+= render 'shift_table', shifts: @responder.shifts
+
+%br
+= render 'dispatch_table', dispatches: @responder.dispatches
 .row
   %br
   - status = @responder.active ? 'Deactivate' : 'Reactivate'

@@ -6,8 +6,6 @@ describe Responder do
   describe('#respond(body)')
   describe('#completed_count')
   describe('#rejected_count')
-  describe('#available?')
-  describe('#unavailable?')
   describe('#status')
   describe('#set_password')
 end

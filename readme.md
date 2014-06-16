@@ -1,1 +1,1 @@
-![](https://www.codeship.io/projects/99846000-4ff7-0131-f772-2a1ce4399e92/status)
+[ ![Codeship Status for dbmarks/concrn-rails](https://www.codeship.io/projects/ecd35080-d735-0131-c4ee-52fb07763392/status)](https://www.codeship.io/projects/23861)

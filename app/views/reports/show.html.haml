@@ -49,5 +49,13 @@
 
   %ul.list.group.col-md-8= render partial: "reports/logroll"
 
+  %ul.list.group.col-md-4
+    %br
+    %td{class: "@report-#{@report.id}-dispatch"}
+    = render partial: "dispatches/create", locals: { report: @report } unless @report.archived_or_completed?
+  %ul.list.group.col-md-4
+    - if @report.dispatches.present?
+      = render partial: "dispatches/index", locals: { report: @report }
+
 = link_to 'Delete', report_path(@report), method: :delete,
   confirm: 'Are you sure you want to delete the report?', class: 'btn btn-danger'

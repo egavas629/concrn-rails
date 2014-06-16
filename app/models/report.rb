@@ -47,7 +47,7 @@ class Report < ActiveRecord::Base
   end
 
   def accepted_dispatches
-    dispatches.accepted.order('created_at DESC')
+    dispatches.accepted.order(:accepted_at)
   end
 
 
@@ -120,10 +120,6 @@ class Report < ActiveRecord::Base
       dispatches.pending.each {|i| i.update_attribute(:status, 'rejected')}
       accepted_dispatches.each {|i| i.update_attribute(:status, 'completed')}
     end
-  end
-
-  def accept_feedback(opts={})
-    logs.create! author: opts[:from], body: opts[:body]
   end
 
   def google_maps_address

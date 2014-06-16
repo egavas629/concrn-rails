@@ -26,7 +26,7 @@
     %dd= report.setting
   - if report.observations.present?
     %dt Observations
-    %dd= report.observations.join(', ')
+    %dd= report.observations * ', '
 
 %td= link_to report.address, report.google_maps_address, target: '_blank'
 

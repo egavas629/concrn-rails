@@ -16,7 +16,13 @@ SimpleForm.setup do |config|
     b.use :error, wrap_with: { tag: 'span', class: 'help-inline' }
     b.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
   end
- 
+
+  config.wrappers :checkbox, :tag => 'div', :class => 'control-group', :error_class => 'error' do |b|
+    b.use :tag => 'div', :class => 'controls' do |ba|
+      ba.use :label_input
+    end
+  end
+
   config.wrappers :group, tag: 'div', class: "form-group", error_class: 'error' do |b|
     b.use :html5
     b.use :placeholder

@@ -16,3 +16,6 @@
 
 # Pow
 .powrc
+
+# Ignore application configuration
+/config/application.yml

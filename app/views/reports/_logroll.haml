@@ -7,17 +7,25 @@
         .col-sm-6
           %span{style: 'float:right;'}
             - @report.accepted_responders.each do |responder|
-              .responder{style: 'float:right;'}= "#{responder.name} @ #{responder.phone}"
+              .responder{style: 'float:right;'}
+                = link_to responder.name, responder
+                = "@ #{responder.phone}"
               %br
-    - @report.logs.each_with_index do |log, i|
-      %div{class: "row log-entry"}
-        .col-md-1= log.created_at.strftime('%H:%M')
-        .author{class: "col-md-1", style: "width: auto; white-space: nowrap;"}= log.author.name
-        .body{class: "col-md-6"}= log.body
-        - unless @report.unassigned? || log.broadcasted?
-          .col-md-2.forward-via-sms{style: 'width: auto; float:right; '}=link_to "Send SMS", log_path(log), method: 'PUT'
-        - if log.broadcasted?
-          .col-md-2.sent-stamp{style: 'width: auto; float:right;'}= "Sent (#{log.updated_at.strftime('%H:%M')})"
+    %table.table
+      %tbody
+        - @report.logs.each_with_index do |log, i|
+          %tr.log-entry
+            %td= log.created_at.strftime('%H:%M')
+            %td.author{style: "white-space: nowrap;"}
+              %strong
+                - if log.author.role == 'responder'
+                  = link_to log.author.name, responder_path(log.author)
+                - else
+                  = log.author.name
+            %td.body= log.body
+            %td{style: "white-space: nowrap;"}
+              .forward-via-sms=link_to "Send SMS", log_path(log), method: 'PUT' unless @report.unassigned? || log.broadcasted?
+              .sent-stamp= "Sent (#{log.updated_at.strftime('%H:%M')})" if log.broadcasted?
 
   %li.list-group-item.metaphone
     = simple_form_for @metaphone do |f|
