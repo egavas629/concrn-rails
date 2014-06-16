@@ -28,6 +28,7 @@ class DispatchMessanger
     @dispatch.update_attribute(:accepted_at, Time.now)
     @report.logs.create!(author: @responder, body: "*** Accepted the dispatch ***")
     acknowledge_acceptance
+    primary_responder
     notify_reporter
   end
 
@@ -66,6 +67,13 @@ private
   def notify_reporter
     Telephony.send(reporter_synopsis, @report.phone)
   end
+
+  def primary_responder
+    if @report.accepted_dispatches.count > 1 && primary = @report.accepted_dispatches.first.responder
+      Telephony.send("The primary responder for this report is #{primary.name} – #{primary.phone}", @responder.phone)
+    end
+  end
+
 
   def reporter_synopsis
     <<-SMS

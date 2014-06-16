@@ -47,7 +47,7 @@ class Report < ActiveRecord::Base
   end
 
   def accepted_dispatches
-    dispatches.accepted.order('created_at DESC')
+    dispatches.accepted.order(:accepted_at)
   end
 
 
