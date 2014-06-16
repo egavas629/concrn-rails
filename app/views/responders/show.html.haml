@@ -4,11 +4,12 @@
   .col-md-5.col-md-offset-2
     - if @responder.active
       %br
-      %label Available &nbsp
+
       - path = @responder.on_shift? ? end_shift_responder_path(@responder) : start_shift_responder_path(@responder)
       = simple_form_for '', url: path, method: :post do |f|
-        = f.check_box :available, checked: @responder.on_shift?, class: 'availability'
-    %br
+        .availability
+          = f.check_box :available, class: "available", :label => false, :inline_label => true, checked: @responder.on_shift?
+          %strong Available
     .phone= @responder.phone
     .email= link_to @responder.email, "mailto:#{@responder.email}"
 %br
