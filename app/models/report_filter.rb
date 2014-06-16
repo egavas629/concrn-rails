@@ -14,14 +14,15 @@ class ReportFilter
 
   def query
     if defined?(@start_date) && defined?(@end_date)
-      completed_reports.where('created_at >= ? and created_at <= ?', @start_date, @end_date).order(@order)
+      reports = completed_reports.where('Date(created_at) >= ? and Date(created_at) <= ?', @start_date, @end_date)
     elsif defined?(@start_date)
-      completed_reports.where('created_at >= ?', @start_date).order(@order)
+      reports = completed_reports.where('Date(created_at) >= ?', @start_date)
     elsif defined?(@end_date)
-      completed_reports.where('created_at <= ?', @end_date).order(@order)
+      reports = completed_reports.where('Date(created_at) <= ?', @end_date)
     else
-      completed_reports.where(@params).order(@order)
+      reports = completed_reports.where(@params)
     end
+    reports.order(@order)
   end
 
 private
