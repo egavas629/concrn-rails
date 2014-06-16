@@ -1,7 +1,7 @@
 class ReportsController < ApplicationController
   before_action :authenticate_user!,   only: %w(index)
   before_action :ensure_dispatcher,    only: %w(index active history)
-  before_action :available_responders, only: %w(index active)
+  before_action :available_responders, only: %w(index active show)
   before_action :find_report,          only: %w(destroy update show download)
 
   def new
