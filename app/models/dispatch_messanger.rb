@@ -70,15 +70,21 @@ private
 
   def primary_responder
     if @report.accepted_dispatches.count > 1 && primary = @report.accepted_dispatches.first.responder
-      Telephony.send("The primary responder for this report is #{primary.name} – #{primary.phone}", @responder.phone)
+      Telephony.send("The primary responder for this report is: #{primary.name} – #{primary.phone}", @responder.phone)
     end
   end
 
 
   def reporter_synopsis
-    <<-SMS
-    INCIDENT RESPONSE: #{@responder.name} is on the way. #{@responder.phone}
-    SMS
+    if @report.accepted_dispatches.count > 1 && primary = @report.accepted_dispatches.first.responder
+      <<-SMS
+      #{@responder.name} - #{@responder.phone} is on the way to help #{primary.name}.
+      SMS
+    else
+       <<-SMS
+      INCIDENT RESPONSE: #{@responder.name} is on the way. #{@responder.phone}
+      SMS
+
   end
 
   def responder_synopses
