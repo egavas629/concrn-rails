@@ -2,9 +2,8 @@
   .col-md-5
     %h1.name= "#{@responder.name} (Responder)"
   .col-md-5.col-md-offset-2
+    %br
     - if @responder.active
-      %br
-
       - path = @responder.on_shift? ? end_shift_responder_path(@responder) : start_shift_responder_path(@responder)
       = simple_form_for '', url: path, method: :post do |f|
         .availability
