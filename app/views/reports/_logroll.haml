@@ -17,7 +17,11 @@
           %tr.log-entry
             %td= log.created_at.strftime('%H:%M')
             %td.author{style: "white-space: nowrap;"}
-              %strong= link_to log.author.name, responder_path(log.author)
+              %strong
+                - if log.author.role == 'responder'
+                  = link_to log.author.name, responder_path(log.author)
+                - else
+                  = log.author.name
             %td.body= log.body
             %td{style: "white-space: nowrap;"}
               .forward-via-sms=link_to "Send SMS", log_path(log), method: 'PUT' unless @report.unassigned? || log.broadcasted?
