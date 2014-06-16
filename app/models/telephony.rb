@@ -8,6 +8,8 @@ class Telephony
   def self.send(body='Thanks!', to=nil)
     sleep 1 # Carriers are sloppy.
     client.account.messages.create(from: OUTGOING_PHONE, to: to, body: body)
+  rescue
+    puts "### MESSAGE NOT SENT TO #{to} ###"
   end
 
   def self.receive(body, opts={})
