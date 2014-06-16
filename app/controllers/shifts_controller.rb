@@ -6,9 +6,9 @@ class ShiftsController < ApplicationController
     puts params.inspect
     respond_to do |format|
       if @responder.shifts.start!
-        flash[:notice] = "#{@responder.name}'s shift successfully started"
+        flash[:notice] = "#{@responder.name}'s shift has started."
       else
-        flash[:alert]  = "Error creating #{@responder.name}'s shift"
+        flash[:alert]  = "Error starting #{@responder.name}'s shift."
       end
       format.html { redirect_to :back }
     end
@@ -19,9 +19,9 @@ class ShiftsController < ApplicationController
     puts params.inspect
     respond_to do |format|
       if @responder.shifts.end!
-        flash[:notice] = "#{@responder.name}'s shift successfully ended"
+        flash[:notice] = "#{@responder.name}'s shift has ended."
       else
-        flash[:alert]  = "Error ending #{@responder.name}'s shift"
+        flash[:alert]  = "Error ending #{@responder.name}'s shift."
       end
       format.html { redirect_to :back }
     end

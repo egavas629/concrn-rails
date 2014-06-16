@@ -13,6 +13,7 @@
     .email= link_to @responder.email, "mailto:#{@responder.email}"
 %br
 = render 'shift_table', shifts: @responder.shifts
+
 %br
 = render 'dispatch_table', dispatches: @responder.dispatches
 .row

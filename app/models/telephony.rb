@@ -1,5 +1,5 @@
 class Telephony
-  OUTGOING_PHONE = ENV['SMS_PHONE'] || '(978) 566-1976'
+  OUTGOING_PHONE = ENV['SMS_PHONE'] || '(415) 801-3737'
 
   def self.client
     @client ||= Twilio::REST::Client.new(ENV['TWILIO_SID'], ENV['TWILIO_TOKEN'])
