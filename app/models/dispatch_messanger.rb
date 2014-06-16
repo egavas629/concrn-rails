@@ -58,7 +58,7 @@ private
   end
 
   def acknowledge_rejection
-    Telephony.send("We appreciate your timely rejection. Your report is being re-submitted.", @responder.phone)
+    Telephony.send("You have been removed from this incident at #{@report.address}. You are now available to be dispatched.", @responder.phone)
   end
 
   def give_feedback(body)
@@ -88,7 +88,7 @@ private
   end
 
   def thank_responder
-    Telephony.send("Thanks for your help. You are now available to be dispatched.", @responder.phone)
+    Telephony.send("The report is now completed, thanks for your help! You are now available to be dispatched.", @responder.phone)
   end
 
   def thank_reporter
