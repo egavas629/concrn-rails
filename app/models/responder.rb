@@ -11,7 +11,7 @@ class Responder < User
   after_validation :make_unavailable!, :on => :update, if: :need_to_make_unavailable?
 
   # SCOPES #
-  default_scope -> { where(role: 'responder') }
+  default_scope    -> { where(role: 'responder') }
   scope :active,   -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
   scope :on_shift, -> { where(id: Shift.on_shift.map(&:responder_id)) }

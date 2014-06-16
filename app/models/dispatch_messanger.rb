@@ -8,7 +8,7 @@ class DispatchMessanger
 
   def respond(body)
     feedback = true
-    if @responder.available? && body.match(/break/i)
+    if @responder.on_shift? && body.match(/break/i)
 
       if @dispatch.nil? || @dispatch.completed? || @dispatch.pending?
         @responder.shifts.end!('sms')
@@ -16,7 +16,7 @@ class DispatchMessanger
       end
       @dispatch.update_attributes!(status: 'rejected') if @dispatch && @dispatch.pending?
 
-    elsif !@responder.available? && body.match(/on/i)
+    elsif !@responder.on_shift? && body.match(/on/i)
       @responder.shifts.start!('sms')
       feedback = false
     elsif @dispatch.pending? && body.match(/no/i)
