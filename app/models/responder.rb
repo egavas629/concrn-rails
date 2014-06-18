@@ -1,8 +1,8 @@
 class Responder < User
   # RELATIONS #
-  has_many :reports, through: :dispatches
-  has_many :dispatches
-  has_many :shifts
+  has_many :dispatches, dependent: :destroy
+  has_many :reports,    through:   :dispatches
+  has_many :shifts,     dependent: :destroy
 
   # VALIDATIONS #
   validates_presence_of :phone
