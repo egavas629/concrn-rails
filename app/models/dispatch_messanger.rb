@@ -94,7 +94,9 @@ private
   end
 
   def thank_responder
-    Telephony.send("The report is now completed, thanks for your help! You are now available to be dispatched.", @responder.phone)
+    @report.accepted_responders.each do |responder|
+      Telephony.send("The report is now completed, thanks for your help! You are now available to be dispatched.", responder.phone)
+    end
   end
 
   def thank_reporter
