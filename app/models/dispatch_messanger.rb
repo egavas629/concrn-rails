@@ -7,7 +7,7 @@ class DispatchMessanger
   end
 
   def respond(body)
-    feedback = true
+    feedback, status = true, nil
     if @responder.on_shift? && body[/break/i]
       @responder.shifts.end!('sms') && feedback = false if non_breaktime
       status = 'rejected' if @dispatch && @dispatch.pending?
@@ -20,7 +20,7 @@ class DispatchMessanger
     elsif !@dispatch.accepted? && !@dispatch.completed?
       status = 'accepted'
     end
-    @dispatch.update_attributes!(status: status)
+    @dispatch.update_attributes!(status: status) if status
     give_feedback(body) if feedback
   end
 
