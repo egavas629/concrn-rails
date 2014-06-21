@@ -22,14 +22,12 @@ class ReportsController < ApplicationController
     @reports = params[:show_all] ? reports : reports.page(params[:page])
   end
 
-  # Needed to comment out Pusher for it to redirect to index
   def create
     @report = Report.new(report_params)
     respond_to do |format|
       if @report.save
         format.js { render json: @report }
         format.html { redirect_to action: :index }
-        # Pusher.trigger('reports' , 'refresh', {})
       else
         format.js { render json: @report }
         format.html { render action: :new }
@@ -44,7 +42,6 @@ class ReportsController < ApplicationController
 
   def update
     @report.update_attributes!(report_params)
-    Pusher.trigger("reports" , "refresh", {})
     respond_to do |format|
       format.js { render json: {success: true} }
       format.html { redirect_to :back }

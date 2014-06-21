@@ -1,1 +1,5 @@
-Pusher.url = "http://6e4f11b611afebfc624d:55a74db81ffac96a344e@api.pusherapp.com/apps/59560"
+if Rails.env.development?
+  require 'pusher'
+  Pusher.url = "http://#{ENV['PUSHER_KEY']}:#{ENV['PUSHER_SECRET']}@api.pusherapp.com/apps/#{ENV['PUSHER_APP_ID']}"
+  Pusher.logger = Rails.logger
+end

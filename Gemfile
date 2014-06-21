@@ -8,16 +8,35 @@ gem 'jbuilder', '~> 1.2'
 gem 'haml'
 gem 'simple_form'
 gem 'devise'
+
+# Telephony API
 gem 'twilio-ruby'
+
 gem 'pusher'
 gem 'foreman'
+
+# Get Coordinates for Address
 gem 'geocoder'
+
+# Get query info
 gem 'bullet', group: :development
+
+# Images on AWS S3
 gem 'aws-sdk'
+
+# Image uploading
 gem 'paperclip'
+
+# Pagination
 gem 'kaminari'
+
+# Seed/Testing
 gem 'factory_girl_rails'
+
+# Environment Variable Handling
 gem 'figaro'
+
+# Web Server
 gem 'thin'
 
 # Assets

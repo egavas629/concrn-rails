@@ -14,6 +14,7 @@ class Report < ActiveRecord::Base
   before_validation { image.clear if delete_image == '1' }
   before_validation { observations.delete_if(&:empty?) if observations_changed? }
   after_validation  { set_completed! if status_changed? }
+  after_save        :push_reports
 
   # CONSTANTS #
   Gender            = ['Male', 'Female', 'Other']
@@ -128,13 +129,23 @@ class Report < ActiveRecord::Base
 
 # TODO: Write CSS rules for actual statuses, and get rid of this method.
   def table_status
-    {
-      'rejected'      => 'danger',
-      'pending'       => 'warning',
-      'accepted'      => 'active',
-      'archived'      => 'info',
-      'completed'     => 'success',
-      'unassigned'    => 'warning'
-    }.fetch(status)
+    case status
+    when 'rejected'
+      'danger'
+    when 'pending'
+      'warning'
+    when 'archived'
+      'info'
+    when 'completed'
+      'success'
+    when 'unassigned'
+      'warning'
+    end
+  end
+
+private
+
+  def push_reports
+    Pusher.trigger("report-#{self.id}" , "refresh", {})
   end
 end

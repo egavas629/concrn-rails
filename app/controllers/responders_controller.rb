@@ -51,7 +51,6 @@ class RespondersController < ApplicationController
 
   def update
     @responder.update_attributes(responder_params)
-    Pusher.trigger("reports" , "refresh", {}) unless request.xhr?
     respond_to do |format|
       format.json {render json: @responder}
       format.html {render action: :show}

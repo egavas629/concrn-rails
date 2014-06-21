@@ -27,7 +27,7 @@ class Log < ActiveRecord::Base
 private
 
   def refresh_report
-    Pusher.trigger("reports" , "refresh", report)
+    Pusher.trigger("report-#{report.id}", "refresh", self)
   end
 
 end

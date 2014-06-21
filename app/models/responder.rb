@@ -9,6 +9,7 @@ class Responder < User
 
   # CALLBACKS #
   after_validation :make_unavailable!, :on => :update, if: :need_to_make_unavailable?
+  after_update     :push_reports
 
   # SCOPES #
   default_scope    -> { where(role: 'responder') }
@@ -53,7 +54,7 @@ class Responder < User
     self.password_confirmation = 'password'
   end
 
-  private
+private
 
   def make_unavailable!
     shifts.end!('web')
@@ -61,5 +62,9 @@ class Responder < User
 
   def need_to_make_unavailable?
     active_changed? && !active
+  end
+
+  def push_reports
+    Pusher.trigger("reports" , "refresh", {})
   end
 end

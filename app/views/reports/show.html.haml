@@ -1,4 +1,4 @@
-%h2
+%h2.pusher{'data-id' => @report.id, 'data-type' => 'report'}
   = @report.neighborhood ? "Crisis in #{@report.neighborhood}" : "Reported"
   %small="#{time_ago_in_words(@report.created_at)} ago:"
 
