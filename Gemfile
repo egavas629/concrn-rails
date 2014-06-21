@@ -3,16 +3,10 @@ ruby '2.0.0'
 
 gem 'rails', '4.0.0'
 gem 'pg'
-gem 'sass-rails', '~> 4.0.0'
-gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.0.0'
-gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
-gem 'haml-rails'
 gem 'haml'
 gem 'simple_form'
-gem 'bootstrap-sass-rails'
 gem 'devise'
 gem 'twilio-ruby'
 gem 'pusher'
@@ -22,11 +16,19 @@ gem 'bullet', group: :development
 gem 'aws-sdk'
 gem 'paperclip'
 gem 'kaminari'
-gem 'jquery-ui-rails'
 gem 'factory_girl_rails'
+gem 'figaro'
+gem 'thin'
+
+# Assets
+gem 'sass-rails', '~> 4.0.0'
+gem 'uglifier', '>= 1.3.0'
+gem 'coffee-rails', '~> 4.0.0'
+gem 'jquery-rails'
+gem 'bootstrap-sass-rails'
+gem 'jquery-ui-rails'
 gem 'bourbon'
 gem 'jquery-turbolinks'
-gem 'figaro'
 
 group :production, :staging do
   gem 'rails_12factor'
@@ -42,7 +44,6 @@ group :test do
   gem 'selenium-webdriver'
   gem 'rspec-rails'
   gem 'rspec-mocks'
-
   gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
 end
