@@ -8,7 +8,7 @@ class Dispatch < ActiveRecord::Base
   validates_presence_of :responder
 
   # SCOPE #
-  default_scope    -> { order('created_at DESC') }
+  default_scope    -> { order(created_at: :desc) }
   scope :accepted, -> { where(status: %w(accepted completed)) }
   scope :pending,  -> { where(status: 'pending') }
 
@@ -23,7 +23,7 @@ class Dispatch < ActiveRecord::Base
 
   # CLASS METHODS #
   def self.latest
-    order('created_at desc').first
+    first
   end
 
   # INSTANCE METHODS #

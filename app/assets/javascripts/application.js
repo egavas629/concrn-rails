@@ -15,5 +15,6 @@
 //= require jquery_ujs
 //= require jquery.ui.datepicker
 //= require twitter/bootstrap
+//= require gritter
 //= require turbolinks
 //= require_tree .

@@ -1,26 +1,47 @@
-var channels = formatChannelNames();
-if(channels.length > 0){
-  var pusherKey = $('body').data('pusher-key'),
-      pusher    = new Pusher(pusherKey);
-  channels.forEach(function(channel){
-    pusher.subscribe(channel);
-  })
-  pusher.bind("refresh", function(data){
-    return window.location.reload(true);
-  });
-}
+$(document).ready(function(){
 
-function formatChannelNames(){
-  var channels = [];
-  $('.pusher').each(function(index){
-    var id   = $(this).data('id'),
-        type = $(this).data('type');
-    channels.push(type + '-' + id);
-  });
-  // User on index page that when repsonders update, should refresh
-  if(channels.length > 1){
-    channels.push('reports');
+  if(typeof channelName() != 'undefined' && channelName().length > 0 && !window.onunload){
+    var pusherKey = $('body').data('pusher-key'),
+        pusher    = new Pusher(pusherKey);
+
+    pusher.subscribe(channelName());
+    pusher.bind("refresh", function(data){
+      $(function() {
+        $.gritter.add({
+          image: '/assets/notice.png',
+          title: 'Page is outdated',
+          text: "<a href='javascript:window.location.reload()'>Click here to update page.</a>",
+          sticky: false,
+          time: 8000
+        });
+      });
+    });
+    pusher.bind("message", function(data){
+      $('#log_body').val('');
+      addMessage(data);
+    });
   }
 
-  return channels;
-};
+  function channelName(){
+    var name;
+    if($('.pusher').length > 0){
+      name = 'reports-responders'
+    }else if($('.pusher-id').length >0){
+      var id = $('.pusher-id').data('id');
+      name = 'report-' + id;
+    }
+    return name;
+  }
+
+  function addMessage(data){
+    var messageRow = $('#' + data['id'])
+    if(messageRow.length > 0){
+      messageRow.html(data['inner_html'])
+    }else{
+      messageRow = document.createElement('tr');
+      messageRow.setAttribute('id', data['id']);
+      messageRow.innerHTML = data['inner_html'];
+      $('#transcript').find('tbody').append(messageRow);
+    }
+  }
+})

@@ -1,4 +1,4 @@
-= content_tag_for :tr, report, class: "freshness-#{report.freshness} pusher", data: {'id' => report.id, 'type' => 'report'} do
+= content_tag_for :tr, report, class: "freshness-#{report.freshness}" do
   %td{title: report.created_at.to_s}
     %strong
       .digits= "#{report.created_at.strftime("%I:%M %p")}"

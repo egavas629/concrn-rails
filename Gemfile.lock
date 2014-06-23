@@ -120,6 +120,7 @@ GEM
       diff-lcs (~> 1.1)
       mime-types (~> 1.15)
       posix-spawn (~> 0.3.6)
+    gritter (1.1.0)
     haml (4.0.3)
       tilt
     hike (1.2.3)
@@ -308,6 +309,7 @@ DEPENDENCIES
   figaro
   foreman
   geocoder
+  gritter
   haml
   jazz_hands
   jbuilder (~> 1.2)

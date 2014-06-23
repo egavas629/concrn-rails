@@ -27,7 +27,7 @@ class Report < ActiveRecord::Base
       .order("reports.created_at DESC").references(:dispatches)
   end
 
-  scope :archived, -> { where(status: "archived") }
+  scope :archived,  -> { where(status: "archived") }
   scope :completed, -> { where("reports.status = 'archived' OR reports.status = 'completed'") }
 
   scope :pending, -> do
@@ -137,6 +137,6 @@ class Report < ActiveRecord::Base
 private
 
   def push_reports
-    Pusher.trigger("report-#{self.id}" , "refresh", {})
+    Pusher.trigger('reports-responders' , "refresh", {})
   end
 end

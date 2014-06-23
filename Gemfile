@@ -48,6 +48,7 @@ gem 'bootstrap-sass-rails'
 gem 'jquery-ui-rails'
 gem 'bourbon'
 gem 'jquery-turbolinks'
+gem 'gritter'
 
 group :production, :staging do
   gem 'rails_12factor'
