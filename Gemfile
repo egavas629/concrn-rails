@@ -49,6 +49,7 @@ gem 'jquery-ui-rails'
 gem 'bourbon'
 gem 'jquery-turbolinks'
 gem 'gritter'
+gem 'coveralls', require: false
 
 group :production, :staging do
   gem 'rails_12factor'
