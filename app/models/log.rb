@@ -24,7 +24,7 @@ class Log < ActiveRecord::Base
     sent_at.present?
   end
 
-# private
+private
 
   def refresh_report
     Pusher.trigger("report-#{report.id}", "message", {'inner_html' => LogPresenter.new(self).inner_html, 'id' => self.id})
