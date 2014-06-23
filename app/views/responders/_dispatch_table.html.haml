@@ -11,9 +11,9 @@
         %tr
           - report = dispatch.report
           = content_tag_for :tr, report, class: row_style(dispatch.status) do
-            %td= report.created_at.strftime('%-m-%-d-%y')
+            %td= dispatch.created_at.strftime('%-m-%-d-%y')
             %td= report.address
-            %td= dispatch.status
+            %td= dispatch.status.capitalize
             %td= link_to 'Details', report_path(report)
 - else
   %weak Responder has not been dispatched to a report yet.
