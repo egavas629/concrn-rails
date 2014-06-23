@@ -49,7 +49,7 @@
 
     .btn-delete
       = link_to 'Delete', report_path(@report), method: :delete,
-      confirm: 'Are you sure you want to delete the report?', class: 'btn btn-danger'
+      'data-confirm' => 'Are you sure you want to delete the report. All dispatches and records of this report will be destroyed permanently?', class: 'btn btn-danger'
 
   %ul.list.group.col-md-8
     = render partial: "reports/logroll"

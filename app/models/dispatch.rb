@@ -8,15 +8,14 @@ class Dispatch < ActiveRecord::Base
   validates_presence_of :responder
 
   # SCOPE #
-  default_scope { order(:created_at) }
-  scope :accepted,     -> { where(status: %w(accepted completed)) }
+  default_scope       { order(:created_at) }
+  scope :accepted, -> { where(status: %w(accepted completed)) }
+  scope :pending,      -> { where(status: 'pending') }
 
   scope :not_rejected, -> do
     where.not(status: 'rejected')
       .joins(:responder).order('dispatches.status', 'dispatches.updated_at')
   end
-
-  scope :pending,      -> { where(status: 'pending') }
 
   # CALLBACKS #
   after_create :messanger

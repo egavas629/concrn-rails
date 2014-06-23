@@ -6,15 +6,13 @@ class Report < ActiveRecord::Base
   # RELATIONS #
   has_many :dispatches, dependent: :destroy
   has_many :logs,       dependent: :destroy
-  has_many :responders, :through => :dispatches
+  has_many :responders, through:   :dispatches
 
   # CALLBACKS #
-  has_attached_file :image
-
-  before_validation { image.clear if delete_image == '1' }
-  before_validation { observations.delete_if(&:empty?) if observations_changed? }
-  after_validation  { set_completed! if status_changed? }
-  after_save        :push_reports
+  has_attached_file   :image
+  before_validation   :clean_image, :clean_observations
+  after_validation    :set_completed! if :status_changed?
+  after_commit        :push_reports
 
   # CONSTANTS #
   Gender            = ['Male', 'Female', 'Other']
@@ -51,6 +49,13 @@ class Report < ActiveRecord::Base
     dispatches.accepted.order(:accepted_at)
   end
 
+  def clean_image
+    image.clear if delete_image == '1'
+  end
+
+  def clean_observations
+    observations.delete_if(&:empty?) if observations_changed?
+  end
 
   def current_status
     if status == 'pending'
@@ -72,14 +77,16 @@ class Report < ActiveRecord::Base
 
 
   def freshness
-    if created_at > 2.minutes.ago
-      "fresh"
-    elsif created_at > 4.minutes.ago
-      "semi-fresh"
-    elsif created_at > 9.minutes.ago
-      "stale"
+    minutes_ago = ((Time.now - created_at) / 60).round
+    case minutes_ago
+    when 0..2
+      'fresh'
+    when 3..4
+      'semi-fresh'
+    when 5..9
+      'stale'
     else
-      "old"
+      'old'
     end
   end
 
@@ -125,22 +132,6 @@ class Report < ActiveRecord::Base
 
   def google_maps_address
     "https://maps.google.com/?q=#{address}"
-  end
-
-# TODO: Write CSS rules for actual statuses, and get rid of this method.
-  def table_status
-    case status
-    when 'rejected'
-      'danger'
-    when 'pending'
-      'warning'
-    when 'archived'
-      'info'
-    when 'completed'
-      'success'
-    when 'unassigned'
-      'warning'
-    end
   end
 
 private

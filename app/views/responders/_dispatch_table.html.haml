@@ -10,10 +10,10 @@
       - dispatches.each do |dispatch|
         %tr
           - report = dispatch.report
-          = content_tag_for :tr, report, class: report.table_status do
+          = content_tag_for :tr, report, class: row_style(dispatch.status) do
             %td= report.created_at.strftime('%-m-%-d-%y')
             %td= report.address
-            %td= report.status
+            %td= dispatch.status
             %td= link_to 'Details', report_path(report)
 - else
   %weak Responder has not been dispatched to a report yet.

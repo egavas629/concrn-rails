@@ -65,6 +65,6 @@ private
   end
 
   def push_reports
-    Pusher.trigger("reports" , "refresh", {})
+    Pusher.trigger("responder-#{self.id}" , "refresh", responder)
   end
 end
