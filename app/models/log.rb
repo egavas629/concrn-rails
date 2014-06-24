@@ -3,6 +3,7 @@ class Log < ActiveRecord::Base
   belongs_to :report
   belongs_to :author, class_name: 'User'
 
+  delegate :name, :role, to: :author, prefix: true
   # CALLBACKS #
   after_commit :refresh_report
 

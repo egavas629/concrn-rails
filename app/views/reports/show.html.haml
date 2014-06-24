@@ -1,7 +1,8 @@
 %h2.pusher-id{'data-id' => @report.id, 'data-type' => 'report'}
   = @report.neighborhood ? "Crisis in #{@report.neighborhood}" : "Reported"
-  %small="#{time_ago_in_words(@report.created_at)} ago:"
-
+  %small
+    %abbr.timeago{title: @report.created_at.getutc.iso8601}= @report.created_at.to_s
+    :
 .row
   %ul.list-group.col-md-4
     %li.list-group-item
@@ -31,7 +32,7 @@
     %li.list-group-item
       %h4.list-group-item-heading Client
       .list-group-item-text="#{@report.age} #{@report.race} #{@report.gender}"
-      .list-group-item-text=@report.nature.present? ? "#{@report.nature}" : 'Nature Not Provided'
+      .list-group-item-text=@report.nature? ? "#{@report.nature}" : 'Nature Not Provided'
 
     %li.list-group-item
       %h4.list-group-item-heading Files
@@ -52,12 +53,12 @@
       'data-confirm' => 'Are you sure you want to delete the report. All dispatches and records of this report will be destroyed permanently?', class: 'btn btn-danger'
 
   %ul.list.group.col-md-8
-    = render partial: "reports/logroll"
+    = render partial: "reports/logroll", locals: {report: @report}
     .col-md-6
       %br
       %br
       %td{class: "@report-#{@report.id}-dispatch"}
-      = render partial: "dispatches/create", locals: { report: @report } unless @report.archived_or_completed?
+      = render partial: "dispatches/create", locals: { report: @report, responders: @available_responders } unless @report.archived_or_completed?
     .col-md-6
       %br
       - if @report.dispatches.present?

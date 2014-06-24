@@ -9,10 +9,9 @@ class DispatchesController < ApplicationController
   end
 
   def update
-    @dispatch = Dispatch.find(params[:id])
-    if @dispatch.update_attributes(dispatch_attributes)
-      address = @dispatch.report.address
-      flash[:notice] = "#{@dispatch.responder.name} #{@dispatch.status} #{address.present? ? ('report @ ' + address) : 'the report'}"
+    dispatch = Dispatch.find(params[:id])
+    if dispatch.update_attributes(dispatch_attributes)
+      flash[:notice] = dispatch.status_update
       redirect_to :back
     end
   end

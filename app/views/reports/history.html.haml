@@ -11,7 +11,7 @@
       end_date: params[:end_date], order: params[:order], show_all: true), class: 'btn btn-primary',
       style: 'margin:25px; margin-left:43px;'
 
-= render partial: "report_table", locals: { reports: @reports }
+= render "report_table", reports: @reports, responders: @available_responders
 
 = paginate @reports unless params[:show_all]
 

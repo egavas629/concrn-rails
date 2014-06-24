@@ -7,7 +7,6 @@ class AddFieldsToReports < ActiveRecord::Migration
       t.decimal :lat , :precision => 10, :scale => 6
       t.string :status
       t.text   :nature
- 
     end
   end
 end

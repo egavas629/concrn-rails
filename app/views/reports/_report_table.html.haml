@@ -18,6 +18,4 @@
       %tr
         %td{colspan: 7} No Reports
   - else
-    %tbody
-      - reports.each do |report|
-        = render "report_row", report: report
+    %tbody= render reports, responders: responders

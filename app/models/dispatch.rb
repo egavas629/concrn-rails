@@ -2,6 +2,8 @@ class Dispatch < ActiveRecord::Base
   # RELATIONS #
   belongs_to :report
   belongs_to :responder
+  delegate :name,    to: :responder, prefix: true
+  delegate :address, to: :report,    prefix: true
 
   # VALIDATIONS #
   validates_presence_of :report
@@ -41,6 +43,10 @@ class Dispatch < ActiveRecord::Base
 
   def rejected?
     status == "rejected"
+  end
+
+  def status_update
+    "#{responder_name} #{status} #{report_address.present? ? 'report @ ' + report_address : 'the report'}"
   end
 
 private

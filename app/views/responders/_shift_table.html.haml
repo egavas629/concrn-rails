@@ -9,9 +9,6 @@
     %tbody
       - shifts.each do |shift|
         %tr
-          %td
-            = shift.start_time.localtime.strftime('%-m-%-d-%y')
-            - if shift.end_time && shift.start_time.to_date != shift.end_time.to_date
-              to
-              = shift.end_time.localtime.strftime('%-m-%-d-%y')
-          %td= "#{shift.start_time.localtime.strftime('%H:%M')} to #{shift.end_time ? shift.end_time.localtime.strftime('%H:%M') : 'now'}"
+          - shift_presenter = ShiftPresenter.new(shift)
+          %td= shift_presenter.date
+          %td= shift_presenter.time

@@ -1,7 +1,7 @@
 Streetmom::Application.routes.draw do
   devise_for :users
 
-  resources :reports do
+  resources :reports, except: %w(edit) do
     collection do
       get 'active'
       get 'history'

@@ -67,4 +67,5 @@ group :test do
   gem 'rspec-mocks'
   gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
+  gem 'simplecov', '~> 0.7.1', :require => false
 end

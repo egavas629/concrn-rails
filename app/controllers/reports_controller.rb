@@ -30,14 +30,14 @@ class ReportsController < ApplicationController
         format.html { redirect_to action: :index }
       else
         format.js { render json: @report }
-        format.html { render action: :new }
+        format.html { render :new }
       end
     end
   end
 
   def destroy
     @report.destroy!
-    redirect_to action: :index
+    redirect_to :index
   end
 
   def update
@@ -49,7 +49,7 @@ class ReportsController < ApplicationController
   end
 
   def show
-    @metaphone = Log.new
+    render
   end
 
   def download

@@ -21,6 +21,11 @@ class Shift < ActiveRecord::Base
     first.update_attributes!(end_time: Time.now, end_via: type)
   end
 
+  # INSTANCE METHODS #
+  def same_day?
+    start_time.to_date == end_time.to_date
+  end
+
 private
 
   def refresh_responders

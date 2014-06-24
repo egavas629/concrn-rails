@@ -1,10 +1,10 @@
+require 'simplecov'
+SimpleCov.start 'rails'
+
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
-require 'coveralls'
-
-Coveralls.wear!
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 

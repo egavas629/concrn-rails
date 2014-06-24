@@ -1,5 +1,5 @@
 = simple_form_for(Dispatch.new) do |f|
   = f.input :report_id, input_html: {value: report.id}, as: :hidden
-  = f.input :responder_id, collection: @available_responders, label: false, prompt: "Responders..."
+  = f.input :responder_id, collection: responders, label: false, prompt: "Responders..."
   .btn-assign
     = f.submit "Assign Responder", class: 'btn btn-primary'
