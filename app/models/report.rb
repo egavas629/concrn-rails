@@ -27,7 +27,6 @@ class Report < ActiveRecord::Base
       .order("reports.created_at DESC").references(:dispatches)
   end
 
-  scope :archived,  -> { where(status: "archived") }
   scope :completed, -> { where("reports.status = 'archived' OR reports.status = 'completed'") }
 
   scope :pending, -> do
@@ -92,14 +91,6 @@ class Report < ActiveRecord::Base
 
   def dispatch!(responder)
     dispatches.create!(responder: responder)
-  end
-
-  def dispatched?
-    dispatches.keep_if {|i| i.responder.present? }.size > 0
-  end
-
-  def unassigned?
-    !dispatched? || dispatches.all?(&:rejected?)
   end
 
   def accepted?
