@@ -12,14 +12,11 @@ gem 'devise'
 # Telephony API
 gem 'twilio-ruby'
 
+# Pusher API
 gem 'pusher'
-gem 'foreman'
 
 # Get Coordinates for Address
 gem 'geocoder'
-
-# Get query info
-gem 'bullet', group: :development
 
 # Images on AWS S3
 gem 'aws-sdk'
@@ -40,32 +37,25 @@ gem 'figaro'
 gem 'thin'
 
 # Assets
+gem 'bootstrap-sass-rails'
+gem 'bourbon'
+gem 'coffee-rails', '~> 4.0.0'
+gem 'gritter'
+gem 'jquery-rails'
+gem 'jquery-turbolinks'
+gem 'jquery-ui-rails'
 gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.0.0'
-gem 'jquery-rails'
-gem 'bootstrap-sass-rails'
-gem 'jquery-ui-rails'
-gem 'bourbon'
-gem 'jquery-turbolinks'
-gem 'gritter'
-gem 'coveralls', require: false
 
-group :production, :staging do
+group :rangers, :production, :staging do
   gem 'rails_12factor'
 end
 
-group :development, :test do
-  gem 'quiet_assets'
-  gem 'faker'
-  gem 'jazz_hands'
-end
-
 group :test do
-  gem 'selenium-webdriver'
+  gem 'capybara'
+  gem 'faker'
+  gem 'guard-rspec'
   gem 'rspec-rails'
-  gem 'rspec-mocks'
-  gem 'cucumber-rails', :require => false
-  gem 'database_cleaner'
   gem 'simplecov', '~> 0.7.1', :require => false
+  gem 'shoulda-matchers', require: false
 end

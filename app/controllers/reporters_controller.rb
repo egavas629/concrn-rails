@@ -1,4 +1,4 @@
-class ReporterController < ApplicationController
+class ReportersController < ApplicationController
   def show
     @reports  = Report.where(reporter_params)
     @key_info = params['name'] || params['phone'] || params['address']

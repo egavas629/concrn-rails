@@ -1,6 +1,4 @@
 require 'spec_helper'
 
-
-describe LogsHelper do
-
+describe Telephony do
 end

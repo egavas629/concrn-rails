@@ -2,8 +2,6 @@ class ShiftsController < ApplicationController
   before_action :find_responder
 
   def start
-    p '********************'
-    puts params.inspect
     respond_to do |format|
       if @responder.shifts.start!
         flash[:notice] = "#{@responder.name}'s shift has started."
@@ -15,8 +13,6 @@ class ShiftsController < ApplicationController
   end
 
   def end
-    p '********************'
-    puts params.inspect
     respond_to do |format|
       if @responder.shifts.end!
         flash[:notice] = "#{@responder.name}'s shift has ended."
