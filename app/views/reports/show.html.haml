@@ -1,8 +1,7 @@
 %h2.pusher-id{'data-id' => @report.id, 'data-type' => 'report'}
-  = @report.neighborhood ? "Crisis in #{@report.neighborhood}" : "Reported"
+  = @report.neighborhood ? "Report in #{@report.neighborhood}" : "Reported"
   %small
     %abbr.timeago{title: @report.created_at.getutc.iso8601}= @report.created_at.to_s
-    :
 .row
   %ul.list-group.col-md-4
     %li.list-group-item
