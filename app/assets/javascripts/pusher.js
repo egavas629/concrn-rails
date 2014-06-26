@@ -7,16 +7,16 @@ $(document).ready(function(){
     pusher.subscribe(channelName());
     pusher.bind("refresh", function(data){
       $(function() {
+        $.extend($.gritter.options, {
+          position: 'bottom-right',
+          width: '215px',
+          height: '50px'
+        });
         $.gritter.add({
           title: 'New information arrived!',
           text: "<a href='javascript:window.location.reload()'>Click here to update.</a>",
           sticky: false,
           time: 10000
-        });
-        $.extend($.gritter.options, {
-          position: 'bottom-right',
-          width: 215,
-          height: 50
         });
       });
     });
