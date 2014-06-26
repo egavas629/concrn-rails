@@ -37,7 +37,7 @@ class ReportsController < ApplicationController
 
   def destroy
     @report.destroy!
-    redirect_to :index
+    redirect_to action: :index
   end
 
   def update
