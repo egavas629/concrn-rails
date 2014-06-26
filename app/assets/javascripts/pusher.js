@@ -13,8 +13,8 @@ $(document).ready(function(){
           sticky: false,
           time: 10000,
           position: 'bottom-right',
-          width: 215px,
-          height: 50px
+          width: 215,
+          height: 50
         });
       });
     });
