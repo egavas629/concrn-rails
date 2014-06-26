@@ -11,7 +11,10 @@ $(document).ready(function(){
           title: 'New information arrived!',
           text: "<a href='javascript:window.location.reload()'>Click here to update.</a>",
           sticky: false,
-          time: 10000
+          time: 10000,
+          position: 'bottom-right',
+          width: 215px,
+          height: 50px
         });
       });
     });
