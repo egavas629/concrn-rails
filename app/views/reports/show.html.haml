@@ -1,8 +1,7 @@
 %h2.pusher-id{'data-id' => @report.id, 'data-type' => 'report'}
-  = @report.neighborhood ? "Crisis in #{@report.neighborhood}" : "Reported"
+  = @report.neighborhood ? "Report in #{@report.neighborhood}" : "Reported"
   %small
     %abbr.timeago{title: @report.created_at.getutc.iso8601}= @report.created_at.to_s
-    :
 .row
   %ul.list-group.col-md-4
     %li.list-group-item
@@ -50,7 +49,7 @@
 
     .btn-delete
       = link_to 'Delete', report_path(@report), method: :delete,
-      'data-confirm' => 'Are you sure you want to delete the report. All dispatches and records of this report will be destroyed permanently?', class: 'btn btn-danger'
+      'data-confirm' => 'Are you sure you want to delete the report? All dispatches and records of this report will be destroyed permanently.', class: 'btn btn-danger'
 
   %ul.list.group.col-md-8
     = render partial: "reports/logroll", locals: {report: @report}

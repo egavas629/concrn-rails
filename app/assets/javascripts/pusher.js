@@ -7,12 +7,16 @@ $(document).ready(function(){
     pusher.subscribe(channelName());
     pusher.bind("refresh", function(data){
       $(function() {
+        $.extend($.gritter.options, {
+          position: 'bottom-right',
+          width: '215px',
+          height: '50px'
+        });
         $.gritter.add({
-          image: '/assets/notice.png',
-          title: 'Page is outdated',
-          text: "<a href='javascript:window.location.reload()'>Click here to update page.</a>",
+          title: 'New information arrived!',
+          text: "<a href='javascript:window.location.reload()'>Click here to update.</a>",
           sticky: false,
-          time: 8000
+          time: 10000
         });
       });
     });

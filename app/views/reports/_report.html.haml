@@ -2,7 +2,7 @@
   %td{title: report.created_at.to_s}
     %strong
       .digits= "#{report.created_at.strftime("%I:%M %p")}"
-      .words
+      .time-ago.words
         (
         %abbr.timeago{title: report.created_at.getutc.iso8601}= report.created_at.to_s
         )
