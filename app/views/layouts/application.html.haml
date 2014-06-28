@@ -6,7 +6,8 @@
     = csrf_meta_tags
     %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}
     %link{href: asset_path("concrn-favicon.png"), rel: "shortcut icon"}
-
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = javascript_include_tag "//js.pusher.com/2.2/pusher.min.js"
   %body{'data-pusher-key' => ENV['PUSHER_KEY']}
     = conditional_nav_tag do
       .container
@@ -54,5 +55,3 @@
         %br
         %br
         %p © Concrn (2014)
-    = javascript_include_tag "//js.pusher.com/2.2/pusher.min.js"
-    = javascript_include_tag "application", "data-turbolinks-track" => true

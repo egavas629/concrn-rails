@@ -22,6 +22,7 @@ class Dispatch < ActiveRecord::Base
   # CALLBACKS #
   after_create :messanger
   after_update :messanger, if: :status_changed?
+  after_commit :push_reports
 
   # CLASS METHODS #
   def self.latest
@@ -59,6 +60,10 @@ private
     when 'rejected'
       dispatch_messanger.reject!
     end
+  end
+
+  def push_reports
+    Pusher.trigger('reports-responders' , "refresh", {})
   end
 
 end
