@@ -8,7 +8,7 @@ class Responder < User
   validates_presence_of :phone
 
   # CALLBACKS #
-  after_validation :make_unavailable!, :on => :update, if: :need_to_make_unavailable?
+  after_validation :make_unavailable!, :on => :update
   after_update     :push_reports
 
   # SCOPES #
@@ -45,11 +45,7 @@ class Responder < User
 private
 
   def make_unavailable!
-    shifts.end!('web')
-  end
-
-  def need_to_make_unavailable?
-    active_changed? && !active
+    shifts.end!('web') if active_changed? && !active
   end
 
   def push_reports
