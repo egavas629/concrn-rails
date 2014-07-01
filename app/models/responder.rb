@@ -27,6 +27,11 @@ class Responder < User
     }) & on_shift
   end
 
+  # CLASS METHODS #
+  def self.accepted(report_id)
+    includes(:dispatches).where(:dispatches => {report_id: report_id, status: %w(accepted completed)})
+  end
+
   # INSTANCE METHODS #
   def on_shift?
     shifts.on_shift.count > 0

@@ -29,6 +29,7 @@ gem 'kaminari'
 
 # Seed/Testing
 gem 'factory_girl_rails'
+gem 'faker'
 
 # Environment Variable Handling
 gem 'figaro'
@@ -53,7 +54,6 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'faker'
   gem 'guard-rspec'
   gem 'rspec-rails'
   gem 'simplecov', '~> 0.7.1', :require => false

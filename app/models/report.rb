@@ -27,7 +27,7 @@ class Report < ActiveRecord::Base
       .order("reports.created_at DESC").references(:dispatches)
   end
 
-  scope :completed, -> { where("reports.status = 'archived' OR reports.status = 'completed'") }
+  scope :completed, -> { where(status: %w(completed archived)) }
 
   scope :pending, -> do
     includes(:dispatches).where(status: "pending").where.not(id: accepted.map(&:id))
@@ -40,25 +40,17 @@ class Report < ActiveRecord::Base
   end
 
   # INSTANCE METHODS #
-  def accepted_responders
-    responders.includes(:dispatches).where(:dispatches => {report_id: id, status: %w(accepted completed)})
-  end
-
-  def accepted_dispatches
-    dispatches.accepted.order(:accepted_at)
-  end
-
   def clean_image
     image.clear if delete_image == '1'
   end
 
   def clean_observations
-    observations.delete_if(&:empty?) if observations_changed?
+    observations.delete_if(&:blank?) if observations_changed?
   end
 
   def current_status
     if status == 'pending'
-      if accepted_dispatches.present?
+      if Dispatch.accepted(id).present?
         'active'
       elsif current_pending?
         'pending'
@@ -74,27 +66,12 @@ class Report < ActiveRecord::Base
     Report.pending.include?(self)
   end
 
-
-  def freshness
-    minutes_ago = ((Time.now - created_at) / 60).round
-    case minutes_ago
-    when 0..2
-      'fresh'
-    when 3..4
-      'semi-fresh'
-    when 5..9
-      'stale'
-    else
-      'old'
-    end
-  end
-
   def dispatch!(responder)
     dispatches.create!(responder: responder)
   end
 
   def accepted?
-    accepted_responders.any?
+    Responder.accepted(id).any?
   end
 
   def archived?
@@ -106,23 +83,19 @@ class Report < ActiveRecord::Base
   end
 
   def archived_or_completed?
-    %w(archived completed).include?(status)
+    archived? || completed?
   end
 
   def complete!
-    update_attribute(:status, 'completed')
+    update_attributes!(:status => 'completed')
   end
 
   def set_completed!
     if %w(archived completed).include?(status)
       update_attributes(completed_at: Time.now) unless completed_at.present?
       dispatches.pending.each {|i| i.update_attribute(:status, 'rejected')}
-      accepted_dispatches.each {|i| i.update_attribute(:status, 'completed')}
+      Dispatch.accepted(id).each {|i| i.update_attribute(:status, 'completed')}
     end
-  end
-
-  def google_maps_address
-    "https://maps.google.com/?q=#{address}"
   end
 
 private

@@ -11,7 +11,6 @@ class Dispatch < ActiveRecord::Base
 
   # SCOPE #
   default_scope    -> { order(created_at: :desc) }
-  scope :accepted, -> { where(status: %w(accepted completed)) }
   scope :pending,  -> { where(status: 'pending') }
 
   scope :not_rejected, -> do
@@ -26,6 +25,11 @@ class Dispatch < ActiveRecord::Base
   # CLASS METHODS #
   def self.latest
     first
+  end
+
+  def self.accepted(report_id=nil)
+    query = where(status: %w(accepted completed)).order(:accepted_at)
+    report_id ? query.where(report_id: report_id) : query
   end
 
   # INSTANCE METHODS #

@@ -1,7 +1,10 @@
+include ActionDispatch::TestProcess
+require 'faker'
+
 FactoryGirl.define do
   factory(:report) do
     name    { Faker::Name.name }
-    phone   { ['5103874543', '2133733979'].sample }
+    phone   { '5103874543' }
     lat     { 37.920556 + (rand() * (rand() > 0.5 ? -1 : 1)) }
     long    { 122.416667 + (rand() * (rand() > 0.5 ? -1 : 1)) }
     address { Faker::Address.street_address }
@@ -12,33 +15,48 @@ FactoryGirl.define do
     observations { ['At-risk of harm', 'Under the influence', 'Anxious', 'Depressed', 'Aggarvated', 'Threatening'].sample(rand(6)) }
     nature  { Faker::Lorem.sentence }
 
-    trait(:pending) do
-      after(:create) do |report|
-        responder = create :responder
-        report.dispatch!(responder)
-        messanger = DispatchMessanger.new(responder)
-      end
-    end
-
-    trait(:completed) do
-      after(:create) do |report|
-        joe = create :responder
-        report.dispatch! joe
-        messsanger = DispatchMessanger.new(joe)
-        messsanger.respond 'yes'
-        messsanger.respond 'I met him, his name is Francis'
-        messsanger.respond 'He is currently homeless and tripping'
-        messsanger.respond 'done, took him to Buckley'
-      end
-    end
-
     trait(:accepted) do
       after(:create) do |report|
-        responder = create :responder
+        responder = create(:responder, :on_shift)
         report.dispatch!(responder)
         messanger = DispatchMessanger.new(responder)
         messanger.respond('I accept')
       end
+    end
+
+    trait(:archived) do
+      status { 'archived' }
+    end
+
+    trait(:completed) do
+      after(:create) do |report|
+        joe = create(:responder, :on_shift)
+        report.dispatch! joe
+        messsanger = DispatchMessanger.new(joe)
+        messsanger.respond 'yes'
+        messsanger.respond 'I met him, his name is Francis'
+        messsanger.respond 'done, took him to Buckley'
+      end
+    end
+
+    trait(:pending) do
+      after(:create) do |report|
+        responder = create(:responder, :on_shift)
+        report.dispatch!(responder)
+      end
+    end
+
+    trait(:rejected) do
+      after(:create) do |report|
+        responder = create(:responder, :on_shift)
+        report.dispatch!(responder)
+        messanger = DispatchMessanger.new(responder)
+        messanger.respond('No')
+      end
+    end
+
+    trait(:image_attached) do
+      image { fixture_file_upload(Rails.root.join('spec', 'photos', 'test.png'), 'image/png') }
     end
   end
 end

@@ -1,3 +1,5 @@
+require 'faker'
+
 FactoryGirl.define do
   factory :dispatcher do
     email         { Faker::Internet.email }
@@ -17,6 +19,10 @@ FactoryGirl.define do
     trait(:jacob) do
      name "Jacob"
      phone '6502481396'
+    end
+
+    trait(:on_shift) do
+      after(:create) { |responder| responder.shifts.start! }
     end
   end
 end

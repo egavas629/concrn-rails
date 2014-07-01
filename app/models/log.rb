@@ -14,7 +14,7 @@ class Log < ActiveRecord::Base
   def broadcast
     message_sent = false
 
-    report.accepted_responders.each do |responder|
+    Responder.accepted(report.id).each do |responder|
       Telephony.send(body, responder.phone) && message_sent = true
     end
 

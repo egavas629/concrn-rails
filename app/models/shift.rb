@@ -3,7 +3,7 @@ class Shift < ActiveRecord::Base
   belongs_to :responder
 
   # CALLBACKS #
-  after_save :refresh_responders
+  after_commit :refresh_responders
 
   # VALIDATIONS #
   validates_presence_of :responder, :start_time, :start_via

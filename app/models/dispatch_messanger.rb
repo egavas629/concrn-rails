@@ -3,7 +3,7 @@ class DispatchMessanger
   def initialize(responder)
     @responder = responder
     @dispatch  = responder.dispatches.latest
-    @report    = @dispatch.report unless @dispatch.nil?
+    @report    = @dispatch.report unless @dispatch.blank?
   end
 
   def respond(body)
@@ -47,6 +47,9 @@ class DispatchMessanger
   end
 
 private
+  def accepted_dispatches
+    Dispatch.accepted(@report.id)
+  end
 
   def acknowledge_acceptance
     Telephony.send("You have been assigned to an incident at #{@report.address}.", @responder.phone)
@@ -69,14 +72,13 @@ private
   end
 
   def primary_responder
-    if @report.accepted_dispatches.count > 1 && primary = @report.accepted_dispatches.first.responder
+    if accepted_dispatches.count > 1 && primary = accepted_dispatches.first.responder
       Telephony.send("The primary responder for this report is: #{primary.name} – #{primary.phone}", @responder.phone)
     end
   end
 
-
   def reporter_synopsis
-    if @report.accepted_dispatches.count > 1 && primary = @report.accepted_dispatches.first.responder
+    if accepted_dispatches.count > 1 && primary = accepted_dispatches.first.responder
       "#{@responder.name} - #{@responder.phone} is on the way to help #{primary.name}."
     else
       "INCIDENT RESPONSE: #{@responder.name} is on the way. #{@responder.phone}"
@@ -94,7 +96,7 @@ private
   end
 
   def thank_responder
-    @report.accepted_responders.each do |responder|
+    Responder.accepted(@report.id).each do |responder|
       Telephony.send("The report is now completed, thanks for your help! You are now available to be dispatched.", responder.phone)
     end
   end

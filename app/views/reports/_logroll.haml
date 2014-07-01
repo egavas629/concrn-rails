@@ -6,7 +6,7 @@
           = "Transcript#{' with ' if report.accepted? }"
         .col-sm-6
           %span{style: 'float:right;'}
-            - report.accepted_responders.each do |responder|
+            - Responder.accepted(report.id).each do |responder|
               .responder{style: 'float:right;'}
                 = link_to responder.name, responder
                 = "@ #{responder.phone}"
