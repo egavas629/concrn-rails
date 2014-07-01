@@ -1,4 +1,4 @@
-- report_presenter = ReportPresent.new(report)
+- report_presenter = ReportPresenter.new(report)
 = content_tag_for :tr, report, class: "freshness-#{report_presenter.freshness}" do
   %td{title: report.created_at.to_s}
     %strong

@@ -12,7 +12,6 @@ class Dispatch < ActiveRecord::Base
   # SCOPE #
   default_scope    -> { order(created_at: :desc) }
   scope :pending,  -> { where(status: 'pending') }
-
   scope :not_rejected, -> do
     where.not(status: 'rejected')
       .joins(:responder).order('dispatches.status', 'dispatches.updated_at')
@@ -30,6 +29,18 @@ class Dispatch < ActiveRecord::Base
   def self.accepted(report_id=nil)
     query = where(status: %w(accepted completed)).order(:accepted_at)
     report_id ? query.where(report_id: report_id) : query
+  end
+
+  def self.completed_count(responder_id=nil)
+    query = where(status: "completed")
+    query = responder_id ? query.where(responder_id: responder_id) : query
+    query.count
+  end
+
+  def self.rejected_count(responder_id=nil)
+    query = where(status: "rejected")
+    query = responder_id ? query.where(responder_id: responder_id) : query
+    query.count
   end
 
   # INSTANCE METHODS #

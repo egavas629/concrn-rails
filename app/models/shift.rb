@@ -10,9 +10,14 @@ class Shift < ActiveRecord::Base
 
   # SCOPE #
   default_scope -> { order('start_time DESC') }
-  scope :on_shift, -> { where('start_time <= (?) AND end_time IS ?', Time.now, nil) }
+  scope :on, -> { where('start_time <= (?) AND end_time IS ?', Time.now, nil) }
 
   # CLASS METHODS #
+  def self.started?(responder_id=nil)
+    query = responder_id ? on.where(responder_id: responder_id) : on
+    query.count > 0
+  end
+
   def self.start!(type='web')
     create!(start_time: Time.now, start_via: type)
   end

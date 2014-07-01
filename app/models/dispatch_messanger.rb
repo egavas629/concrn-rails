@@ -8,10 +8,10 @@ class DispatchMessanger
 
   def respond(body)
     feedback, status = true, nil
-    if @responder.on_shift? && body[/break/i]
+    if @responder.shifts.started? && body[/break/i]
       @responder.shifts.end!('sms') && feedback = false if non_breaktime
       status = 'rejected' if @dispatch && @dispatch.pending?
-    elsif !@responder.on_shift? && body[/on/i]
+    elsif !@responder.shifts.started? && body[/on/i]
       @responder.shifts.start!('sms') && feedback = false
     elsif @dispatch.pending? && body[/no/i]
       status = 'rejected'
@@ -48,7 +48,7 @@ class DispatchMessanger
 
 private
   def accepted_dispatches
-    Dispatch.accepted(@report.id)
+    @report.dispatches.accepted
   end
 
   def acknowledge_acceptance

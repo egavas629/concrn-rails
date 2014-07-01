@@ -15,7 +15,7 @@ class Responder < User
   default_scope    -> { where(role: 'responder') }
   scope :active,   -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
-  scope :on_shift, -> { where(id: Shift.on_shift.map(&:responder_id)) }
+  scope :on_shift, -> { where(id: Shift.on.map(&:responder_id)) }
 
   scope :available, -> do
     find_by_sql(%Q{
@@ -33,25 +33,8 @@ class Responder < User
   end
 
   # INSTANCE METHODS #
-  def on_shift?
-    shifts.on_shift.count > 0
-  end
-
   def phone=(new_phone)
-    write_attribute :phone, NumberSanitizer.sanitize(new_phone)
-  end
-
-  def completed_count
-    dispatches.where(status: "completed").count
-  end
-
-  def rejected_count
-    dispatches.where(status: "rejected").count
-  end
-
-  def status
-    return "unassigned" if dispatches.none?
-    "last: #{dispatches.latest.status}"
+    write_attribute(:phone, NumberSanitizer.sanitize(new_phone))
   end
 
   def set_password
