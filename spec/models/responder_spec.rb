@@ -74,7 +74,6 @@ describe Responder do
 
   end
 
-  # Class methods
   describe '.accepted' do
     subject(:report)          { create(:report, :accepted) }
     subject(:responder)       { responder = report.dispatches.where(status: 'accepted')[0].responder }
