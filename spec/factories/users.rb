@@ -21,7 +21,7 @@ FactoryGirl.define do
     end
 
     trait(:on_shift) do
-      after(:create) { |responder| responder.shifts.start! }
+      after(:create) { |r| create(:shift, responder: r) }
     end
   end
 end

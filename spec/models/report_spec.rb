@@ -6,24 +6,51 @@ describe Report do
   it { should have_many(:responders).through(:dispatches) }
 
   describe 'scopes' do
-    let(:report)           { create(:report) }
-    let(:accepted_report)  { create(:report, :accepted) }
-    let(:archived_report)  { create(:report, :archived) }
-    let(:completed_report) { create(:report, :completed) }
-    let(:pending_report)   { create(:report, :pending) }
-    let(:rejected_report)  { create(:report, :rejected) }
+    subject(:report)           { create(:report) }
+    subject(:accepted_report)  { create(:report, :accepted) }
+    subject(:archived_report)  { create(:report, :archived) }
+    subject(:completed_report) { create(:report, :completed) }
+    subject(:pending_report)   { create(:report, :pending) }
+    subject(:rejected_report)  { create(:report, :rejected) }
 
-    it '.accepted' do
-      expect(Report.accepted).to match_array([accepted_report])
+    before do
+      accepted_report.reload
+      pending_report.reload
     end
-    it '.completed' do
-      expect(Report.completed).to include(completed_report, archived_report)
+
+    describe '.accepted' do
+      it 'should include accepted reports' do
+        expect(Report.accepted).to include(accepted_report)
+      end
+      it 'should exclude non-accepted reports' do
+        expect(Report.accepted).to_not include(report, archived_report, pending_report, rejected_report)
+      end
     end
-    it '.pending' do
-      expect(Report.pending).to match_array([pending_report])
+    describe '.completed' do
+      it 'should include completed reports' do
+        expect(Report.completed).to include(completed_report, archived_report)
+      end
+
+      it 'should exclude non-completed reports' do
+        expect(Report.completed).to_not include(report, accepted_report, pending_report, rejected_report)
+      end
     end
-    it '.unassigned' do
-      expect(Report.unassigned).to include(rejected_report, report)
+    describe '.pending' do
+      it 'should include pending reports' do
+        expect(Report.pending).to include(pending_report)
+      end
+      it 'should exclude non-pending reports' do
+        expect(Report.pending).to_not include(report, accepted_report, archived_report, completed_report, rejected_report)
+      end
+    end
+    describe '.unassigned' do
+      it 'should include unassigned reports' do
+        expect(Report.unassigned).to include(rejected_report, report)
+      end
+
+      it 'should exclude assigned reports' do
+        expect(Report.unassigned).to_not include(accepted_report, archived_report, completed_report, pending_report)
+      end
     end
   end
 
@@ -32,13 +59,13 @@ describe Report do
 
     it 'should remove image if delete_image true' do
       report.delete_image = '1'
-      report.save
+      report.clean_image
       expect(report.image.url).to eq("/images/original/missing.png")
     end
 
     it 'should keep image if delete_image false' do
       report.delete_image = '0'
-      report.save
+      report.clean_image
       expect(report.image.url).not_to eq("/images/original/missing.png")
     end
   end
@@ -62,6 +89,7 @@ describe Report do
     subject(:completed_report) { create(:report, :completed) }
     subject(:pending_report)   { create(:report, :pending) }
     subject(:rejected_report)  { create(:report, :rejected) }
+    before { completed_report.reload }
 
     describe '#current_status' do
       it 'should be active if accepted responders' do
@@ -76,10 +104,8 @@ describe Report do
       it 'should be unassigned if rejected dispatches' do
         expect(rejected_report.current_status).to eq('unassigned')
       end
-      # Unsure why I need to relookup the object, doesnt work when using same instance variable
-      # 2 other instances below
       it 'should be completed' do
-        expect(Report.find(completed_report.id).current_status).to eq('completed')
+        expect(completed_report.current_status).to eq('completed')
       end
       it 'should be archived' do
         expect(archived_report.current_status).to eq('archived')
@@ -140,7 +166,7 @@ describe Report do
         expect(archived_report.completed?).to be_false
       end
       it 'is completed' do
-        expect(Report.find(completed_report.id).completed?).to be_true
+        expect(completed_report.completed?).to be_true
       end
       it 'is pending' do
         expect(pending_report.completed?).to be_false
@@ -158,7 +184,7 @@ describe Report do
         expect(archived_report.archived_or_completed?).to be_true
       end
       it 'is completed' do
-        expect(Report.find(completed_report.id).archived_or_completed?).to be_true
+        expect(completed_report.archived_or_completed?).to be_true
       end
       it 'is pending' do
         expect(pending_report.archived_or_completed?).to be_false

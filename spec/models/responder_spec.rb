@@ -11,6 +11,7 @@ describe Responder do
     subject(:responder_off)       { create(:responder) }
     subject(:responder_inactive)  { create(:responder, active: false) }
     subject(:dispatcher)          { create(:dispatcher) }
+    before { responder.shifts(true) }
 
     describe 'default scope' do
       it 'should exclude dispatchers' do
@@ -48,8 +49,6 @@ describe Responder do
       end
 
       it 'should include shifted in responders' do
-        # Unsure why I need the below link to make the test pass?
-        responder.shifts.started?
         expect(Responder.on_shift).to include(responder)
       end
     end
@@ -66,8 +65,6 @@ describe Responder do
       end
 
       it 'should include shifted-in unassigned responders' do
-        # Unsure why I need the below link to make the test pass?
-        responder.shifts.started?
         expect(Responder.available).to include(responder)
       end
     end
