@@ -28,8 +28,10 @@ gem 'paperclip'
 gem 'kaminari'
 
 # Seed/Testing
-gem 'factory_girl_rails'
-gem 'faker'
+group :development, :test, :staging do
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
+end
 
 # Environment Variable Handling
 gem 'figaro'
@@ -55,7 +57,10 @@ end
 group :test do
   gem 'capybara'
   gem 'guard-rspec'
-  gem 'rspec-rails'
+  gem 'faker'
   gem 'simplecov', '~> 0.7.1', :require => false
   gem 'shoulda-matchers', require: false
+  gem 'launchy'
+  gem 'database_cleaner'
+  gem 'selenium-webdriver'
 end

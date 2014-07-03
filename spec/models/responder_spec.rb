@@ -14,93 +14,104 @@ describe Responder do
     before { responder.shifts(true) }
 
     describe 'default scope' do
-      it 'should exclude dispatchers' do
-        expect(Responder.all).to_not include(dispatcher)
+      subject(:all_responders) { Responder.all }
+
+      it 'excludes dispatchers' do
+        expect(all_responders).to_not include(dispatcher)
       end
 
-      it 'should include all responders' do
-        expect(Responder.all).to include(responder, responder_off, responder_inactive)
+      it 'includes all responders' do
+        expect(all_responders).to include(responder, responder_off, responder_inactive)
       end
     end
 
     describe '.active' do
-      it 'should exclude inactive responders' do
-        expect(Responder.active).to_not include(responder_inactive)
-      end
+      subject(:active_responders) { Responder.active }
 
-      it 'should only show active responders' do
-        expect(Responder.all).to include(responder, responder_off)
+      it 'excludes inactive responders' do
+        expect(active_responders).to_not include(responder_inactive)
+      end
+      it 'includes active responders' do
+        expect(active_responders).to include(responder, responder_off)
       end
     end
 
     describe '.inactive' do
-      it 'should include inactive responders' do
-        expect(Responder.inactive).to match_array([responder_inactive])
-      end
+      subject(:inactive_responders) { Responder.inactive }
 
-      it 'should exclude active responders' do
-        expect(Responder.inactive).to_not include(responder, responder_off)
+      it 'includes inactive responders' do
+        expect(inactive_responders).to match_array([responder_inactive])
+      end
+      it 'excludes active responders' do
+        expect(inactive_responders).to_not include(responder, responder_off)
       end
     end
 
     describe '.on_shift' do
-      it 'should exclude responders that are not off shift/inactive' do
-        expect(Responder.on_shift).to_not include(responder_off, responder_inactive)
+      subject(:on_shift_responders) { Responder.on_shift }
+
+      it 'excludes responders that are not off shift/inactive' do
+        expect(on_shift_responders).to_not include(responder_off, responder_inactive)
       end
 
-      it 'should include shifted in responders' do
-        expect(Responder.on_shift).to include(responder)
+      it 'includes shifted in responders' do
+        expect(on_shift_responders).to match_array([responder])
       end
     end
 
     describe '.available' do
-      it 'should exclude accepted/pending responders' do
+      subject(:available_responders) { Responder.available }
+
+      it 'excludes accepted/pending responders' do
         responder_pending  = create(:report, :pending).responders[0]
         responder_accepted = create(:report, :accepted).responders[0]
-        expect(Responder.available).to_not include(responder_pending, responder_accepted)
+        expect(available_responders).to_not include(responder_pending, responder_accepted)
       end
 
-      it 'should exclude shifted-out/inactive responders' do
-        expect(Responder.available).to_not include(responder_off, responder_inactive)
+      it 'excludes shifted-out/inactive responders' do
+        expect(available_responders).to_not include(responder_off, responder_inactive)
       end
-
-      it 'should include shifted-in unassigned responders' do
-        expect(Responder.available).to include(responder)
+      it 'includes shifted-in unassigned responders' do
+        expect(available_responders).to match_array([responder])
       end
     end
 
   end
 
   describe '.accepted' do
-    subject(:report)          { create(:report, :accepted) }
-    subject(:responder)       { responder = report.dispatches.where(status: 'accepted')[0].responder }
-    subject(:responder_two)   { create(:responder, :on_shift) }
-    subject(:responder_three) { create(:responder, :on_shift) }
+    subject(:report)              { create(:report, :accepted) }
+    subject(:responder)           { responder = report.dispatches.find_by_status('accepted').responder }
+    subject(:responder_two)       { create(:responder, :on_shift) }
+    subject(:responder_three)     { create(:responder, :on_shift) }
+    subject(:accepted_responders) { Responder.accepted(report.id)}
     before { report.dispatch!(responder_two) }
 
-    it 'should exclude pending/unassigned responders' do
-      expect(Responder.accepted(report.id)).to_not include(responder_two, responder_three)
+    it 'excludes pending/unassigned responders' do
+      expect(accepted_responders).to_not include(responder_two, responder_three)
     end
 
-    it 'should include accepted/completed responders' do
-      expect(Responder.accepted(report.id)).to include(responder)
+    it 'includes accepted/completed responders' do
+      expect(accepted_responders).to match_array([responder])
     end
   end
 
   # Instance methods
   describe '#phone=' do
+    subject(:responder) { create(:responder, phone: '555 555 5551gsas') }
+
     it 'does not accept letters' do
-      responder = create(:responder, phone: '555 555 5551gsas')
       expect(responder.phone).to eq('5555555551')
     end
   end
 
   describe '#set_password' do
+    subject(:responder) { build(:responder, password: nil, password_confirmation: nil) }
+    before { responder.set_password }
+
     it 'sets the password' do
-      responder = build(:responder, password: nil, password_confirmation: nil)
-      expect(responder.password).to eq(nil)
-      responder.set_password
       expect(responder.password).to eq('password')
+    end
+    it 'sets the password_confirmation' do
       expect(responder.password_confirmation).to eq('password')
     end
   end
@@ -108,12 +119,13 @@ describe Responder do
   # Private
   describe '#make_unavailable!' do
     subject(:responder) { create(:responder, :on_shift) }
-    it 'should shift out when inactive' do
+    before do
       responder.active = false
       responder.send(:make_unavailable!)
+    end
+
+    it 'shifts out when inactive' do
       expect(responder.shifts.started?).to be_false
     end
   end
-
-  describe '#push_reports'
 end

@@ -2,7 +2,7 @@ class DispatchMessanger
 
   def initialize(responder)
     @responder = responder
-    @dispatch  = responder.dispatches.latest
+    @dispatch  = responder.dispatches.first
     @report    = @dispatch.report unless @dispatch.blank?
   end
 

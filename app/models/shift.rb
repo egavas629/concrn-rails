@@ -34,6 +34,6 @@ class Shift < ActiveRecord::Base
 private
 
   def refresh_responders
-    Pusher.trigger('reports-responders', 'refresh', {})
+    Push.refresh
   end
 end

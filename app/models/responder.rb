@@ -49,6 +49,6 @@ private
   end
 
   def push_reports
-    Pusher.trigger('reports-responders' , "refresh", {})
+    Push.refresh
   end
 end

@@ -4,11 +4,28 @@ FactoryGirl.define do
     association :report
 
     trait(:accepted) do
-      after(:create) {|d| d.reject! }
+      after(:create) do |d|
+        dm = DispatchMessanger.new(d.responder)
+        dm.respond('yes')
+        d.reload
+      end
+    end
+
+    trait(:completed) do
+      after(:create) do |d|
+        dm = DispatchMessanger.new(d.responder)
+        dm.respond('yes')
+        dm.respond('done')
+        d.reload
+      end
     end
 
     trait(:rejected) do
-      after(:create) {|d| d.accept! }
+      after(:create) do |d|
+        dm = DispatchMessanger.new(d.responder)
+        dm.respond('no')
+        d.reload
+      end
     end
   end
 end

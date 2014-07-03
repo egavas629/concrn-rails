@@ -22,10 +22,6 @@ class Dispatch < ActiveRecord::Base
   after_update :messanger, if: :status_changed?
 
   # CLASS METHODS #
-  def self.latest
-    first
-  end
-
   def self.accepted(report_id=nil)
     query = where(status: %w(accepted completed)).order(:accepted_at)
     report_id ? query.where(report_id: report_id) : query

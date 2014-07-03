@@ -40,14 +40,6 @@ class Report < ActiveRecord::Base
   end
 
   # INSTANCE METHODS #
-  def clean_image
-    image.clear if delete_image == '1'
-  end
-
-  def clean_observations
-    observations.delete_if(&:blank?) if observations_changed?
-  end
-
   def current_status
     if status == 'pending'
       if Dispatch.accepted(id).present?
@@ -100,7 +92,15 @@ class Report < ActiveRecord::Base
 
 private
 
+  def clean_image
+    image.clear if delete_image == '1'
+  end
+
+  def clean_observations
+    observations.delete_if(&:blank?) if observations_changed?
+  end
+
   def push_reports
-    Pusher.trigger('reports-responders' , "refresh", {})
+    Push.refresh
   end
 end

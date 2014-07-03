@@ -6,74 +6,92 @@ describe Shift do
   it { should validate_presence_of(:start_time) }
   it { should validate_presence_of(:start_via) }
 
+  context 'creating instance' do
+    subject(:shift) do
+      responder = create(:responder)
+      responder.shifts.create(
+        start_time: Time.now,
+        start_via: 'web'
+      )
+    end
+
+    it 'is valid with a responder, start_time, and start_via' do
+      expect(shift).to be_valid
+    end
+  end
+
   describe 'scope' do
     subject(:shift)     { create(:shift) }
     subject(:shift_off) { create(:shift, :ended) }
+    before do
+      shift.reload
+      shift_off.reload
+    end
 
     describe 'default scope' do
+      subject(:shifts) { Shift.all }
+
       it 'shows in descending start_time order' do
-        first, second = Shift.all[0], Shift.all[1]
-        expect(first.start_time).to be > second.start_time
+        expect(shifts).to match_array([shift, shift_off])
       end
     end
 
     describe '.on' do
-      it 'should not show shifted out responders' do
-        expect(Shift.on).to_not include(shift_off)
+      subject(:shift_on) { Shift.on }
+
+      it 'excludes shifted out responders' do
+        expect(shift_on).to_not include(shift_off)
       end
 
-      it 'should show shifted in responders' do
-        expect(Shift.on).to include(shift)
+      it 'includes shifted in responders' do
+        expect(shift_on).to match_array([shift])
       end
     end
   end
 
   describe '.started?' do
-    it 'should be true if shift started' do
-      shift = create(:shift)
-      expect(shift.responder.shifts.started?).to be_true
+    subject(:responder) { create(:responder) }
+
+    it 'true if in-shift' do
+      responder.shifts.start!
+      expect(responder.shifts.started?).to be_true
     end
 
-    it 'should be false if shift not-started' do
-      responder = create(:responder)
+    it 'is false if not in-shift' do
       expect(responder.shifts.started?).to be_false
     end
   end
+
   describe '.start!' do
-    it 'should create a shift' do
-      responder = create(:responder)
-      expect(responder.shifts.count).to eq(0)
-      responder.shifts.start!
-      expect(responder.shifts.count).to eq(1)
+    subject(:responder) { create(:responder) }
+    before { responder.shifts.start! }
+
+    it 'creates a shift' do
       expect(responder.shifts.started?).to be_true
     end
   end
   describe '.end!' do
-    it 'should end a shift' do
-      shift     = create(:shift)
-      responder = shift.responder
-      expect(responder.shifts.started?).to be_true
-      responder.shifts.end!
+    subject(:shift)     { create(:shift) }
+    subject(:responder) { shift.responder}
+    before { responder.shifts.end! }
+
+    it 'ends a shift' do
       expect(responder.shifts.started?).to be_false
     end
   end
 
   describe '#same_day?' do
-    it 'should be true when same day' do
-      shift     = create(:shift, start_time: Time.now)
-      responder = shift.responder
-      responder.shifts.end!
-      expect(responder.shifts.first.same_day?).to be_true
+    subject(:shift) { build(:shift, :ended) }
+
+    it 'is true when same day' do
+      shift.start_time = Time.now - 10.minutes
+      expect(shift.same_day?).to be_true
     end
 
-    it 'should be false when diff day' do
-      shift     = create(:shift)
-      responder = shift.responder
-      responder.shifts.end!
-      expect(responder.shifts.first.same_day?).to be_false
+    it 'is false when diff day' do
+      shift.start_time = Time.now - 2.days
+      expect(shift.same_day?).to be_false
     end
   end
 
-  # Private
-  describe '#refresh_responders'
 end

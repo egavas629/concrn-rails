@@ -3,12 +3,11 @@ require 'spec_helper'
 describe Log do
   it { should belong_to(:report) }
   it { should belong_to(:author).class_name('User') }
+  it { should delegate_method(:author_role).to(:author).as(:role) }
 
   describe 'default scope'
   describe '#broadcast'
   describe '#broadcasted?'
-  # private
-  describe '#refresh_report'
 
   # describe '#broadcast' do
   #   let(:responder_phone) { log.report.accepted_responders.first.phone }

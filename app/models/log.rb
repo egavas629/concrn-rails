@@ -28,7 +28,7 @@ class Log < ActiveRecord::Base
 private
 
   def refresh_report
-    Pusher.trigger("report-#{report.id}", "message", {'inner_html' => LogPresenter.new(self).inner_html, 'id' => self.id})
+    Push.update_transcript(report.id, self)
   end
 
 end
