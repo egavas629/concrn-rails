@@ -5,7 +5,8 @@ class Responder < User
   has_many :shifts,     dependent: :destroy
 
   # VALIDATIONS #
-  validates_presence_of :phone
+  validates :phone, presence: true, uniqueness: true
+  validates :name,  presence: true, uniqueness: true
 
   # CALLBACKS #
   after_validation :make_unavailable!, :on => :update
@@ -35,6 +36,8 @@ class Responder < User
   # INSTANCE METHODS #
   def phone=(new_phone)
     write_attribute(:phone, NumberSanitizer.sanitize(new_phone))
+  rescue NoMethodError
+    errors.add(:phone, 'Phone Number is not valid')
   end
 
   def set_password

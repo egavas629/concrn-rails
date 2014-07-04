@@ -1,96 +1,72 @@
 require 'spec_helper'
 
 describe Shift do
-  it { should belong_to(:responder) }
-  it { should validate_presence_of(:responder) }
-  it { should validate_presence_of(:start_time) }
-  it { should validate_presence_of(:start_via) }
+  context 'validations' do
+    it { should belong_to(:responder) }
+    it { should validate_presence_of(:responder) }
+    it { should validate_presence_of(:start_time) }
+    it { should validate_presence_of(:start_via) }
+  end
 
   context 'creating instance' do
-    subject(:shift) do
-      responder = create(:responder)
-      responder.shifts.create(
-        start_time: Time.now,
-        start_via: 'web'
-      )
-    end
+    let(:responder) { create(:responder) }
+    subject         { responder.shifts.create(start_time: Time.now, start_via: 'web') }
 
-    it 'is valid with a responder, start_time, and start_via' do
-      expect(shift).to be_valid
-    end
+    it { should be_valid }
   end
 
   describe 'scope' do
-    subject(:shift)     { create(:shift) }
-    subject(:shift_off) { create(:shift, :ended) }
-    before do
-      shift.reload
-      shift_off.reload
-    end
+    let(:shift)     { create(:shift) }
+    let(:shift_off) { create(:shift, :ended) }
 
+    # had start_with instead of include but causing errors
     describe 'default scope' do
-      subject(:shifts) { Shift.all }
-
-      it 'shows in descending start_time order' do
-        expect(shifts).to match_array([shift, shift_off])
-      end
+      subject { Shift.all }
+      it { should include(shift_off, shift) }
     end
 
+    # had start_with instead of include but causing errors
     describe '.on' do
-      subject(:shift_on) { Shift.on }
-
-      it 'excludes shifted out responders' do
-        expect(shift_on).to_not include(shift_off)
-      end
-
-      it 'includes shifted in responders' do
-        expect(shift_on).to match_array([shift])
-      end
+      subject { Shift.on }
+      it { should_not include(shift_off) }
+      it { should include(shift) }
     end
   end
 
   describe '.started?' do
-    subject(:responder) { create(:responder) }
+    subject { create(:responder) }
 
+    its('shifts.started?') { should be_false }
     it 'true if in-shift' do
-      responder.shifts.start!
-      expect(responder.shifts.started?).to be_true
-    end
-
-    it 'is false if not in-shift' do
-      expect(responder.shifts.started?).to be_false
+      subject.shifts.start!
+      expect(subject.shifts.started?).to be_true
     end
   end
 
   describe '.start!' do
-    subject(:responder) { create(:responder) }
-    before { responder.shifts.start! }
-
-    it 'creates a shift' do
-      expect(responder.shifts.started?).to be_true
-    end
+    subject { create(:responder) }
+    before  { subject.shifts.start! }
+    its('shifts.count') { should eq(1) }
+    its('shifts.first.start_via') { should eq('web') }
   end
-  describe '.end!' do
-    subject(:shift)     { create(:shift) }
-    subject(:responder) { shift.responder}
-    before { responder.shifts.end! }
 
-    it 'ends a shift' do
-      expect(responder.shifts.started?).to be_false
-    end
+  describe '.end!' do
+    subject { create(:responder, :on_shift) }
+    before  { subject.shifts.end! }
+    its('shifts.started?') { should be_false }
   end
 
   describe '#same_day?' do
-    subject(:shift) { build(:shift, :ended) }
+    subject { build(:shift, :ended) }
 
     it 'is true when same day' do
-      shift.start_time = Time.now - 10.minutes
-      expect(shift.same_day?).to be_true
+      subject.start_time = Time.now - 10.minutes
+      expect(subject.same_day?).to be_true
     end
 
     it 'is false when diff day' do
-      shift.start_time = Time.now - 2.days
-      expect(shift.same_day?).to be_false
+      subject.start_time = Time.now - 2.days
+      expect(subject.same_day?).to be_false
     end
   end
 

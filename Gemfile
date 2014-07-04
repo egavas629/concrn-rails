@@ -60,7 +60,4 @@ group :test do
   gem 'faker'
   gem 'simplecov', '~> 0.7.1', :require => false
   gem 'shoulda-matchers', require: false
-  gem 'launchy'
-  gem 'database_cleaner'
-  gem 'selenium-webdriver'
 end

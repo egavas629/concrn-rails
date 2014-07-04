@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Dispatch do
+  let(:time) { Time.now }
+
   it { should belong_to(:report) }
   it { should belong_to(:responder) }
   it { should validate_presence_of(:report) }
@@ -9,52 +11,37 @@ describe Dispatch do
   it { should delegate_method(:report_address).to(:report).as(:address) }
 
   describe 'scope' do
-    subject(:dispatch)           { create(:dispatch) }
-    subject(:dispatch_accepted)  { create(:dispatch, :accepted)}
-    subject(:dispatch_completed) { create(:dispatch, :completed)}
-    subject(:dispatch_rejected)  { create(:dispatch, :rejected)}
+    let(:dispatch)           { create(:dispatch, created_at: time - 10.minutes) }
+    let(:dispatch_accepted)  { create(:dispatch, :accepted, created_at: time - 5.minutes) }
+    let(:dispatch_completed) { create(:dispatch, :completed, created_at: time - 3.minutes) }
+    let(:dispatch_rejected)  { create(:dispatch, :rejected) }
 
     describe 'default scope' do
-      subject(:dispatches) { Dispatch.all }
-
-      it 'orders dispatches by created_at time desc' do
-        expect(dispatches).to match_array([dispatch_rejected, dispatch_completed, dispatch_accepted, dispatch])
-      end
+      subject { Dispatch.all }
+      it { should start_with(dispatch_rejected, dispatch_completed, dispatch_accepted, dispatch) }
     end
 
     describe '.pending' do
-      subject(:dispatches_pending) { Dispatch.pending }
-
-      it 'includes pending dispatches' do
-        expect(dispatches_pending).to match_array([dispatch])
-      end
-      it 'excludes non-pending dispatches' do
-        expect(dispatches_pending).to_not include(dispatch_accepted, dispatch_rejected, dispatch_completed)
-      end
+      subject { Dispatch.pending }
+      it { should start_with(dispatch) }
+      it { should_not include(dispatch_accepted, dispatch_rejected, dispatch_completed) }
     end
 
     describe '.not_rejected' do
-      subject(:dispatch_not_rejected) { Dispatch.not_rejected }
-
-      it 'includes non_rejected' do
-        expect(dispatch_not_rejected).to include(dispatch_accepted, dispatch, dispatch_completed)
-      end
-      it 'excludes rejected' do
-        expect(dispatch_not_rejected).to_not include(dispatch_rejected)
-      end
+      subject { Dispatch.not_rejected }
+      it { should include(dispatch_accepted, dispatch, dispatch_completed) }
+      it { should_not include(dispatch_rejected) }
     end
   end
 
   # Class
   describe '.accepted' do
-    subject(:dispatch_accepted)  { create(:dispatch, :accepted) }
-    subject(:dispatch_completed) { create(:dispatch, :completed) }
-    subject(:dispatch)           { create(:dispatch) }
-    subject(:dispatches)         { Dispatch.accepted }
-    
-    it 'only includes accepted/completed dispatches' do
-      expect(dispatches).to match_array([dispatch_completed, dispatch_accepted])
-    end
+    let(:dispatch_accepted)  { create(:dispatch, :accepted, created_at: time - 10.minutes) }
+    let(:dispatch_completed) { create(:dispatch, :completed, created_at: time - 5.minutes) }
+    let(:dispatch)           { create(:dispatch) }
+    subject                  { Dispatch.accepted }
+
+    it { should include(dispatch_completed, dispatch_accepted) }
   end
 
   describe 'counters' do
@@ -64,11 +51,14 @@ describe Dispatch do
       create_list(:dispatch, 2)
     end
 
-    it '.completed_count' do
-      expect(Dispatch.completed_count).to eq(3)
+    describe '.completed_count' do
+      subject { Dispatch.completed_count }
+      it { should eq(3) }
     end
-    it '.rejected_count' do
-      expect(Dispatch.rejected_count).to eq(4)
+
+    describe '.rejected_count' do
+      subject { Dispatch.rejected_count }
+      it { should eq(4) }
     end
   end
 
@@ -76,50 +66,41 @@ describe Dispatch do
     subject(:dispatch) { build(:dispatch) }
 
     describe '#accepted?' do
-      it 'is true if accepted' do
-        dispatch.status = 'accepted'
-        expect(dispatch.accepted?).to be_true
-      end
-      it 'is false if not accepted' do
+      before { dispatch.status = 'accepted' }
+      its(:accepted?) { should be_true }
+      it 'is false unless accepted' do
+        dispatch.status = 'archived'
         expect(dispatch.accepted?).to be_false
       end
     end
 
     describe '#completed?' do
-      it 'is true if completed' do
-        dispatch.status = 'completed'
-        expect(dispatch.completed?).to be_true
-      end
-      it 'is false if not completed' do
+      before { dispatch.status = 'completed' }
+      its(:completed?) { should be_true }
+      it 'is false unless completed' do
         dispatch.status = 'accepted'
         expect(dispatch.completed?).to be_false
       end
     end
 
     describe '#pending?' do
-      it 'is true if pending' do
-        dispatch.status = 'pending'
-        expect(dispatch.pending?).to be_true
-      end
-      it 'is false if not pending' do
+      before { dispatch.status = 'pending' }
+      its(:pending?) { should be_true }
+      it 'is false unless pending' do
         dispatch.status = 'accepted'
         expect(dispatch.pending?).to be_false
       end
     end
-
   end
 
   describe '#status_update' do
-    subject(:dispatch) { create(:dispatch) }
-
-    it 'includes responder_name' do
-      expect(dispatch.status_update).to include(dispatch.responder_name, dispatch.status)
-    end
+    subject { create(:dispatch) }
+    its(:status_update) { should include(subject.responder_name, subject.status) }
   end
 
   context 'when created' do
-    let (:report) { create :report }
-    let (:responder) { create :responder }
+    let(:report) { create :report }
+    let(:responder) { create :responder }
 
     it 'hits #messanger with pending status' do
       expect_any_instance_of(DispatchMessanger).to receive(:pending!)

@@ -6,60 +6,32 @@ describe Report do
   it { should have_many(:responders).through(:dispatches) }
 
   describe 'scopes' do
-    subject(:report)           { create(:report) }
-    subject(:accepted_report)  { create(:report, :accepted) }
-    subject(:archived_report)  { create(:report, :archived) }
-    subject(:completed_report) { create(:report, :completed) }
-    subject(:pending_report)   { create(:report, :pending) }
-    subject(:rejected_report)  { create(:report, :rejected) }
-
-    before do
-      accepted_report.reload
-      pending_report.reload
-    end
+    let(:report)           { create(:report) }
+    let(:accepted_report)  { create(:report, :accepted) }
+    let(:archived_report)  { create(:report, :archived) }
+    let(:completed_report) { create(:report, :completed) }
+    let(:pending_report)   { create(:report, :pending) }
+    let(:rejected_report)  { create(:report, :rejected) }
 
     describe '.accepted' do
-      subject(:accepted_reports) { Report.accepted }
-
-      it 'includes accepted reports' do
-        expect(accepted_reports).to match_array([accepted_report])
-      end
-      it 'excludes non-accepted reports' do
-        expect(accepted_reports).to_not include(report, archived_report, pending_report, rejected_report)
-      end
+      subject { Report.accepted }
+      it { should include(accepted_report) }
+      it { should_not include(report, archived_report, pending_report, rejected_report) }
     end
     describe '.completed' do
-      subject(:completed_reports) { Report.completed }
-
-      it 'includes completed reports' do
-        expect(completed_reports).to include(completed_report, archived_report)
-      end
-
-      it 'excludes non-completed reports' do
-        expect(completed_reports).to_not include(report, accepted_report, pending_report, rejected_report)
-      end
+      subject { Report.completed }
+      it { should include(completed_report, archived_report) }
+      it { should_not include(report, accepted_report, pending_report, rejected_report) }
     end
     describe '.pending' do
-      subject(:pending_reports) { Report.pending }
-
-      it 'includes pending reports' do
-        expect(pending_reports).to match_array([pending_report])
-      end
-      it 'excludes non-pending reports' do
-        expect(pending_reports).to_not include(report, accepted_report, archived_report, completed_report, rejected_report)
-      end
+      subject { Report.pending }
+      it { should include(pending_report) }
+      it { should_not include(report, accepted_report, archived_report, completed_report, rejected_report) }
     end
-
     describe '.unassigned' do
-      subject(:unassigned_reports) { Report.unassigned }
-
-      it 'includes unassigned reports' do
-        expect(unassigned_reports).to include(rejected_report, report)
-      end
-
-      it 'excludes assigned reports' do
-        expect(unassigned_reports).to_not include(accepted_report, archived_report, completed_report, pending_report)
-      end
+      subject { Report.unassigned }
+      it { should include(rejected_report, report) }
+      it { should_not include(accepted_report, archived_report, completed_report, pending_report) }
     end
   end
 
@@ -96,126 +68,66 @@ describe Report do
 
   end
 
-  describe 'status states' do
-    subject(:report)           { create(:report) }
-    subject(:accepted_report)  { create(:report, :accepted) }
-    subject(:archived_report)  { create(:report, :archived) }
-    subject(:completed_report) { create(:report, :completed) }
-    subject(:pending_report)   { create(:report, :pending) }
-    subject(:rejected_report)  { create(:report, :rejected) }
-    before { completed_report.reload }
+  context 'new report' do
+    subject { create(:report) }
+    its(:current_status) { should eq('unassigned') }
+  end
 
-    describe '#current_status' do
-      it 'report is active if any accepted responders' do
-        expect(accepted_report.current_status).to eq('active')
-      end
-      it 'pending report is pending' do
-        expect(pending_report.current_status).to eq('pending')
-      end
-      it 'unassigned report is unassigned' do
-        expect(report.current_status).to eq('unassigned')
-      end
-      it 'rejected report is unassigned' do
-        expect(rejected_report.current_status).to eq('unassigned')
-      end
-      it 'completed report is completed' do
-        expect(completed_report.current_status).to eq('completed')
-      end
-      it 'archived report is archived' do
-        expect(archived_report.current_status).to eq('archived')
-      end
+  context 'accepted report' do
+    subject { create(:report, :accepted) }
+    its(:accepted?)              { should be_true }
+    its(:archived?)              { should be_false }
+    its(:archived_or_completed?) { should be_false }
+    its(:completed?)             { should be_false }
+    its(:current_status)         { should eq('active') }
+    its(:current_pending?)       { should be_false }
+
+    it 'is false if accepted & pending' do
+      subject.dispatch!(create(:responder, :on_shift))
+      expect(subject.current_pending?).to be_false
     end
+  end
 
-    describe '#current_pending?' do
-      it 'is true if pending responders' do
-        expect(pending_report.current_pending?).to be_true
-      end
-      it 'is false if rejected' do
-        expect(rejected_report.current_pending?).to be_false
-      end
-      it 'is false if accepted' do
-        expect(pending_report.current_pending?).to be_true
-      end
-      it 'is false if accepted or pending' do
-        accepted_report.dispatch!(create(:responder, :on_shift))
-        expect(accepted_report.current_pending?).to be_false
-      end
-    end
+  context 'archived report' do
+    subject { create(:report, :archived) }
+    its(:archived?)              { should be_true }
+    its(:archived_or_completed?) { should be_true }
+    its(:completed?)             { should be_false}
+    its(:current_status)         { should eq('archived') }
+  end
 
-    describe '#accepted?' do
-      it 'is true if accepted' do
-        expect(accepted_report.accepted?).to be_true
-      end
-      it 'is false if pending' do
-        expect(pending_report.accepted?).to be_false
-      end
-      it 'is false if rejected' do
-        expect(rejected_report.accepted?).to be_false
-      end
-    end
+  context 'completed report' do
+    subject { create(:report, :completed).reload }
+    its(:archived?)              { should be_false }
+    its(:archived_or_completed?) { should be_true }
+    its(:completed?)             { should be_true }
+    its(:current_status)         { should eq('completed') }
+  end
 
-    describe '#archived?' do
-      it 'is false if accepted' do
-        expect(accepted_report.archived?).to be_false
-      end
-      it 'is true if archived' do
-        expect(archived_report.archived?).to be_true
-      end
-      it 'is false if completed' do
-        expect(completed_report.archived?).to be_false
-      end
-      it 'is false if pending' do
-        expect(pending_report.archived?).to be_false
-      end
-      it 'is false if rejected' do
-        expect(rejected_report.archived?).to be_false
-      end
-    end
+  context 'pending report' do
+    subject { create(:report, :pending) }
+    its(:accepted?)              { should be_false }
+    its(:archived?)              { should be_false }
+    its(:archived_or_completed?) { should be_false }
+    its(:completed?)             { should be_false }
+    its(:current_pending?)       { should be_true }
+    its(:current_status)         { should eq('pending') }
+  end
 
-    describe '#completed?' do
-      it 'is false if accepted' do
-        expect(accepted_report.completed?).to be_false
-      end
-      it 'is false if archived' do
-        expect(archived_report.completed?).to be_false
-      end
-      it 'is true if completed' do
-        expect(completed_report.completed?).to be_true
-      end
-      it 'is false if pending' do
-        expect(pending_report.completed?).to be_false
-      end
-      it 'fales if rejected' do
-        expect(rejected_report.completed?).to be_false
-      end
-    end
-
-    describe '#archived_or_completed?' do
-      it 'is false if accepted' do
-        expect(accepted_report.archived_or_completed?).to be_false
-      end
-      it 'is true if archived' do
-        expect(archived_report.archived_or_completed?).to be_true
-      end
-      it 'is true if completed' do
-        expect(completed_report.archived_or_completed?).to be_true
-      end
-      it 'is false if pending' do
-        expect(pending_report.archived_or_completed?).to be_false
-      end
-      it 'is false if rejected' do
-        expect(rejected_report.archived_or_completed?).to be_false
-      end
-    end
-
+  context 'rejected report' do
+    subject { create(:report, :rejected) }
+    its(:accepted?)              { should be_false }
+    its(:archived?)              { should be_false }
+    its(:archived_or_completed?) { should be_false }
+    its(:completed?)             { should be_false }
+    its(:current_pending?)       { should be_false }
+    its(:current_status)         { should eq('unassigned') }
   end
 
   describe '#complete!' do
-    it 'completes attributes' do
-      report = create(:report)
-      report.complete!
-      expect(report.status).to eq('completed')
-    end
+    subject { create(:report) }
+    before  { subject.complete! }
+    its(:status) { should eq('completed') }
   end
 
   describe '#set_completed!' do
