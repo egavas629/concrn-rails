@@ -6,7 +6,9 @@ class Telephony
   end
 
   def self.send(body='Thanks!', to=nil)
-    unless Rails.env.test?
+    if Rails.env.test?
+      true
+    else
       sleep 1 # Carriers are sloppy.
       client.account.messages.create(from: OUTGOING_PHONE, to: to, body: body)
     end

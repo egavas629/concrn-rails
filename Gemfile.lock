@@ -211,6 +211,7 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
+    test_after_commit (0.2.3)
     thin (1.6.2)
       daemons (>= 1.0.9)
       eventmachine (>= 1.0.0)
@@ -271,6 +272,7 @@ DEPENDENCIES
   shoulda-matchers
   simple_form
   simplecov (~> 0.7.1)
+  test_after_commit
   thin
   turbolinks
   twilio-ruby

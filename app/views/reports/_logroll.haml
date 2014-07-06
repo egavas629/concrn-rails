@@ -13,7 +13,7 @@
               %br
     %table.table#transcript
       %tbody
-        - report.logs.each_with_index do |log, i|
+        - report.logs.each do |log|
           - log_presenter = LogPresenter.new(log)
           %tr.log-entry{id: log.id}
             = log_presenter.created_at

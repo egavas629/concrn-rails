@@ -4,6 +4,12 @@ describe Report do
   it { should have_many(:dispatches).dependent(:destroy) }
   it { should have_many(:logs).dependent(:destroy) }
   it { should have_many(:responders).through(:dispatches) }
+  it { should validate_presence_of(:address) }
+  it { should ensure_inclusion_of(:status).in_array(Report::Status) }
+  it { should ensure_inclusion_of(:gender).in_array(Report::Gender).allow_nil(true) }
+  it { should ensure_inclusion_of(:age).in_array(Report::AgeGroups).allow_nil(true) }
+  it { should ensure_inclusion_of(:race).in_array(Report::RaceEthnicity).allow_nil(true) }
+  it { should ensure_inclusion_of(:setting).in_array(Report::CrisisSetting).allow_nil(true) }
 
   describe 'scopes' do
     let(:report)           { create(:report) }
@@ -38,6 +44,11 @@ describe Report do
   describe '#clean_image' do
     subject(:report) { build(:report, :image_attached) }
 
+    it 'is run before_validation' do
+      expect(report).to receive(:clean_image).once
+      report.valid?
+    end
+
     it 'removes image if delete_image true' do
       report.delete_image = '1'
       report.send(:clean_image)
@@ -53,6 +64,11 @@ describe Report do
 
   describe '#clean_observations' do
     subject(:report) { build(:report) }
+
+    it 'is run before_validation' do
+      expect(report).to receive(:clean_observations).once
+      report.valid?
+    end
 
     it 'deletes blank elements in array' do
       report.observations = ['Agitated', '', 'Hungry', nil]
@@ -131,6 +147,28 @@ describe Report do
   end
 
   describe '#set_completed!' do
+    context 'after_validation triggered' do
+      subject { create(:report) }
+
+      it 'is run after_validation if completed' do
+        subject.status = 'completed'
+        expect(subject).to receive(:set_completed!).once
+        subject.valid?
+      end
+
+      it 'is run after_validation if archived' do
+        subject.status = 'archived'
+        expect(subject).to receive(:set_completed!).once
+        subject.valid?
+      end
+
+      it 'not run after_validation if pending' do
+        subject.status = 'pending'
+        expect(subject).to_not receive(:set_completed!)
+        subject.valid?
+      end
+    end
+
     # Use update_attribute to not trigger callbacks that occur around validation
     it 'rejects pending responders' do
       report = create(:report, :pending)
@@ -151,6 +189,16 @@ describe Report do
       report.update_attribute(:status, 'completed')
       report.set_completed!
       expect(report.completed_at).to be < Time.now
+    end
+  end
+
+  describe '#push_reports' do
+    context 'after_commit' do
+      subject { build(:report) }
+      it 'should trigger' do
+        expect(subject).to receive(:push_reports)
+        subject.save
+      end
     end
   end
 end

@@ -70,4 +70,14 @@ describe Shift do
     end
   end
 
+  describe '#push_reports' do
+    context 'after_commit' do
+      subject { build(:shift) }
+      it 'should trigger' do
+        expect(subject).to receive(:push_reports)
+        subject.save
+      end
+    end
+  end
+
 end

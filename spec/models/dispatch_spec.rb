@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Dispatch do
-  let(:time) { Time.now }
+  let(:time) { Time.now.utc }
 
   it { should belong_to(:report) }
   it { should belong_to(:responder) }
@@ -34,7 +34,6 @@ describe Dispatch do
     end
   end
 
-  # Class
   describe '.accepted' do
     let(:dispatch_accepted)  { create(:dispatch, :accepted, created_at: time - 10.minutes) }
     let(:dispatch_completed) { create(:dispatch, :completed, created_at: time - 5.minutes) }
@@ -59,6 +58,25 @@ describe Dispatch do
     describe '.rejected_count' do
       subject { Dispatch.rejected_count }
       it { should eq(4) }
+    end
+  end
+
+  describe '#accept!' do
+    subject { build(:dispatch) }
+    before { Dispatch.any_instance.stub(:messanger) }
+
+    context 'status not accepted' do
+      before { subject.accept! }
+      its(:accepted_at) { should be_nil }
+    end
+
+    context 'status accepted' do
+      let(:day) { time.day }
+      before do
+        subject.status = 'accepted'
+        subject.accept!
+      end
+      its("accepted_at.day") { should eq(day) }
     end
   end
 
@@ -98,13 +116,45 @@ describe Dispatch do
     its(:status_update) { should include(subject.responder_name, subject.status) }
   end
 
-  context 'when created' do
-    let(:report) { create :report }
-    let(:responder) { create :responder }
+  describe '#messanger' do
+    context 'accepted' do
+      subject    { build(:dispatch, status: 'accepted') }
+      it 'DispatchMessanger receives #accept!' do
+        expect_any_instance_of(DispatchMessanger).to receive(:accept!)
+        subject.save!
+      end
+    end
+    context 'completed' do
+      subject    { build(:dispatch, status: 'completed') }
+      it 'DispatchMessanger receives #complete!' do
+        expect_any_instance_of(DispatchMessanger).to receive(:complete!)
+        subject.save!
+      end
+    end
+    context 'pending' do
+      let(:report)    { create(:report) }
+      let(:responder) { create(:responder, :on_shift) }
+      it 'DispatchMessanger receives #pending!' do
+        expect_any_instance_of(DispatchMessanger).to receive(:pending!)
+        report.dispatch!(responder)
+      end
+    end
+    context 'rejected' do
+      subject    { build(:dispatch, status: 'rejected') }
+      it 'DispatchMessanger receives #reject!' do
+        expect_any_instance_of(DispatchMessanger).to receive(:reject!)
+        subject.save!
+      end
+    end
+  end
 
-    it 'hits #messanger with pending status' do
-      expect_any_instance_of(DispatchMessanger).to receive(:pending!)
-      report.dispatch!(responder)
+  describe '#push_reports' do
+    context 'after_commit' do
+      subject { build(:dispatch) }
+      it 'should trigger' do
+        expect(subject).to receive(:push_reports)
+        subject.save
+      end
     end
   end
 end

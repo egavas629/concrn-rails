@@ -11,15 +11,24 @@ class Report < ActiveRecord::Base
   # CALLBACKS #
   has_attached_file   :image
   before_validation   :clean_image, :clean_observations
-  after_validation    :set_completed! if :status_changed?
+  after_validation    :set_completed!, if: :archived_or_completed?
   after_commit        :push_reports
 
   # CONSTANTS #
-  Gender            = ['Male', 'Female', 'Other']
   AgeGroups         = ['Youth (0-17)', 'Young Adult (18-34)', 'Adult (35-64)', 'Senior (65+)']
-  RaceEthnicity     = ['Hispanic or Latino', 'American Indian or Alaska Native', 'Asian', 'Black or African American', 'Native Hawaiian or Pacific Islander', 'White', 'Other/Unknown']
   CrisisSetting     = ['Public Space', 'Workplace', 'School', 'Home', 'Other']
   CrisisObservation = ['At-risk of harm', 'Under the influence', 'Anxious', 'Depressed', 'Aggarvated', 'Threatening']
+  Gender            = ['Male', 'Female', 'Other']
+  RaceEthnicity     = ['Hispanic or Latino', 'American Indian or Alaska Native', 'Asian', 'Black or African American', 'Native Hawaiian or Pacific Islander', 'White', 'Other/Unknown']
+  Status            = ['archived', 'completed', 'pending']
+
+  # VALIDATIONS #
+  validates :address, presence: true
+  validates_inclusion_of :status, in: Status
+  validates_inclusion_of :gender, in: Gender, allow_nil: true
+  validates_inclusion_of :age, in: AgeGroups, allow_nil: true
+  validates_inclusion_of :race, in: RaceEthnicity, allow_nil: true
+  validates_inclusion_of :setting, in: CrisisSetting, allow_nil: true
 
   # SCOPE #
   scope :accepted, -> do

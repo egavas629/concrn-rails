@@ -20,21 +20,21 @@ staging:
   encoding: unicode
   database: streetmom_staging
   pool: 5
-  username: streetmom
-  password:
+  # username: streetmom
+  # password:
 
 production:
   adapter: postgresql
   encoding: unicode
   database: streetmom_production
   pool: 5
-  username: streetmom
-  password:
+  # username: streetmom
+  # password:
 
 rangers:
   adapter: postgresql
   encoding: unicode
   database: streetmom_rangers
   pool: 5
-  username: streetmom
-  password:
+  # username: streetmom
+  # password:

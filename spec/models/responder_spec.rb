@@ -48,7 +48,7 @@ describe Responder do
       subject { Responder.available }
 
       it { should_not include(responder_off, responder_inactive) }
-      it { should start_with(responder) }
+      it { should include(responder) }
 
       it 'excludes accepted/pending responders' do
         responder_pending  = create(:report, :pending).responders[0]
@@ -96,5 +96,16 @@ describe Responder do
     end
 
     its(:started?) { should be_false }
+  end
+
+  describe '#push_reports' do
+    context 'after_update' do
+      subject { create(:responder) }
+      before  { subject.name = 'Joe Smith' }
+      it 'should trigger' do
+        expect(subject).to receive(:push_reports)
+        subject.save
+      end
+    end
   end
 end

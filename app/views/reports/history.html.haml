@@ -15,13 +15,14 @@
 
 = paginate @reports unless params[:show_all]
 
-:javascript
-  var ready;
-  ready = function() {
-    $('.date').datepicker({
-      dateFormat: 'M d, yy'
-    })
-  };
+= content_for :footer_js do
+  :javascript
+    var ready;
+    ready = function() {
+      $('.date').datepicker({
+        dateFormat: 'M d, yy'
+      })
+    };
 
-  $(document).ready(ready);
-  $(document).on('page:load', ready);
+    $(document).ready(ready);
+    $(document).on('page:load', ready);

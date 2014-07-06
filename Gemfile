@@ -60,4 +60,5 @@ group :test do
   gem 'faker'
   gem 'simplecov', '~> 0.7.1', :require => false
   gem 'shoulda-matchers', require: false
+  gem 'test_after_commit'
 end

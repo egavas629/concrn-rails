@@ -4,11 +4,15 @@ class Log < ActiveRecord::Base
   belongs_to :author, class_name: 'User'
 
   delegate :name, :role, to: :author, prefix: true
+
+  # VALIDATIONS #
+  validates_presence_of :author, :report, :body
+
   # CALLBACKS #
   after_commit :refresh_report
 
   # SCOPE #
-  default_scope -> { order :created_at }
+  default_scope -> { order(:created_at) }
 
   # INSTANCE METHODS #
   def broadcast
@@ -18,7 +22,7 @@ class Log < ActiveRecord::Base
       Telephony.send(body, responder.phone) && message_sent = true
     end
 
-    update_attribute(:sent_at, Time.now) if message_sent
+    self.update_attribute(:sent_at, Time.now) if message_sent
   end
 
   def broadcasted?

@@ -3,7 +3,7 @@ class Shift < ActiveRecord::Base
   belongs_to :responder
 
   # CALLBACKS #
-  after_commit :refresh_responders
+  after_commit :push_reports
 
   # VALIDATIONS #
   validates_presence_of :responder, :start_time, :start_via
@@ -33,7 +33,7 @@ class Shift < ActiveRecord::Base
 
 private
 
-  def refresh_responders
+  def push_reports
     Push.refresh
   end
 end
