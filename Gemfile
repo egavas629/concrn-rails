@@ -27,9 +27,11 @@ gem 'paperclip'
 # Pagination
 gem 'kaminari'
 
-# Seed/Testing
-group :development, :test, :staging do
-  gem 'factory_girl_rails'
+# Seed/Testing #since seed of db uses faker need to include
+gem 'factory_girl_rails'
+gem 'faker'
+
+group :development, :test do
   gem 'rspec-rails'
 end
 
@@ -57,7 +59,6 @@ end
 group :test do
   gem 'capybara'
   gem 'guard-rspec'
-  gem 'faker'
   gem 'simplecov', '~> 0.7.1', :require => false
   gem 'shoulda-matchers', require: false
   gem 'test_after_commit'
