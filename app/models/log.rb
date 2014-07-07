@@ -29,10 +29,9 @@ class Log < ActiveRecord::Base
     sent_at.present?
   end
 
-private
+  private
 
   def refresh_report
     Push.update_transcript(report.id, self)
   end
-
 end

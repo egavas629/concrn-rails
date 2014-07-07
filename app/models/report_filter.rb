@@ -1,5 +1,4 @@
 class ReportFilter
-
   def initialize(params)
     start_date  = params[:start_date]
     end_date    = params[:end_date]
@@ -25,5 +24,4 @@ class ReportFilter
     end
     reports.order(@order)
   end
-
 end

@@ -1,5 +1,4 @@
 class DispatchMessanger
-
   def initialize(responder)
     @responder = responder
     @dispatch  = responder.dispatches.first
@@ -39,7 +38,7 @@ class DispatchMessanger
     end
   end
 
-private
+  private
 
   def accept!
     @dispatch.accept!
@@ -64,7 +63,9 @@ private
   end
 
   def accept_dispatch_notification
-    @report.logs.create!(author: @responder, body: "*** Accepted the dispatch ***")
+    @report.logs.create!(
+      author: @responder, body: '*** Accepted the dispatch ***'
+    )
   end
 
   def accepted_dispatches
@@ -80,11 +81,18 @@ private
   end
 
   def acknowledge_acceptance
-    Telephony.send("You have been assigned to an incident at #{@report.address}.", @responder.phone)
+    Telephony.send(
+      "You have been assigned to an incident at #{@report.address}.",
+      @responder.phone
+    )
   end
 
   def acknowledge_rejection
-    Telephony.send("You have been removed from this incident at #{@report.address}. You are now available to be dispatched.", @responder.phone)
+    message = <<-MSG
+      You have been removed from this incident at #{@report.address}.
+      You are now available to be dispatched.
+    MSG
+    Telephony.send(message, @responder.phone)
   end
 
   def give_feedback(body)
@@ -100,14 +108,20 @@ private
   end
 
   def notify_about_primary_responder
-    if multi_accepted_responders?
-      Telephony.send("The primary responder for this report is: #{primary_responder.name} – #{primary_responder.phone}", @responder.phone)
-    end
+    return false unless multi_accepted_responders?
+    message = <<-MSG
+      The primary responder for this report is: #{primary_responder.name} –
+      #{primary_responder.phone}
+    MSG
+    Telephony.send(message, @responder.phone)
   end
 
   def reporter_synopsis
     if multi_accepted_responders?
-      "#{@responder.name} - #{@responder.phone} is on the way to help #{primary_responder.name}."
+      <<-MSG
+        #{@responder.name} - #{@responder.phone} is on the way to help
+        #{primary_responder.name}.
+      MSG
     else
       "INCIDENT RESPONSE: #{@responder.name} is on the way. #{@responder.phone}"
     end
@@ -124,12 +138,16 @@ private
   end
 
   def thank_responder
+    message = <<-LINEEND
+      The report is now completed, thanks for your help! You are now available
+      to be dispatched.
+    LINEEND
     Responder.accepted(@report.id).each do |responder|
-      Telephony.send("The report is now completed, thanks for your help! You are now available to be dispatched.", responder.phone)
+      Telephony.send(message, responder.phone)
     end
   end
 
   def thank_reporter
-    Telephony.send("Report resolved, thanks for being concrned!", @report.phone)
+    Telephony.send('Report resolved, thanks for being concrned!', @report.phone)
   end
 end

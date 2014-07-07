@@ -5,7 +5,7 @@ class Telephony
     @client ||= Twilio::REST::Client.new(ENV['TWILIO_SID'], ENV['TWILIO_TOKEN'])
   end
 
-  def self.send(body='Thanks!', to=nil)
+  def self.send(body = 'Thanks!', to = nil)
     if Rails.env.test?
       true
     else
@@ -17,9 +17,9 @@ class Telephony
     puts "### MESSAGE NOT SENT TO #{to} ###"
   end
 
-  def self.receive(body, opts={})
+  def self.receive(body, opts = {})
     responder = Responder.find_by_phone(opts[:from])
-    send("#{opts[:from]}: #{opts[:body]}", to: "6507876770") unless responder
+    send("#{opts[:from]}: #{opts[:body]}", to: '6507876770') unless responder
     messanger = DispatchMessanger.new(responder)
     messanger.respond(body)
   end

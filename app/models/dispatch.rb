@@ -10,12 +10,12 @@ class Dispatch < ActiveRecord::Base
   validates_presence_of :responder
 
   # SCOPE #
-  default_scope    -> { order(created_at: :desc) }
-  scope :pending,  -> { where(status: 'pending') }
-  scope :not_rejected, -> do
+  default_scope ->    { order(created_at: :desc) }
+  scope :pending, ->  { where(status: 'pending') }
+  scope :not_rejected, lambda {
     where.not(status: 'rejected')
       .joins(:responder).order('dispatches.status', 'dispatches.updated_at')
-  end
+  }
 
   # CALLBACKS #
   after_create :messanger
@@ -23,19 +23,19 @@ class Dispatch < ActiveRecord::Base
   after_commit :push_reports
 
   # CLASS METHODS #
-  def self.accepted(report_id=nil)
+  def self.accepted(report_id = nil)
     query = where(status: %w(accepted completed)).order(:accepted_at)
     report_id ? query.where(report_id: report_id) : query
   end
 
-  def self.completed_count(responder_id=nil)
-    query = where(status: "completed")
+  def self.completed_count(responder_id = nil)
+    query = where(status: 'completed')
     query = responder_id ? query.where(responder_id: responder_id) : query
     query.count
   end
 
-  def self.rejected_count(responder_id=nil)
-    query = where(status: "rejected")
+  def self.rejected_count(responder_id = nil)
+    query = where(status: 'rejected')
     query = responder_id ? query.where(responder_id: responder_id) : query
     query.count
   end
@@ -46,22 +46,25 @@ class Dispatch < ActiveRecord::Base
   end
 
   def accepted?
-    status == "accepted"
+    status == 'accepted'
   end
 
   def completed?
-    status == "completed"
+    status == 'completed'
   end
 
   def pending?
-    status == "pending"
+    status == 'pending'
   end
 
   def status_update
-    "#{responder_name} #{status} #{report_address.present? ? 'report @ ' + report_address : 'the report'}"
+    [
+      responder_name, status,
+      (report_address.present? ? 'report @ ' + report_address : 'the report')
+    ].join(' ')
   end
 
-private
+  private
 
   def messanger
     DispatchMessanger.new(responder).trigger
@@ -70,5 +73,4 @@ private
   def push_reports
     Push.refresh
   end
-
 end
