@@ -70,4 +70,5 @@ private
   def push_reports
     Push.refresh
   end
+
 end
