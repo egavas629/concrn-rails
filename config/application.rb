@@ -26,9 +26,9 @@ module Streetmom
     config.paperclip_defaults = {
       :storage => :s3,
       :s3_credentials => {
-        :bucket => "concrn",
-        :access_key_id => "AKIAJBC3OEJ6ORK2V4XQ",
-        :secret_access_key => "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"
+        :bucket => ENV["AWS_BUCKET"],
+        :access_key_id => ENV["AWS_KEY"],
+        :secret_access_key => ENV["AWS_SECRET"]
       },
       :s3_host_alias => "concrn.s3.amazonaws.com",
       :url => ":s3_domain_url",

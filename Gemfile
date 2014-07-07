@@ -62,3 +62,5 @@ group :test do
   gem 'shoulda-matchers', require: false
   gem 'test_after_commit'
 end
+
+gem 'guard-rubocop', group: :development

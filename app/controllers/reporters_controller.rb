@@ -5,10 +5,9 @@ class ReportersController < ApplicationController
     render
   end
 
-private
+  private
 
   def reporter_params
     params.permit([:name, :phone, :address])
   end
-
 end

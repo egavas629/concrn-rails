@@ -22,7 +22,7 @@ class Log < ActiveRecord::Base
       Telephony.send(body, responder.phone) && message_sent = true
     end
 
-    self.update_attribute(:sent_at, Time.now) if message_sent
+    update_attribute(:sent_at, Time.now) if message_sent
   end
 
   def broadcasted?
