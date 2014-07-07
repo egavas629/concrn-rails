@@ -31,7 +31,7 @@ class LogPresenter < BasePresenter
         h.content_tag :div, class: 'sent-stamp' do
           "Sent (#{log.updated_at.strftime('%H:%M')})"
         end
-      elsif log.report.dispatches.accepted.present?
+      elsif Dispatch.accepted(log.report.id).present?
         h.content_tag :div, class: 'forward-via-sms' do
           h.link_to "Send SMS", url.log_path(log), method: 'PUT', remote: true
         end

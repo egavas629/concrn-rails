@@ -4,17 +4,21 @@ class Log < ActiveRecord::Base
   belongs_to :author, class_name: 'User'
 
   delegate :name, :role, to: :author, prefix: true
+
+  # VALIDATIONS #
+  validates_presence_of :author, :report, :body
+
   # CALLBACKS #
   after_commit :refresh_report
 
   # SCOPE #
-  default_scope -> { order :created_at }
+  default_scope -> { order(:created_at) }
 
   # INSTANCE METHODS #
   def broadcast
     message_sent = false
 
-    report.accepted_responders.each do |responder|
+    Responder.accepted(report.id).each do |responder|
       Telephony.send(body, responder.phone) && message_sent = true
     end
 
@@ -28,7 +32,7 @@ class Log < ActiveRecord::Base
 private
 
   def refresh_report
-    Pusher.trigger("report-#{report.id}", "message", {'inner_html' => LogPresenter.new(self).inner_html, 'id' => self.id})
+    Push.update_transcript(report.id, self)
   end
 
 end

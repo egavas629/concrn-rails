@@ -24,7 +24,7 @@ Streetmom::Application.routes.draw do
   end
   resources :dispatches, only: %w(create update)
   resources :logs,       only: %w(create update)
-  resources :reporter,   only: %w(show)
+  resources :reporters,  only: %w(show)
   resources :sms,        only: %w(create)
 
   root 'pages#home'

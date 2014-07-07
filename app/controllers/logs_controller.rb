@@ -1,6 +1,6 @@
 class LogsController < ApplicationController
   def create
-    log = Log.create! params.require(:log).permit [:body, :author_id, :report_id]
+    Log.create! params.require(:log).permit [:body, :author_id, :report_id]
     render nothing: true, status: :ok
     # redirect_to report_path(log.report)
   end

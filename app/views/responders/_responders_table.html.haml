@@ -14,17 +14,18 @@
     %tbody
       - responders.each do |responder|
         = content_tag_for :tr, responder do
+          - responder_presenter = ResponderPresenter.new(responder)
           %th= link_to responder.name, responder
           %td.phone= responder.phone
           %td= link_to responder.email, "mailto:#{responder.email}"
-          %td= responder.completed_count
-          %td= responder.rejected_count
+          %td= responder.dispatches.completed_count
+          %td= responder.dispatches.rejected_count
           - unless deactivated
-            - path = responder.on_shift? ? end_shift_responder_path(responder) : start_shift_responder_path(responder)
+            - path = responder.shifts.started? ? end_shift_responder_path(responder) : start_shift_responder_path(responder)
             %td
               = simple_form_for '', url: path, method: :post do |f|
-                = f.check_box :available, checked: responder.on_shift?, class: 'availability'
-            %td= responder.status
+                = f.check_box :available, checked: responder.shifts.started?, class: 'availability'
+            %td= responder_presenter.status
 - else
   %p.notice
     %br There are no responders to show.

@@ -2,16 +2,16 @@ class DispatchMessanger
 
   def initialize(responder)
     @responder = responder
-    @dispatch  = responder.dispatches.latest
-    @report    = @dispatch.report unless @dispatch.nil?
+    @dispatch  = responder.dispatches.first
+    @report    = @dispatch.report unless @dispatch.blank?
   end
 
   def respond(body)
     feedback, status = true, nil
-    if @responder.on_shift? && body[/break/i]
+    if @responder.shifts.started? && body[/break/i]
       @responder.shifts.end!('sms') && feedback = false if non_breaktime
       status = 'rejected' if @dispatch && @dispatch.pending?
-    elsif !@responder.on_shift? && body[/on/i]
+    elsif !@responder.shifts.started? && body[/on/i]
       @responder.shifts.start!('sms') && feedback = false
     elsif @dispatch.pending? && body[/no/i]
       status = 'rejected'
@@ -20,15 +20,32 @@ class DispatchMessanger
     elsif !@dispatch.accepted? && !@dispatch.completed?
       status = 'accepted'
     end
-    @dispatch.update_attributes!(status: status) if status
-    give_feedback(body) if feedback
+    # If dispatch changed then update status
+    @dispatch.update_attributes(status: status) if status
+    # Send log if there is a need for feedback
+    @report.logs.create(author: responder, body: body) if feedback
   end
 
+  def trigger
+    case @dispatch.status
+    when 'accepted'
+      accept!
+    when 'completed'
+      complete!
+    when 'pending'
+      pending!
+    when 'rejected'
+      reject!
+    end
+  end
+
+private
+
   def accept!
-    @dispatch.update_attribute(:accepted_at, Time.now)
-    @report.logs.create!(author: @responder, body: "*** Accepted the dispatch ***")
+    @dispatch.accept!
+    accept_dispatch_notification
     acknowledge_acceptance
-    primary_responder
+    notify_about_primary_responder
     notify_reporter
   end
 
@@ -39,14 +56,28 @@ class DispatchMessanger
   end
 
   def pending!
-    responder_synopses.each { |snippet| Telephony.send(snippet, @responder.phone) }
+    Telephony.send(responder_synopses, @responder.phone)
   end
 
   def reject!
     acknowledge_rejection
   end
 
-private
+  def accept_dispatch_notification
+    @report.logs.create!(author: @responder, body: "*** Accepted the dispatch ***")
+  end
+
+  def accepted_dispatches
+    @report.dispatches.accepted
+  end
+
+  def multi_accepted_responders?
+    accepted_dispatches.count > 1
+  end
+
+  def primary_responder
+    accepted_dispatches.first.responder
+  end
 
   def acknowledge_acceptance
     Telephony.send("You have been assigned to an incident at #{@report.address}.", @responder.phone)
@@ -68,16 +99,15 @@ private
     Telephony.send(reporter_synopsis, @report.phone)
   end
 
-  def primary_responder
-    if @report.accepted_dispatches.count > 1 && primary = @report.accepted_dispatches.first.responder
-      Telephony.send("The primary responder for this report is: #{primary.name} – #{primary.phone}", @responder.phone)
+  def notify_about_primary_responder
+    if multi_accepted_responders?
+      Telephony.send("The primary responder for this report is: #{primary_responder.name} – #{primary_responder.phone}", @responder.phone)
     end
   end
 
-
   def reporter_synopsis
-    if @report.accepted_dispatches.count > 1 && primary = @report.accepted_dispatches.first.responder
-      "#{@responder.name} - #{@responder.phone} is on the way to help #{primary.name}."
+    if multi_accepted_responders?
+      "#{@responder.name} - #{@responder.phone} is on the way to help #{primary_responder.name}."
     else
       "INCIDENT RESPONSE: #{@responder.name} is on the way. #{@responder.phone}"
     end
@@ -90,11 +120,11 @@ private
       "#{[@report.race, @report.gender, @report.age].delete_blank * '/'}",
       @report.setting,
       @report.nature
-    ].delete_blank
+    ].delete_blank * ' | '
   end
 
   def thank_responder
-    @report.accepted_responders.each do |responder|
+    Responder.accepted(@report.id).each do |responder|
       Telephony.send("The report is now completed, thanks for your help! You are now available to be dispatched.", responder.phone)
     end
   end

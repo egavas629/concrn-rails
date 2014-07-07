@@ -6,14 +6,14 @@
           = "Transcript#{' with ' if report.accepted? }"
         .col-sm-6
           %span{style: 'float:right;'}
-            - report.accepted_responders.each do |responder|
+            - Responder.accepted(report.id).each do |responder|
               .responder{style: 'float:right;'}
                 = link_to responder.name, responder
                 = "@ #{responder.phone}"
               %br
     %table.table#transcript
       %tbody
-        - report.logs.each_with_index do |log, i|
+        - report.logs.each do |log|
           - log_presenter = LogPresenter.new(log)
           %tr.log-entry{id: log.id}
             = log_presenter.created_at

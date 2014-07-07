@@ -11,15 +11,24 @@ class Report < ActiveRecord::Base
   # CALLBACKS #
   has_attached_file   :image
   before_validation   :clean_image, :clean_observations
-  after_validation    :set_completed! if :status_changed?
+  after_validation    :set_completed!, if: :archived_or_completed?
   after_commit        :push_reports
 
   # CONSTANTS #
-  Gender            = ['Male', 'Female', 'Other']
   AgeGroups         = ['Youth (0-17)', 'Young Adult (18-34)', 'Adult (35-64)', 'Senior (65+)']
-  RaceEthnicity     = ['Hispanic or Latino', 'American Indian or Alaska Native', 'Asian', 'Black or African American', 'Native Hawaiian or Pacific Islander', 'White', 'Other/Unknown']
   CrisisSetting     = ['Public Space', 'Workplace', 'School', 'Home', 'Other']
   CrisisObservation = ['At-risk of harm', 'Under the influence', 'Anxious', 'Depressed', 'Aggarvated', 'Threatening']
+  Gender            = ['Male', 'Female', 'Other']
+  RaceEthnicity     = ['Hispanic or Latino', 'American Indian or Alaska Native', 'Asian', 'Black or African American', 'Native Hawaiian or Pacific Islander', 'White', 'Other/Unknown']
+  Status            = ['archived', 'completed', 'pending']
+
+  # VALIDATIONS #
+  validates :address, presence: true
+  validates_inclusion_of :status, in: Status
+  validates_inclusion_of :gender, in: Gender, allow_nil: true
+  validates_inclusion_of :age, in: AgeGroups, allow_nil: true
+  validates_inclusion_of :race, in: RaceEthnicity, allow_nil: true
+  validates_inclusion_of :setting, in: CrisisSetting, allow_nil: true
 
   # SCOPE #
   scope :accepted, -> do
@@ -27,7 +36,7 @@ class Report < ActiveRecord::Base
       .order("reports.created_at DESC").references(:dispatches)
   end
 
-  scope :completed, -> { where("reports.status = 'archived' OR reports.status = 'completed'") }
+  scope :completed, -> { where(status: %w(completed archived)) }
 
   scope :pending, -> do
     includes(:dispatches).where(status: "pending").where.not(id: accepted.map(&:id))
@@ -40,25 +49,9 @@ class Report < ActiveRecord::Base
   end
 
   # INSTANCE METHODS #
-  def accepted_responders
-    responders.includes(:dispatches).where(:dispatches => {report_id: id, status: %w(accepted completed)})
-  end
-
-  def accepted_dispatches
-    dispatches.accepted.order(:accepted_at)
-  end
-
-  def clean_image
-    image.clear if delete_image == '1'
-  end
-
-  def clean_observations
-    observations.delete_if(&:empty?) if observations_changed?
-  end
-
   def current_status
     if status == 'pending'
-      if accepted_dispatches.present?
+      if Dispatch.accepted(id).present?
         'active'
       elsif current_pending?
         'pending'
@@ -74,27 +67,12 @@ class Report < ActiveRecord::Base
     Report.pending.include?(self)
   end
 
-
-  def freshness
-    minutes_ago = ((Time.now - created_at) / 60).round
-    case minutes_ago
-    when 0..2
-      'fresh'
-    when 3..4
-      'semi-fresh'
-    when 5..9
-      'stale'
-    else
-      'old'
-    end
-  end
-
   def dispatch!(responder)
     dispatches.create!(responder: responder)
   end
 
   def accepted?
-    accepted_responders.any?
+    Responder.accepted(id).any?
   end
 
   def archived?
@@ -106,28 +84,32 @@ class Report < ActiveRecord::Base
   end
 
   def archived_or_completed?
-    %w(archived completed).include?(status)
+    archived? || completed?
   end
 
   def complete!
-    update_attribute(:status, 'completed')
+    update_attributes!(:status => 'completed')
   end
 
   def set_completed!
     if %w(archived completed).include?(status)
       update_attributes(completed_at: Time.now) unless completed_at.present?
       dispatches.pending.each {|i| i.update_attribute(:status, 'rejected')}
-      accepted_dispatches.each {|i| i.update_attribute(:status, 'completed')}
+      Dispatch.accepted(id).each {|i| i.update_attribute(:status, 'completed')}
     end
-  end
-
-  def google_maps_address
-    "https://maps.google.com/?q=#{address}"
   end
 
 private
 
+  def clean_image
+    image.clear if delete_image == '1'
+  end
+
+  def clean_observations
+    observations.delete_if(&:blank?) if observations_changed?
+  end
+
   def push_reports
-    Pusher.trigger('reports-responders' , "refresh", {})
+    Push.refresh
   end
 end

@@ -25,13 +25,9 @@
   / = :lat(@location.latitude)
   / = :long(@location.longitude)
 
-:javascript
-  $('#is-person').on('change', function(){
-    var status;
-    if(this.checked){
-      status = 'show';
-    }else{
-      status = 'hide';
-    }
-    $('#person-fields')[status]();
-  })
+= content_for :footer_js do
+  :javascript
+    $(document).on('change', '#is-person', function(){
+      var status = this.checked ? 'show' : 'hide';
+      $('#person-fields')[status]();
+    });

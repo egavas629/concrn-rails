@@ -11,9 +11,7 @@ class Dispatch < ActiveRecord::Base
 
   # SCOPE #
   default_scope    -> { order(created_at: :desc) }
-  scope :accepted, -> { where(status: %w(accepted completed)) }
   scope :pending,  -> { where(status: 'pending') }
-
   scope :not_rejected, -> do
     where.not(status: 'rejected')
       .joins(:responder).order('dispatches.status', 'dispatches.updated_at')
@@ -25,11 +23,28 @@ class Dispatch < ActiveRecord::Base
   after_commit :push_reports
 
   # CLASS METHODS #
-  def self.latest
-    first
+  def self.accepted(report_id=nil)
+    query = where(status: %w(accepted completed)).order(:accepted_at)
+    report_id ? query.where(report_id: report_id) : query
+  end
+
+  def self.completed_count(responder_id=nil)
+    query = where(status: "completed")
+    query = responder_id ? query.where(responder_id: responder_id) : query
+    query.count
+  end
+
+  def self.rejected_count(responder_id=nil)
+    query = where(status: "rejected")
+    query = responder_id ? query.where(responder_id: responder_id) : query
+    query.count
   end
 
   # INSTANCE METHODS #
+  def accept!
+    update_attributes(accepted_at: Time.now) if accepted?
+  end
+
   def accepted?
     status == "accepted"
   end
@@ -49,21 +64,11 @@ class Dispatch < ActiveRecord::Base
 private
 
   def messanger
-    dispatch_messanger = DispatchMessanger.new(responder)
-    case status
-    when 'accepted'
-      dispatch_messanger.accept!
-    when 'completed'
-      dispatch_messanger.complete!
-    when 'pending'
-      dispatch_messanger.pending!
-    when 'rejected'
-      dispatch_messanger.reject!
-    end
+    DispatchMessanger.new(responder).trigger
   end
 
   def push_reports
-    Pusher.trigger('reports-responders' , "refresh", {})
+    Push.refresh
   end
 
 end

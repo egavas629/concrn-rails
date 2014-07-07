@@ -1,4 +1,5 @@
-= content_tag_for :tr, report, class: "freshness-#{report.freshness}" do
+- report_presenter = ReportPresenter.new(report)
+= content_tag_for :tr, report, class: "freshness-#{report_presenter.freshness}" do
   %td{title: report.created_at.to_s}
     %strong
       .digits= "#{report.created_at.strftime("%I:%M %p")}"
@@ -33,7 +34,7 @@
       %dt Observations
       %dd= report.observations * ', '
 
-  %td= link_to report.address, report.google_maps_address, target: '_blank'
+  %td= link_to report.address, report_presenter.google_maps_address, target: '_blank'
 
   %td{class: "report-#{report.id}-dispatch"}
     = render "dispatches/create", report: report, responders: responders unless report.archived_or_completed?

@@ -1,22 +1,27 @@
+require 'faker'
+
 FactoryGirl.define do
   factory :dispatcher do
     email         { Faker::Internet.email }
-    phone         { '2133733979' }
+    phone         { Faker::PhoneNumber.phone_number }
     password      { 'password' }
     name          { Faker::Name.name }
-    # availability  { false }
   end
 
   factory :responder do
     email         { Faker::Internet.email }
-    phone         { ['5103874543', '2133733979'].sample }
+    phone         { Faker::PhoneNumber.phone_number }
     password      { 'password' }
     name          { Faker::Name.name }
-    # availability  { true }
+    active        { true }
 
     trait(:jacob) do
      name "Jacob"
      phone '6502481396'
+    end
+
+    trait(:on_shift) do
+      after(:create) { |r| create(:shift, responder: r) }
     end
   end
 end

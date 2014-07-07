@@ -1,14 +1,20 @@
 FactoryGirl.define do
   factory :dispatch do
-    association :responder
+    association :responder, :on_shift
     association :report
 
     trait(:accepted) do
-      after(:create) {|d| d.reject! }
+      status      { 'accepted' }
+      accepted_at { Time.now }
+    end
+
+    trait(:completed) do
+      status      { 'completed' }
+      accepted_at { Time.now }
     end
 
     trait(:rejected) do
-      after(:create) {|d| d.accept! }
+      status { 'rejected' }
     end
   end
 end
