@@ -2,58 +2,21 @@
 %html
   %head
     %title Concrn
-    = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
     = csrf_meta_tags
-    %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}
+    = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
     %link{href: asset_path("concrn-favicon.png"), rel: "shortcut icon"}
+    %link{href:'http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900', rel: 'stylesheet'}
+    %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}
 
   %body{'data-pusher-key' => ENV['PUSHER_KEY']}
     = conditional_nav_tag do
-      .container
-        .navbar-header
-          %button.navbar-toggle{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", type: "button"}
-            %img{src: asset_path("mobile-menu-05.png")}/
-            %span.sr-only Toggle navigation
-            %span.icon-bar
-            %span.icon-bar
-            %span.icon-bar
-          %a.navbar-brand{href: "/"}
-
-        .navbar-collapse.collapse.drop-nav
-          - if user_signed_in? && current_user.role == 'dispatcher'
-
-            %ul.nav.navbar-nav
-              %li= link_to 'Dispatch', reports_path
-              %li= link_to "Active", active_reports_path
-              %li= link_to "History", history_reports_path
-              %li= link_to "Responders", responders_path
-              %li= link_to "Create Report", new_report_path
-
-            .navbar-right.navbar-text
-              Logged in as
-              %strong= current_user.email
-              = link_to 'Profile', edit_user_registration_path, class: 'navbar-link'
-              |
-              = link_to "Logout", destroy_user_session_path, method: :delete, class: 'navbar-link'
-
-          - else
-            #sign-in-form
-              = simple_form_for(:user, url: session_path(:user), html: {class: "navbar-form navbar-right"}) do |f|
-                = f.input :email, placeholder: "email",  label: false
-                = f.input :password, type: :password, placeholder: "password", label: false
-                = f.submit "Login", class: "btn btn-success"
-
+      = render 'layouts/navbar'
     = yield :before_grid
     .container.main
-      - if notice
-        %p.alert.alert-success= notice
-      - if alert
-        %p.alert.alert-warning= alert
+      = render 'layouts/notifications'
       = yield
-      %footer
-        %br
-        %br
-        %p © Concrn (2014)
-    = javascript_include_tag "//js.pusher.com/2.2/pusher.min.js"
-    = javascript_include_tag "application", "data-turbolinks-track" => true
-    = yield :footer_js
+      = render 'layouts/footer'
+
+  = javascript_include_tag "//js.pusher.com/2.2/pusher.min.js"
+  = javascript_include_tag "application", "data-turbolinks-track" => true
+  = yield :footer_js

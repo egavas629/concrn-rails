@@ -20,15 +20,32 @@ class DispatchMessanger
     elsif !@dispatch.accepted? && !@dispatch.completed?
       status = 'accepted'
     end
-    @dispatch.update_attributes!(status: status) if status
-    give_feedback(body) if feedback
+    # If dispatch changed then update status
+    @dispatch.update_attributes(status: status) if status
+    # Send log if there is a need for feedback
+    @report.logs.create(author: responder, body: body) if feedback
   end
+
+  def trigger
+    case @dispatch.status
+    when 'accepted'
+      accept!
+    when 'completed'
+      complete!
+    when 'pending'
+      pending!
+    when 'rejected'
+      reject!
+    end
+  end
+
+private
 
   def accept!
     @dispatch.accept!
     accept_dispatch_notification
     acknowledge_acceptance
-    primary_responder
+    notify_about_primary_responder
     notify_reporter
   end
 
@@ -39,20 +56,27 @@ class DispatchMessanger
   end
 
   def pending!
-    responder_synopses.each { |snippet| Telephony.send(snippet, @responder.phone) }
+    Telephony.send(responder_synopses, @responder.phone)
   end
 
   def reject!
     acknowledge_rejection
   end
 
-private
   def accept_dispatch_notification
     @report.logs.create!(author: @responder, body: "*** Accepted the dispatch ***")
   end
 
   def accepted_dispatches
     @report.dispatches.accepted
+  end
+
+  def multi_accepted_responders?
+    accepted_dispatches.count > 1
+  end
+
+  def primary_responder
+    accepted_dispatches.first.responder
   end
 
   def acknowledge_acceptance
@@ -75,15 +99,15 @@ private
     Telephony.send(reporter_synopsis, @report.phone)
   end
 
-  def primary_responder
-    if accepted_dispatches.count > 1 && primary = accepted_dispatches.first.responder
-      Telephony.send("The primary responder for this report is: #{primary.name} – #{primary.phone}", @responder.phone)
+  def notify_about_primary_responder
+    if multi_accepted_responders?
+      Telephony.send("The primary responder for this report is: #{primary_responder.name} – #{primary_responder.phone}", @responder.phone)
     end
   end
 
   def reporter_synopsis
-    if accepted_dispatches.count > 1 && primary = accepted_dispatches.first.responder
-      "#{@responder.name} - #{@responder.phone} is on the way to help #{primary.name}."
+    if multi_accepted_responders?
+      "#{@responder.name} - #{@responder.phone} is on the way to help #{primary_responder.name}."
     else
       "INCIDENT RESPONSE: #{@responder.name} is on the way. #{@responder.phone}"
     end
@@ -96,7 +120,7 @@ private
       "#{[@report.race, @report.gender, @report.age].delete_blank * '/'}",
       @report.setting,
       @report.nature
-    ].delete_blank
+    ].delete_blank * ' | '
   end
 
   def thank_responder

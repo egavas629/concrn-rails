@@ -64,17 +64,7 @@ class Dispatch < ActiveRecord::Base
 private
 
   def messanger
-    dispatch_messanger = DispatchMessanger.new(responder)
-    case status
-    when 'accepted'
-      dispatch_messanger.accept!
-    when 'completed'
-      dispatch_messanger.complete!
-    when 'pending'
-      dispatch_messanger.pending!
-    when 'rejected'
-      dispatch_messanger.reject!
-    end
+    DispatchMessanger.new(responder).trigger
   end
 
   def push_reports

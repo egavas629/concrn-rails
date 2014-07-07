@@ -117,33 +117,26 @@ describe Dispatch do
   end
 
   describe '#messanger' do
-    context 'accepted' do
-      subject    { build(:dispatch, status: 'accepted') }
-      it 'DispatchMessanger receives #accept!' do
-        expect_any_instance_of(DispatchMessanger).to receive(:accept!)
-        subject.save!
+    context 'after_create' do
+      subject { build(:dispatch, status: 'accepted') }
+      it 'hits DispatchMessanger#trigger' do
+        expect(subject).to receive(:messanger).once
+        subject.save
       end
     end
-    context 'completed' do
-      subject    { build(:dispatch, status: 'completed') }
-      it 'DispatchMessanger receives #complete!' do
-        expect_any_instance_of(DispatchMessanger).to receive(:complete!)
-        subject.save!
+
+    context 'after_update' do
+      subject { create(:dispatch) }
+
+      it 'hits DispatchMessanger#trigger if status_changed?' do
+        expect(subject).to receive(:messanger).once
+        subject.status = 'rejected'
+        subject.save
       end
-    end
-    context 'pending' do
-      let(:report)    { create(:report) }
-      let(:responder) { create(:responder, :on_shift) }
-      it 'DispatchMessanger receives #pending!' do
-        expect_any_instance_of(DispatchMessanger).to receive(:pending!)
-        report.dispatch!(responder)
-      end
-    end
-    context 'rejected' do
-      subject    { build(:dispatch, status: 'rejected') }
-      it 'DispatchMessanger receives #reject!' do
-        expect_any_instance_of(DispatchMessanger).to receive(:reject!)
-        subject.save!
+
+      it 'doesn\'t hit DispatchMessanger#trigger if status does\'t change' do
+        expect(subject).to_not receive(:messanger)
+        subject.touch
       end
     end
   end

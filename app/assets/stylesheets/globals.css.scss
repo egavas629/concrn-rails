@@ -1,16 +1,15 @@
 @import "bourbon";
 @import "mixins";
-@import "fonts";
 @import "nav";
 @import "pages";
 
 html, body {
-  font-family: $proxima-nova-font;
+  font-family: $lato-font;
   font-size: $root-fs;
 }
 
 input, select, textarea {
-  font-family: $proxima-nova-font;
+  font-family: $lato-font;
 }
 
 .heading-xlarge {
