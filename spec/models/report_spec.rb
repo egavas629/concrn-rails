@@ -5,11 +5,11 @@ describe Report do
   it { should have_many(:logs).dependent(:destroy) }
   it { should have_many(:responders).through(:dispatches) }
   it { should validate_presence_of(:address) }
-  it { should ensure_inclusion_of(:status).in_array(Report::Status) }
-  it { should ensure_inclusion_of(:gender).in_array(Report::Gender).allow_nil(true) }
-  it { should ensure_inclusion_of(:age).in_array(Report::AgeGroups).allow_nil(true) }
-  it { should ensure_inclusion_of(:race).in_array(Report::RaceEthnicity).allow_nil(true) }
-  it { should ensure_inclusion_of(:setting).in_array(Report::CrisisSetting).allow_nil(true) }
+  it { should ensure_inclusion_of(:status).in_array(Report::STATUS) }
+  it { should ensure_inclusion_of(:gender).in_array(Report::GENDER).allow_blank(true) }
+  it { should ensure_inclusion_of(:age).in_array(Report::AGEGROUP).allow_blank(true) }
+  it { should ensure_inclusion_of(:race).in_array(Report::ETHNICITY).allow_blank(true) }
+  it { should ensure_inclusion_of(:setting).in_array(Report::SETTING).allow_blank(true) }
 
   describe 'scopes' do
     let(:report)           { create(:report) }

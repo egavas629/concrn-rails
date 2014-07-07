@@ -8,12 +8,13 @@
       %span.icon-bar
     %a.navbar-brand{href: "/"}
   .navbar-collapse.collapse.drop-nav
-    - if user_signed_in? && current_user.role == 'dispatcher'
+    - if user_signed_in?
       %ul.nav.navbar-nav
-        %li= link_to 'Dispatch', reports_path
-        %li= link_to "Active", active_reports_path
-        %li= link_to "History", history_reports_path
-        %li= link_to "Responders", responders_path
+        - if current_user.role == 'dispatcher'
+          %li= link_to 'Dispatch', reports_path
+          %li= link_to "Active", active_reports_path
+          %li= link_to "History", history_reports_path
+          %li= link_to "Responders", responders_path
         %li= link_to "Create Report", new_report_path
       .navbar-right.navbar-text
         Logged in as
