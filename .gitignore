@@ -20,4 +20,3 @@
 # Ignore application configuration
 /config/application.yml
 /coverage
-rails_best_practices_output.html
