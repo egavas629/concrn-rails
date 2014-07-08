@@ -5,9 +5,13 @@ class Dispatch < ActiveRecord::Base
   delegate :name,    to: :responder, prefix: true
   delegate :address, to: :report,    prefix: true
 
+  # CONSTANTS #
+  STATUS = %w(accepted completed pending rejected)
+
   # VALIDATIONS #
   validates_presence_of :report
   validates_presence_of :responder
+  validates_inclusion_of :status, in: STATUS
 
   # SCOPE #
   default_scope ->    { order(created_at: :desc) }

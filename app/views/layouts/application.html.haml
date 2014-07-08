@@ -4,11 +4,11 @@
     %title Concrn
     = csrf_meta_tags
     = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
+    = javascript_include_tag "//js.pusher.com/2.2/pusher.min.js"
+    = javascript_include_tag "application", "data-turbolinks-track" => true
     %link{href: asset_path("concrn-favicon.png"), rel: "shortcut icon"}
     %link{href:'http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900', rel: 'stylesheet'}
     %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}
-    = javascript_include_tag "application", "data-turbolinks-track" => true
-    = javascript_include_tag "//js.pusher.com/2.2/pusher.min.js"
 
   %body{'data-pusher-key' => ENV['PUSHER_KEY']}
     = conditional_nav_tag do
@@ -18,7 +18,4 @@
       = render 'layouts/notifications'
       = yield
       = render 'layouts/footer'
-
-  = javascript_include_tag "//js.pusher.com/2.2/pusher.min.js"
-  = javascript_include_tag "application", "data-turbolinks-track" => true
   = yield :footer_js

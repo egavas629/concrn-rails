@@ -9,5 +9,5 @@
   %dl
     %dt Dispatched
     %dd
-      - first_dispatch = report.dispatches.not_rejected.first
+      - first_dispatch = non_rejected_dispatches.first
       %abbr.timeago{title: first_dispatch.created_at.getutc.iso8601}= first_dispatch.created_at.to_s

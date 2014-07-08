@@ -57,6 +57,18 @@ class Report < ActiveRecord::Base
   }
 
   # INSTANCE METHODS #
+  def accepted_dispatches
+    dispatches.accepted
+  end
+
+  def multi_accepted_responders?
+    accepted_dispatches.count > 1
+  end
+
+  def primary_responder
+    accepted_dispatches.first.responder
+  end
+
   def current_status
     return status unless status == 'pending'
     if Dispatch.accepted(id).present?

@@ -2,14 +2,14 @@ require 'faker'
 
 FactoryGirl.define do
   factory :dispatcher do
-    email         { Faker::Internet.email }
+    email         { "#{name.downcase.gsub(/[ .]/, '.' => '', ' ' => '.')}@gmail.com" }
     phone         { Faker::PhoneNumber.phone_number }
     password      { 'password' }
     name          { Faker::Name.name }
   end
 
   factory :responder do
-    email         { Faker::Internet.email }
+    email         { "#{name.downcase.gsub(' ','.')}@gmail.com" }
     phone         { Faker::PhoneNumber.phone_number }
     password      { 'password' }
     name          { Faker::Name.name }

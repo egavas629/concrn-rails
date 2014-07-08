@@ -22,7 +22,7 @@ class DispatchMessanger
     # If dispatch changed then update status
     @dispatch.update_attributes(status: status) if status
     # Send log if there is a need for feedback
-    @report.logs.create(author: responder, body: body) if feedback
+    @report.logs.create!(author: @responder, body: body) if feedback
   end
 
   def trigger
@@ -68,18 +68,6 @@ class DispatchMessanger
     )
   end
 
-  def accepted_dispatches
-    @report.dispatches.accepted
-  end
-
-  def multi_accepted_responders?
-    accepted_dispatches.count > 1
-  end
-
-  def primary_responder
-    accepted_dispatches.first.responder
-  end
-
   def acknowledge_acceptance
     Telephony.send(
       "You have been assigned to an incident at #{@report.address}.",
@@ -95,10 +83,6 @@ class DispatchMessanger
     Telephony.send(message, @responder.phone)
   end
 
-  def give_feedback(body)
-    @report.logs.create!(author: @responder, body: body)
-  end
-
   def non_breaktime
     @dispatch.nil? || @dispatch.completed? || @dispatch.pending?
   end
@@ -108,19 +92,19 @@ class DispatchMessanger
   end
 
   def notify_about_primary_responder
-    return false unless multi_accepted_responders?
+    return false unless @report.multi_accepted_responders?
     message = <<-MSG
-      The primary responder for this report is: #{primary_responder.name} –
-      #{primary_responder.phone}
+      The primary responder for this report is: #{@report.primary_responder.name} –
+      #{@report.primary_responder.phone}
     MSG
     Telephony.send(message, @responder.phone)
   end
 
   def reporter_synopsis
-    if multi_accepted_responders?
+    if @report.multi_accepted_responders?
       <<-MSG
         #{@responder.name} - #{@responder.phone} is on the way to help
-        #{primary_responder.name}.
+        #{@report.primary_responder.name}.
       MSG
     else
       "INCIDENT RESPONSE: #{@responder.name} is on the way. #{@responder.phone}"
@@ -138,10 +122,10 @@ class DispatchMessanger
   end
 
   def thank_responder
-    message = <<-LINEEND
+    message = <<-EOF
       The report is now completed, thanks for your help! You are now available
       to be dispatched.
-    LINEEND
+    EOF
     Responder.accepted(@report.id).each do |responder|
       Telephony.send(message, responder.phone)
     end

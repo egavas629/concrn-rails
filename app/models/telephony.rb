@@ -6,12 +6,9 @@ class Telephony
   end
 
   def self.send(body = 'Thanks!', to = nil)
-    if Rails.env.test?
-      true
-    else
-      sleep 1 # Carriers are sloppy.
-      client.account.messages.create(from: OUTGOING_PHONE, to: to, body: body)
-    end
+    return true if Rails.env.test?
+    sleep 1 # Carriers are sloppy.
+    client.account.messages.create(from: OUTGOING_PHONE, to: to, body: body)
   rescue => e
     puts "### ERROR: #{e} ###"
     puts "### MESSAGE NOT SENT TO #{to} ###"
@@ -20,7 +17,6 @@ class Telephony
   def self.receive(body, opts = {})
     responder = Responder.find_by_phone(opts[:from])
     send("#{opts[:from]}: #{opts[:body]}", to: '6507876770') unless responder
-    messanger = DispatchMessanger.new(responder)
-    messanger.respond(body)
+    DispatchMessanger.new(responder).respond(body)
   end
 end
