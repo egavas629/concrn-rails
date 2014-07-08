@@ -4,10 +4,6 @@ class Responder < User
   has_many :reports,    through:   :dispatches
   has_many :shifts,     dependent: :destroy
 
-  # VALIDATIONS #
-  validates :phone, presence: true, uniqueness: true
-  validates :name,  presence: true, uniqueness: true
-
   # CALLBACKS #
   after_validation :make_unavailable!, on: :update
   after_update :push_reports

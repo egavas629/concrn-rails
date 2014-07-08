@@ -31,9 +31,8 @@ gem 'kaminari'
 gem 'factory_girl_rails'
 gem 'faker'
 
-group :development, :test do
-  gem 'rspec-rails'
-end
+# Need it in development so creates specs in future scaffolds/generators
+gem 'rspec-rails', group: %w(development test)
 
 # Environment Variable Handling
 gem 'figaro'

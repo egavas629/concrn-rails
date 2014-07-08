@@ -18,7 +18,7 @@
         %li= link_to "Create Report", new_report_path
       .navbar-right.navbar-text
         Logged in as
-        %strong= current_user.email
+        %strong= "#{current_user.email} (#{current_agency.name})"
         = link_to 'Profile', edit_user_registration_path, class: 'navbar-link'
         |
         = link_to "Logout", destroy_user_session_path, method: :delete, class: 'navbar-link'

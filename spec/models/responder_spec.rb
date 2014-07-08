@@ -4,10 +4,6 @@ describe Responder do
   it { should have_many(:dispatches).dependent(:destroy) }
   it { should have_many(:shifts).dependent(:destroy) }
   it { should have_many(:reports).through(:dispatches) }
-  it { should validate_presence_of(:name) }
-  it { should validate_uniqueness_of(:name) }
-  it { should validate_presence_of(:phone) }
-  it { should validate_uniqueness_of(:phone) }
 
   describe 'scopes' do
     let(:time)                { Time.now }

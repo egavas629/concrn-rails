@@ -1,6 +1,11 @@
 class ApplicationController < ActionController::Base
   before_filter :configure_permitted_parameters, if: :devise_controller?
 
+  def current_agency
+    current_user.try(:agency)
+  end
+  helper_method :current_agency
+
   protected
 
   def configure_permitted_parameters
