@@ -19,20 +19,6 @@ describe Responder do
       it { should include(responder, responder_off, responder_inactive) }
     end
 
-    describe '.active' do
-      subject { Responder.active }
-
-      it { should_not include(responder_inactive) }
-      it { should include(responder, responder_off) }
-    end
-
-    describe '.inactive' do
-      subject { Responder.inactive }
-
-      it { should start_with(responder_inactive) }
-      it { should_not include(responder, responder_off) }
-    end
-
     describe '.on_shift' do
       subject { Responder.on_shift }
 
@@ -67,21 +53,6 @@ describe Responder do
     it { should start_with(responder) }
   end
 
-  # Instance methods
-  describe '#phone=' do
-    subject     { create(:responder, phone: '555 555 5551gsas') }
-    its(:phone) { should eq('5555555551') }
-  end
-
-  describe '#set_password' do
-    subject { build(:responder, password: nil, password_confirmation: nil) }
-    before  { subject.set_password }
-
-    its(:password) { should eq('password') }
-    its(:password_confirmation) { should eq('password') }
-  end
-
-  # Private
   describe '#make_unavailable!' do
     let(:responder) { create(:responder, :on_shift) }
     subject         { responder.shifts }

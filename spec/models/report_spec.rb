@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Report do
+  it { should belong_to(:agency) }
   it { should have_many(:dispatches).dependent(:destroy) }
   it { should have_many(:logs).dependent(:destroy) }
   it { should have_many(:responders).through(:dispatches) }

@@ -7,6 +7,15 @@ FactoryGirl.define do
     password      { 'password' }
     name          { Faker::Name.name }
     association     :agency
+    active        { true }
+
+    trait :dispatcher do
+      role { 'dispatcher' }
+    end
+
+    trait :responder do
+      role { 'responder' }
+    end
 
     factory :dispatcher, class: Dispatcher do
       role { 'dispatcher' }
@@ -14,7 +23,6 @@ FactoryGirl.define do
 
     factory :responder, class: Responder do
       role   {'responder'}
-      active { true }
 
       trait(:on_shift) do
         after(:create) { |r| create(:shift, responder: r) }

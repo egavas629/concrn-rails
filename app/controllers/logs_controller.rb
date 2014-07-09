@@ -1,4 +1,4 @@
-class LogsController < ApplicationController
+class LogsController < DashboardController
   def create
     Log.create! params.require(:log).permit [:body, :author_id, :report_id]
     render nothing: true, status: :ok

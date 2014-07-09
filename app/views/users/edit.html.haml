@@ -1,0 +1,13 @@
+%h2= "Edit #{@user.name}"
+- if @user.responder?
+  - user = @user.become_child
+  - path = user.shifts.started? ? end_shift_user_path(user) : start_shift_user_path(user)
+  = simple_form_for '', url: path, method: :post do |f|
+    .availability
+      = f.check_box :available, class: "available", :label => false, :inline_label => true, checked: user.shifts.started?
+      %strong Available
+
+= simple_form_for @user do |f|
+  = render 'form', f: f
+
+= render 'password_form' unless @user.new_record?

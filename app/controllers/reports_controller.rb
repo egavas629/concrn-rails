@@ -1,6 +1,7 @@
-class ReportsController < ApplicationController
-  before_action :authenticate_user!,   only: %w(index)
-  before_action :ensure_dispatcher,    only: %w(index active history)
+class ReportsController < DashboardController
+  before_action :authenticate_user!,       except: %w(new create)
+  before_action :authenticate_dispatcher!, only: %w(index active history)
+
   before_action :available_responders, only: %w(index active show)
   before_action :find_report,          only: %w(destroy update show download)
 
@@ -61,18 +62,14 @@ class ReportsController < ApplicationController
                          buffer_size: '4096'
   end
 
+  private
+
   def available_responders
     @available_responders = Responder.available
   end
 
-  private
-
   def find_report
     @report = Report.find(params[:id])
-  end
-
-  def ensure_dispatcher
-    redirect_to edit_user_registration_path unless current_user.role == 'dispatcher'
   end
 
   def report_params

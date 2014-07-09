@@ -1,4 +1,4 @@
-class DispatchesController < ApplicationController
+class DispatchesController < DashboardController
   def create
     if responder ? report.dispatch!(responder) : false
       flash[:notice] = "#{responder.name} has been dispatched to help #{report.name}."

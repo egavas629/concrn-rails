@@ -9,9 +9,7 @@ class Responder < User
   after_update :push_reports
 
   # SCOPES #
-  default_scope ->    { where(role: 'responder') }
-  scope :active,   -> { where(active: true) }
-  scope :inactive, -> { where(active: false) }
+  default_scope    -> { where(role: 'responder') }
   scope :on_shift, -> { where(id: Shift.on.map(&:responder_id)) }
 
   scope :available, lambda {
@@ -32,17 +30,6 @@ class Responder < User
   end
 
   # INSTANCE METHODS #
-  def phone=(new_phone)
-    write_attribute(:phone, NumberSanitizer.sanitize(new_phone))
-  rescue NoMethodError
-    errors.add(:phone, 'Phone Number is not valid')
-  end
-
-  def set_password
-    self.password              = 'password'
-    self.password_confirmation = 'password'
-  end
-
   private
 
   def make_unavailable!

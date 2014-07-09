@@ -3,6 +3,7 @@ class Report < ActiveRecord::Base
   serialize :observations, Array
 
   # RELATIONS #
+  belongs_to :agency
   has_many :dispatches, dependent: :destroy
   has_many :logs,       dependent: :destroy
   has_many :responders, through:   :dispatches

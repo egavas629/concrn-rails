@@ -1,4 +1,4 @@
-class ShiftsController < ApplicationController
+class ShiftsController < DashboardController
   before_action :find_responder
 
   def start
