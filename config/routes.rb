@@ -1,5 +1,5 @@
 Streetmom::Application.routes.draw do
-  devise_for :users, controllers: { registrations: 'registrations'}, path_prefix: 'my'
+  devise_for :users, path_prefix: 'my'
 
   resources :reports, except: %w(edit) do
     collection do

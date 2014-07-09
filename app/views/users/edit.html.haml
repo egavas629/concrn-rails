@@ -9,5 +9,5 @@
 
 = simple_form_for @user do |f|
   = render 'form', f: f
-
-= render 'password_form' unless @user.new_record?
+%hr
+= render 'password_form', user: current_user if !@user.new_record? && @user == current_user
