@@ -62,12 +62,12 @@ describe Dispatch do
     end
   end
 
-  describe '#accept!' do
-    subject { build(:dispatch) }
-    before { Dispatch.any_instance.stub(:messanger) }
+  describe '#accept' do
+    subject { create(:dispatch) }
+    before  { Dispatch.any_instance.stub(:messanger) }
 
     context 'status not accepted' do
-      before { subject.accept! }
+      before { subject.accept }
       its(:accepted_at) { should be_nil }
     end
 
@@ -75,7 +75,7 @@ describe Dispatch do
       let(:day) { time.day }
       before do
         subject.status = 'accepted'
-        subject.accept!
+        subject.accept
       end
       its("accepted_at.day") { should eq(day) }
     end
@@ -119,8 +119,8 @@ describe Dispatch do
 
   describe '#messanger' do
     context 'after_create' do
-      subject { build(:dispatch, status: 'accepted') }
-      it 'hits DispatchMessanger#trigger' do
+      subject { build(:dispatch) }
+      it 'runs' do
         expect(subject).to receive(:messanger).once
         subject.save
       end
@@ -129,15 +129,19 @@ describe Dispatch do
     context 'after_update' do
       subject { create(:dispatch) }
 
-      it 'hits DispatchMessanger#trigger if status_changed?' do
-        expect(subject).to receive(:messanger).once
-        subject.status = 'rejected'
-        subject.save
+      context 'status changed' do
+        before { subject.status = 'rejected' }
+        it 'runs' do
+          expect(subject).to receive(:messanger).once
+          subject.save
+        end
       end
 
-      it 'doesn\'t hit DispatchMessanger#trigger if status does\'t change' do
-        expect(subject).to_not receive(:messanger)
-        subject.touch
+      context 'status unchanged' do
+        it 'doesn\'t run' do
+          expect(subject).to_not receive(:messanger)
+          subject.save
+        end
       end
     end
   end

@@ -14,12 +14,14 @@ FactoryGirl.define do
     end
 
     trait(:archived) do
-      status { 'archived' }
+      after(:create) { |report| report.update_attributes(status: 'archived') }
     end
 
     trait(:completed) do
-      status { 'completed' }
-      after(:create) { |report| create(:dispatch, :completed, report: report) }
+      after(:create) do |report|
+        create(:dispatch, :completed, report: report)
+        report.update_attributes(status: 'completed')
+      end
     end
 
     trait(:pending) do

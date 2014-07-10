@@ -4,17 +4,21 @@ FactoryGirl.define do
     association :report
 
     trait(:accepted) do
-      status      { 'accepted' }
-      accepted_at { Time.now }
+      after(:create) do |d|
+        d.update_attributes(status: 'accepted', accepted_at: Time.now)
+      end
     end
 
     trait(:completed) do
-      status      { 'completed' }
-      accepted_at { Time.now }
+      after(:create) do |d|
+        d.update_attributes(status: 'completed', accepted_at: Time.now)
+      end
     end
 
     trait(:rejected) do
-      status { 'rejected' }
+      after(:create) do |d|
+        d.update_attributes(status: 'rejected')
+      end
     end
   end
 end

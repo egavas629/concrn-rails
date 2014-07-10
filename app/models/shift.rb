@@ -18,12 +18,12 @@ class Shift < ActiveRecord::Base
     query.count > 0
   end
 
-  def self.start!(type = 'web')
-    create!(start_time: Time.now, start_via: type)
+  def self.start(type = 'web')
+    create(start_time: Time.now, start_via: type)
   end
 
-  def self.end!(type = 'web')
-    first.update_attributes!(end_time: Time.now, end_via: type)
+  def self.end(type = 'web')
+    first.update_attributes(end_time: Time.now, end_via: type)
   end
 
   # INSTANCE METHODS #

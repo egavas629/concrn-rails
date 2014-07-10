@@ -9,7 +9,7 @@ class Responder < User
   validates :name,  presence: true, uniqueness: true
 
   # CALLBACKS #
-  after_validation :make_unavailable!, on: :update
+  after_validation :make_unavailable, on: :update
   after_update :push_reports
 
   # SCOPES #
@@ -49,8 +49,8 @@ class Responder < User
 
   private
 
-  def make_unavailable!
-    shifts.end!('web') if active_changed? && !active
+  def make_unavailable
+    shifts.end('web') if active_changed? && !active
   end
 
   def push_reports

@@ -3,7 +3,7 @@ class ShiftsController < ApplicationController
 
   def start
     respond_to do |format|
-      if @responder.shifts.start!
+      if @responder.shifts.start
         flash[:notice] = "#{@responder.name}'s shift has started."
       else
         flash[:alert]  = "Error starting #{@responder.name}'s shift."
@@ -14,7 +14,7 @@ class ShiftsController < ApplicationController
 
   def end
     respond_to do |format|
-      if @responder.shifts.end!
+      if @responder.shifts.end
         flash[:notice] = "#{@responder.name}'s shift has ended."
       else
         flash[:alert]  = "Error ending #{@responder.name}'s shift."

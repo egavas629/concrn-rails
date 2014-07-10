@@ -65,7 +65,7 @@ describe Responder do
     let(:responder_two)       { create(:responder, :on_shift) }
     let(:responder_three)     { create(:responder, :on_shift) }
     subject                   { Responder.accepted(report.id)}
-    before                    { report.dispatch!(responder_two) }
+    before                    { report.dispatch(responder_two) }
 
     it { should_not include(responder_two, responder_three) }
     it { should start_with(responder) }
@@ -86,13 +86,13 @@ describe Responder do
   end
 
   # Private
-  describe '#make_unavailable!' do
+  describe '#make_unavailable' do
     let(:responder) { create(:responder, :on_shift) }
     subject         { responder.shifts }
 
     before do
       responder.active = false
-      responder.send(:make_unavailable!)
+      responder.send(:make_unavailable)
     end
 
     its(:started?) { should be_false }

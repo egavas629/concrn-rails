@@ -38,21 +38,21 @@ describe Shift do
 
     its('shifts.started?') { should be_false }
     it 'true if in-shift' do
-      subject.shifts.start!
+      subject.shifts.start
       expect(subject.shifts.started?).to be_true
     end
   end
 
-  describe '.start!' do
+  describe '.start' do
     subject { create(:responder) }
-    before  { subject.shifts.start! }
+    before  { subject.shifts.start }
     its('shifts.count') { should eq(1) }
     its('shifts.first.start_via') { should eq('web') }
   end
 
-  describe '.end!' do
+  describe '.end' do
     subject { create(:responder, :on_shift) }
-    before  { subject.shifts.end! }
+    before  { subject.shifts.end }
     its('shifts.started?') { should be_false }
   end
 
