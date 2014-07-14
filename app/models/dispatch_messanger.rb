@@ -106,7 +106,7 @@ class DispatchMessanger
         #{@responder.name} - #{@responder.phone} is on the way to help
         #{@report.primary_responder.name}.
       MSG
-    elsif @report.agency.call_phone.present?
+    elsif @report.agency.present? && @report.agency.call_phone.present?
       agency = @report.agency
       "INCIDENT RESPONSE: #{@responder.name} is on the way. Contact the #{agency.name} at #{agency.call_phone}"
     else

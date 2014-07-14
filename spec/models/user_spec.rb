@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe User do
   it { should belong_to(:agency) }
+  it { should have_many(:shifts).dependent(:destroy) }
   it { should validate_presence_of(:agency) }
   it { should validate_presence_of(:name) }
   it { should validate_uniqueness_of(:name).scoped_to(:agency_id) }
@@ -26,6 +27,15 @@ describe User do
       subject { User.inactive }
 
       it { should include(inactive_responder, inactive_dispatcher) }
+      it { should_not include(responder, dispatcher) }
+    end
+
+    describe '.on_shift' do
+      let!(:shift_responder)  { create(:user, :responder, :on_shift) }
+      let!(:shift_dispatcher) { create(:user, :dispatcher, :on_shift) }
+      subject                 { User.on_shift }
+
+      it { should include(shift_responder, shift_dispatcher) }
       it { should_not include(responder, dispatcher) }
     end
   end

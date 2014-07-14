@@ -22,6 +22,8 @@
       .observation-checkboxes
         = f.input :observations, as: :check_boxes, collection: Report::OBSERVATION
     = f.input :nature, label: "Additional Description"
+    = f.input :agency_id, input_html: { value: current_user.agency_id },
+      as: :hidden if user_signed_in?
     = f.submit 'Submit Report', class: 'btn btn-primary'
 
   / = @location.address

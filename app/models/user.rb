@@ -4,8 +4,9 @@ class User < ActiveRecord::Base
 
   # RELATIONS #
   belongs_to :agency
-  has_one :responder,  class_name: 'Responder', foreign_key: :id
-  has_one :dispatcher, class_name: 'Dispatcher', foreign_key: :id
+  has_one    :responder,  class_name: 'Responder', foreign_key: :id
+  has_one    :dispatcher, class_name: 'Dispatcher', foreign_key: :id
+  has_many   :shifts,     dependent: :destroy
 
   # CONSTANTS #
   ROLES = %w(responder dispatcher)
@@ -21,6 +22,7 @@ class User < ActiveRecord::Base
   scope :inactive,    -> { where(active: false) }
   scope :dispatchers, -> { where(role: 'dispatcher') }
   scope :responders,  -> { where(role: 'responder') }
+  scope :on_shift,    -> { where(id: Shift.on.map(&:user_id)) }
 
   # INSTANCE METHODS #
   def become_child

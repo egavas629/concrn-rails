@@ -3,15 +3,13 @@ class Responder < User
   belongs_to :user, class_name: User, foreign_key: :id
   has_many :dispatches, dependent: :destroy
   has_many :reports,    through:   :dispatches
-  has_many :shifts,     dependent: :destroy
 
   # CALLBACKS #
   after_validation :make_unavailable!, on: :update
   after_update :push_reports
 
   # SCOPES #
-  default_scope    -> { where(role: 'responder') }
-  scope :on_shift, -> { where(id: Shift.on.map(&:responder_id)) }
+  default_scope -> { where(role: 'responder') }
 
   scope :available, lambda {
     find_by_sql(%Q{

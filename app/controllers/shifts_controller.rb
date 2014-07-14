@@ -1,12 +1,12 @@
 class ShiftsController < DashboardController
-  before_action :find_responder
+  before_action :find_user
 
   def start
     respond_to do |format|
-      if @responder.shifts.start!
-        flash[:notice] = "#{@responder.name}'s shift has started."
+      if @user.shifts.start!
+        flash[:notice] = "#{@user.name}'s shift has started."
       else
-        flash[:alert]  = "Error starting #{@responder.name}'s shift."
+        flash[:alert]  = "Error starting #{@user.name}'s shift."
       end
       format.html { redirect_to :back }
     end
@@ -14,10 +14,10 @@ class ShiftsController < DashboardController
 
   def end
     respond_to do |format|
-      if @responder.shifts.end!
-        flash[:notice] = "#{@responder.name}'s shift has ended."
+      if @user.shifts.end!
+        flash[:notice] = "#{@user.name}'s shift has ended."
       else
-        flash[:alert]  = "Error ending #{@responder.name}'s shift."
+        flash[:alert]  = "Error ending #{@user.name}'s shift."
       end
       format.html { redirect_to :back }
     end
@@ -25,11 +25,11 @@ class ShiftsController < DashboardController
 
 private
 
-  def find_responder
-    @responder = current_agency.responders.find(responder_id)
+  def find_user
+    @user = current_agency.users.find(user_id)
   end
 
-  def responder_id
+  def user_id
     params[:id]
   end
 

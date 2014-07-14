@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140708215742) do
+ActiveRecord::Schema.define(version: 20140714205422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,12 +82,12 @@ ActiveRecord::Schema.define(version: 20140708215742) do
     t.datetime "end_time"
     t.string   "start_via"
     t.string   "end_via"
-    t.integer  "responder_id"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "shifts", ["responder_id"], name: "index_shifts_on_responder_id", using: :btree
+  add_index "shifts", ["user_id"], name: "index_shifts_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",          null: false

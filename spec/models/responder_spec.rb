@@ -3,13 +3,11 @@ require 'spec_helper'
 describe Responder do
   it { should belong_to(:user).class_name(User) }
   it { should have_many(:dispatches).dependent(:destroy) }
-  it { should have_many(:shifts).dependent(:destroy) }
   it { should have_many(:reports).through(:dispatches) }
 
   describe 'scopes' do
     let(:time)                { Time.now }
     let(:responder)           { create(:responder, :on_shift, created_at: time - 10.minutes) }
-    let(:responder_off)       { create(:responder, created_at: time - 5.minutes) }
     let(:responder_inactive)  { create(:responder, active: false, created_at: time - 3.minutes) }
     let(:dispatcher)          { create(:dispatcher) }
 
@@ -17,20 +15,13 @@ describe Responder do
       subject { Responder.all }
 
       it { should_not include(dispatcher) }
-      it { should include(responder, responder_off, responder_inactive) }
-    end
-
-    describe '.on_shift' do
-      subject { Responder.on_shift }
-
-      it { should_not include(responder_off, responder_inactive) }
-      it { should include(responder) }
+      it { should include(responder, responder_inactive) }
     end
 
     describe '.available' do
       subject { Responder.available }
 
-      it { should_not include(responder_off, responder_inactive) }
+      it { should_not include(responder_inactive) }
       it { should include(responder) }
 
       it 'excludes accepted/pending responders' do
