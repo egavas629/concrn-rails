@@ -59,15 +59,15 @@ describe User do
     its(:phone) { should eq('5555555551') }
   end
 
-  describe '#become_child' do
-    context 'responder' do
-      subject { build(:user, :responder) }
-      its(:become_child) { should be_instance_of(Responder) }
-    end
-
-    context 'dispatcher' do
-      subject { build(:user, :dispatcher) }
-      its(:become_child) { should be_instance_of(Dispatcher) }
-    end
-  end
+  # describe '#become_child' do
+  #   context 'responder' do
+  #     subject { build(:user, :responder) }
+  #     its(:become_child) { should be_instance_of(Responder) }
+  #   end
+  #
+  #   context 'dispatcher' do
+  #     subject { build(:user, :dispatcher) }
+  #     its(:become_child) { should be_instance_of(Dispatcher) }
+  #   end
+  # end
 end

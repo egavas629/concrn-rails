@@ -1,5 +1,6 @@
 class Responder < User
   # RELATIONS #
+  belongs_to :user, class_name: User, foreign_key: :id
   has_many :dispatches, dependent: :destroy
   has_many :reports,    through:   :dispatches
   has_many :shifts,     dependent: :destroy

@@ -32,7 +32,7 @@ gem 'factory_girl_rails'
 gem 'faker'
 
 # Need it in development so creates specs in future scaffolds/generators
-gem 'rspec-rails', group: %w(development test)
+gem 'rspec-rails', '~> 2.14.1', group: %w(development test)
 
 # Environment Variable Handling
 gem 'figaro'

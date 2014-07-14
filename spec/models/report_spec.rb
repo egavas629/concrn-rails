@@ -11,6 +11,7 @@ describe Report do
   it { should ensure_inclusion_of(:age).in_array(Report::AGEGROUP).allow_blank(true) }
   it { should ensure_inclusion_of(:race).in_array(Report::ETHNICITY).allow_blank(true) }
   it { should ensure_inclusion_of(:setting).in_array(Report::SETTING).allow_blank(true) }
+  it { should have_attached_file(:image) }
 
   describe 'scopes' do
     let(:report)           { create(:report) }

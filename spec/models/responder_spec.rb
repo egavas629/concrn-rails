@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Responder do
+  it { should belong_to(:user).class_name(User) }
   it { should have_many(:dispatches).dependent(:destroy) }
   it { should have_many(:shifts).dependent(:destroy) }
   it { should have_many(:reports).through(:dispatches) }

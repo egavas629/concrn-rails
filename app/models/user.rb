@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
 
   # RELATIONS #
   belongs_to :agency
+  has_one :responder,  class_name: 'Responder', foreign_key: :id
+  has_one :dispatcher, class_name: 'Dispatcher', foreign_key: :id
 
   # CONSTANTS #
   ROLES = %w(responder dispatcher)
@@ -22,7 +24,7 @@ class User < ActiveRecord::Base
 
   # INSTANCE METHODS #
   def become_child
-    becomes(responder? ? Responder : Dispatcher)
+    dispatcher || responder
   end
 
   def dispatcher?

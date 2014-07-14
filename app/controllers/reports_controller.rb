@@ -10,16 +10,16 @@ class ReportsController < DashboardController
   end
 
   def index
-    @unassigned_reports = Report.unassigned
-    @pending_reports = Report.pending
+    @unassigned_reports = current_agency.reports.unassigned
+    @pending_reports = current_agency.reports.pending
   end
 
   def active
-    @reports = Report.accepted
+    @reports = current_agency.reports.accepted
   end
 
   def history
-    reports = ReportFilter.new(params).query
+    reports = ReportFilter.new(current_agency.id, params).query
     @reports = params[:show_all] ? reports : reports.page(params[:page])
   end
 
@@ -65,11 +65,11 @@ class ReportsController < DashboardController
   private
 
   def available_responders
-    @available_responders = Responder.available
+    @available_responders = current_agency.responders.available
   end
 
   def find_report
-    @report = Report.find(params[:id])
+    @report = current_agency.reports.find(params[:id])
   end
 
   def report_params

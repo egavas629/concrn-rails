@@ -38,6 +38,8 @@ class Report < ActiveRecord::Base
   validates_inclusion_of :age, in: AGEGROUP, allow_blank: true
   validates_inclusion_of :race, in: ETHNICITY, allow_blank: true
   validates_inclusion_of :setting, in: SETTING, allow_blank: true
+  validates_attachment :image,
+    :content_type => { :content_type => %w(image/jpeg image/jpg image/png) }
 
   # SCOPE #
   scope :accepted, lambda {

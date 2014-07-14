@@ -17,8 +17,8 @@ class Dispatch < ActiveRecord::Base
   default_scope ->    { order(created_at: :desc) }
   scope :pending, ->  { where(status: 'pending') }
   scope :not_rejected, lambda {
-    where.not(status: 'rejected')
-      .joins(:responder).order('dispatches.status', 'dispatches.updated_at')
+    where.not(status: 'rejected').joins(:responder)
+      .order('dispatches.status', 'dispatches.updated_at')
   }
 
   # CALLBACKS #
