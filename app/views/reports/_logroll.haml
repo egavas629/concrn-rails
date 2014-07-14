@@ -8,7 +8,7 @@
           %span{style: 'float:right;'}
             - Responder.accepted(report.id).each do |responder|
               .responder{style: 'float:right;'}
-                = link_to responder.name, responder
+                = link_to responder.name, user_path(responder)
                 = "@ #{responder.phone}"
               %br
     %table.table#transcript

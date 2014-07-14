@@ -26,7 +26,7 @@ class ShiftsController < DashboardController
 private
 
   def find_responder
-    @responder = Responder.find(responder_id)
+    @responder = current_agency.responders.find(responder_id)
   end
 
   def responder_id

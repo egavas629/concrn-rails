@@ -1,4 +1,4 @@
 .row
   %h2.col-sm-6 Deactivated Users
   .table-top-button.col-sm-1.col-sm-offset-4= link_to 'Active Users', users_path, class: 'btn btn-primary'
-= render 'users_table', deactivated: true, users: @users
+= render 'users_table', deactivated: true, dispatchers: @dispatchers, responders: @responders

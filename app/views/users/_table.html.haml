@@ -12,7 +12,6 @@
         %th Current Status
   %tbody
     - users.each do |user|
-      - user = user.become_child
       = content_tag_for :tr, user do
         %th= link_to user.name, user_path(user)
         %td.phone= user.phone

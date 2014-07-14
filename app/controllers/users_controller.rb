@@ -13,7 +13,7 @@ class UsersController < DashboardController
   end
 
   def by_phone
-    @user = User.find_by_phone(NumberSanitizer.sanitize(params[:phone]))
+    @user = current_agency.users.find_by_phone(NumberSanitizer.sanitize(params[:phone]))
     if @user.present?
       render json: @user
     else
@@ -22,18 +22,20 @@ class UsersController < DashboardController
   end
 
   def deactivated
-    @users =  User.inactive
+    @responders = current_agency.responders.inactive
+    @dispatchers = current_agency.dispatchers.inactive
   end
 
   def edit
   end
 
   def index
-    @users =  User.active
+    @responders = current_agency.responders.active
+    @dispatchers = current_agency.dispatchers.active
   end
 
   def new
-    @user = User.new
+    @user = current_agency.users.new
   end
 
   def show
@@ -51,7 +53,7 @@ class UsersController < DashboardController
   private
 
   def find_user
-    @user = User.find(params[:id])
+    @user = current_agency.users.find(params[:id])
   end
 
   def user_params

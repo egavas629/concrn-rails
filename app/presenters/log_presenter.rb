@@ -17,7 +17,7 @@ class LogPresenter < BasePresenter
     h.content_tag :td, class: 'author', style: 'white-space: nowrap;' do
       h.content_tag :strong do
         if log.author_role == 'responder'
-          h.link_to log.author_name, url.responder_path(log.author)
+          h.link_to log.author_name, url.user_path(log.author)
         else
           log.author_name
         end
