@@ -3,7 +3,6 @@ $(document).ready(function(){
   if(typeof channelName() != 'undefined' && channelName().length > 0 && !window.onunload){
     var pusherKey = $('body').data('pusher-key'),
         pusher    = new Pusher(pusherKey);
-
     pusher.subscribe(channelName());
     pusher.bind("refresh", function(data){
       $(function() {
@@ -38,12 +37,13 @@ $(document).ready(function(){
   }
 
   function addMessage(data){
-    var messageRow = $('#' + data['id'])
+    var logId = 'log_' + data['id'],
+        messageRow = $('#' + logId);
     if(messageRow.length > 0){
       messageRow.html(data['inner_html'])
     }else{
       messageRow = document.createElement('tr');
-      messageRow.setAttribute('id', data['id']);
+      messageRow.setAttribute('id', logId);
       messageRow.innerHTML = data['inner_html'];
       $('#transcript').find('tbody').append(messageRow);
     }

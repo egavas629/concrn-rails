@@ -10,6 +10,7 @@ class Log < ActiveRecord::Base
 
   # CALLBACKS #
   after_commit :refresh_report
+  after_touch  :refresh_report
 
   # SCOPE #
   default_scope -> { order(:created_at) }
