@@ -1,11 +1,10 @@
 Streetmom::Application.routes.draw do
   devise_for :users
 
-  resources :reports do
+  resources :reports, except: %w(edit) do
     collection do
       get 'active'
       get 'history'
-      get 'deleted'
     end
 
     member do
@@ -25,7 +24,7 @@ Streetmom::Application.routes.draw do
   end
   resources :dispatches, only: %w(create update)
   resources :logs,       only: %w(create update)
-  resources :reporter,   only: %w(show)
+  resources :reporters,  only: %w(show)
   resources :sms,        only: %w(create)
 
   root 'pages#home'

@@ -3,31 +3,35 @@ class Log < ActiveRecord::Base
   belongs_to :report
   belongs_to :author, class_name: 'User'
 
+  delegate :name, :role, to: :author, prefix: true
+
+  # VALIDATIONS #
+  validates_presence_of :author, :report, :body
+
   # CALLBACKS #
-  after_save :refresh_report
+  after_commit :refresh_report
 
   # SCOPE #
-  default_scope -> { order :created_at }
+  default_scope -> { order(:created_at) }
 
   # INSTANCE METHODS #
   def broadcast
     message_sent = false
 
-    report.accepted_responders.each do |responder|
+    Responder.accepted(report.id).each do |responder|
       Telephony.send(body, responder.phone) && message_sent = true
     end
 
-    self.touch(:sent_at) if message_sent
+    update_attributes(sent_at: Time.now) if message_sent
   end
 
   def broadcasted?
     sent_at.present?
   end
 
-private
+  private
 
   def refresh_report
-    Pusher.trigger("reports" , "refresh", report)
+    Push.update_transcript(report.id, self)
   end
-
 end

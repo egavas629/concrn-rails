@@ -1,10 +1,9 @@
 <h2> Responder's Profile</h2>
 <% if current_user.role == "dispatcher" %>
-  <a href="<%= reports_path %>" class="btn btn-primary">Report Index</a>
-<% else %>  
+  <%= link_to 'Report Index', reports_path, class: 'btn btn-primary' %>
+<% else %>
   <p>You are signed up to receive notifications from our dispatchers</p>
 <% end %>
-
 
 <%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
   <%= f.error_notification %>

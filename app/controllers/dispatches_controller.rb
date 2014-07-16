@@ -1,6 +1,6 @@
 class DispatchesController < ApplicationController
   def create
-    if responder ? report.dispatch!(responder) : false
+    if responder ? report.dispatch(responder) : false
       flash[:notice] = "#{responder.name} has been dispatched to help #{report.name}."
     else
       flash[:alert] = "Please select a responder to dispatch."
@@ -9,10 +9,9 @@ class DispatchesController < ApplicationController
   end
 
   def update
-    @dispatch = Dispatch.find(params[:id])
-    if @dispatch.update_attributes(dispatch_attributes)
-      address = @dispatch.report.address
-      flash[:notice] = "#{@dispatch.responder.name} #{@dispatch.status} #{address.present? ? ('report @ ' + address) : 'the report'}"
+    dispatch = Dispatch.find(params[:id])
+    if dispatch.update_attributes(dispatch_attributes)
+      flash[:notice] = dispatch.status_update
       redirect_to :back
     end
   end

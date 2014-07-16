@@ -22,17 +22,15 @@ class ReportsController < ApplicationController
     @reports = params[:show_all] ? reports : reports.page(params[:page])
   end
 
-  # Needed to comment out Pusher for it to redirect to index
   def create
     @report = Report.new(report_params)
     respond_to do |format|
       if @report.save
         format.js { render json: @report }
         format.html { redirect_to action: :index }
-        # Pusher.trigger('reports' , 'refresh', {})
       else
         format.js { render json: @report }
-        format.html { render action: :new }
+        format.html { render :new }
       end
     end
   end
@@ -43,8 +41,7 @@ class ReportsController < ApplicationController
   end
 
   def update
-    @report.update_attributes!(report_params)
-    Pusher.trigger("reports" , "refresh", {})
+    @report.update_attributes(report_params)
     respond_to do |format|
       format.js { render json: {success: true} }
       format.html { redirect_to :back }
@@ -52,7 +49,7 @@ class ReportsController < ApplicationController
   end
 
   def show
-    @metaphone = Log.new
+    render
   end
 
   def download
@@ -79,7 +76,11 @@ class ReportsController < ApplicationController
   end
 
   def report_params
-    report_attributes = [:name, :phone, :lat, :long, :status, :nature, :delete_image, :setting, {:observations => []}, :age, :gender, :race, :address, :neighborhood, :image]
+    report_attributes = [
+      :name, :phone, :lat, :long, :status, :nature, :delete_image, :setting,
+      { observations: [] }, :age, :gender, :race, :address,
+      :neighborhood, :image
+    ]
 
     params.require(:report).permit report_attributes
   end

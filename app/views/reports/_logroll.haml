@@ -3,33 +3,27 @@
     %h4.list-group-item-heading
       .row
         .transcript-head.col-sm-6
-          = "Transcript#{' with ' if @report.accepted? }"
+          = "Transcript#{' with ' if report.accepted? }"
         .col-sm-6
           %span{style: 'float:right;'}
-            - @report.accepted_responders.each do |responder|
+            - Responder.accepted(report.id).each do |responder|
               .responder{style: 'float:right;'}
                 = link_to responder.name, responder
                 = "@ #{responder.phone}"
               %br
-    %table.table
+    %table.table#transcript
       %tbody
-        - @report.logs.each_with_index do |log, i|
-          %tr.log-entry
-            %td= log.created_at.strftime('%H:%M')
-            %td.author{style: "white-space: nowrap;"}
-              %strong
-                - if log.author.role == 'responder'
-                  = link_to log.author.name, responder_path(log.author)
-                - else
-                  = log.author.name
-            %td.body= log.body
-            %td{style: "white-space: nowrap;"}
-              .forward-via-sms=link_to "Send SMS", log_path(log), method: 'PUT' unless @report.unassigned? || log.broadcasted?
-              .sent-stamp= "Sent (#{log.updated_at.strftime('%H:%M')})" if log.broadcasted?
+        - report.logs.each do |log|
+          - log_presenter = LogPresenter.new(log)
+          = content_tag_for :tr, log, class: 'log-entry' do
+            = log_presenter.created_at
+            = log_presenter.name
+            = log_presenter.body
+            = log_presenter.sms
 
   %li.list-group-item.metaphone
-    = simple_form_for @metaphone do |f|
+    = simple_form_for Log.new, remote: true do |f|
       .row
         .col-md-12= f.input :body, as: :string, label: false, placeholder: 'Enter details...'
         = f.input :author_id, as: :hidden, input_html: { value: current_user.id }
-        = f.input :report_id, as: :hidden, input_html: { value: @report.id }
+        = f.input :report_id, as: :hidden, input_html: { value: report.id }

@@ -1,0 +1,21 @@
+@import "bourbon";
+@import "mixins";
+@import "nav";
+@import "pages";
+
+html, body {
+  font-family: $lato-font;
+  font-size: $root-fs;
+}
+
+input, select, textarea {
+  font-family: $lato-font;
+}
+
+.heading-xlarge {
+  font-size: $fs-xlarge;
+}
+
+.caps {
+  text-transform: uppercase;
+}

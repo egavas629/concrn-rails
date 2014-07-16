@@ -14,6 +14,12 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require jquery.ui.datepicker
+//= require jquery.timeago
 //= require twitter/bootstrap
+//= require gritter
 //= require turbolinks
 //= require_tree .
+
+$(document).ready(function(){
+  $("abbr.timeago").timeago();
+})

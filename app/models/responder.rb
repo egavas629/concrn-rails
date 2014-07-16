@@ -1,22 +1,24 @@
 class Responder < User
   # RELATIONS #
-  has_many :reports, through: :dispatches
-  has_many :dispatches
-  has_many :shifts
+  has_many :dispatches, dependent: :destroy
+  has_many :reports,    through:   :dispatches
+  has_many :shifts,     dependent: :destroy
 
   # VALIDATIONS #
-  validates_presence_of :phone
+  validates :phone, presence: true, uniqueness: true
+  validates :name,  presence: true, uniqueness: true
 
   # CALLBACKS #
-  after_validation :make_unavailable!, :on => :update, if: :need_to_make_unavailable?
+  after_validation :make_unavailable, on: :update
+  after_update :push_reports
 
   # SCOPES #
-  default_scope    -> { where(role: 'responder') }
+  default_scope ->    { where(role: 'responder') }
   scope :active,   -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
-  scope :on_shift, -> { where(id: Shift.on_shift.map(&:responder_id)) }
+  scope :on_shift, -> { where(id: Shift.on.map(&:responder_id)) }
 
-  scope :available, -> do
+  scope :available, lambda {
     find_by_sql(%Q{
       SELECT r.*, count(distinct d.id) as ad_count, count(distinct dr.id) as dr_count FROM users r
         LEFT JOIN dispatches d on d.responder_id=r.id
@@ -24,28 +26,20 @@ class Responder < User
       GROUP BY r.id
       HAVING count(distinct d.id) = count(distinct dr.id)
     }) & on_shift
+  }
+
+  # CLASS METHODS #
+  def self.accepted(report_id)
+    includes(:dispatches).where(
+      dispatches: { report_id: report_id, status: %w(accepted completed) }
+    )
   end
 
   # INSTANCE METHODS #
-  def on_shift?
-    shifts.on_shift.count > 0
-  end
-
   def phone=(new_phone)
-    write_attribute :phone, NumberSanitizer.sanitize(new_phone)
-  end
-
-  def completed_count
-    dispatches.where(status: "completed").count
-  end
-
-  def rejected_count
-    dispatches.where(status: "rejected").count
-  end
-
-  def status
-    return "unassigned" if dispatches.none?
-    "last: #{dispatches.latest.status}"
+    write_attribute(:phone, NumberSanitizer.sanitize(new_phone))
+  rescue NoMethodError
+    errors.add(:phone, 'Phone Number is not valid')
   end
 
   def set_password
@@ -55,11 +49,11 @@ class Responder < User
 
   private
 
-  def make_unavailable!
-    shifts.end!('web')
+  def make_unavailable
+    shifts.end('web') if active_changed? && !active
   end
 
-  def need_to_make_unavailable?
-    active_changed? && !active
+  def push_reports
+    Push.refresh
   end
 end

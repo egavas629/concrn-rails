@@ -1,12 +1,12 @@
-%h2
-  = @report.neighborhood ? "Crisis in #{@report.neighborhood}" : "Reported"
-  %small="#{time_ago_in_words(@report.created_at)} ago:"
-
+%h2.pusher-id{'data-id' => @report.id, 'data-type' => 'report'}
+  = @report.neighborhood ? "Report in #{@report.neighborhood}" : "Reported"
+  %small
+    %abbr.timeago{title: @report.created_at.getutc.iso8601}= @report.created_at.to_s
 .row
   %ul.list-group.col-md-4
     %li.list-group-item
-      .btn-archive.list-group-item-text.pull-right= link_to 'Archive', report_path(@report, report: {status: 'archived'}), confirm: 'Are you sure you want to archive the report?', method: :put, class: 'btn btn-warning' unless @report.archived_or_completed?
-      .btn-complete.list-group-item-text.pull-right= link_to 'Complete', report_path(@report, report: {status: 'completed'}), confirm: 'Are you sure you want to complete the report?', method: :put, class: 'btn btn-success' unless @report.archived_or_completed?
+      .btn-archive.list-group-item-text.pull-right= link_to 'Archive', report_path(@report, report: {status: 'archived'}), 'data-confirm' => 'Are you sure you want to archive the report?', method: :put, class: 'btn btn-warning' unless @report.archived_or_completed?
+      .btn-complete.list-group-item-text.pull-right= link_to 'Complete', report_path(@report, report: {status: 'completed'}), 'data-confirm' => 'Are you sure you want to complete the report?', method: :put, class: 'btn btn-success' unless @report.archived_or_completed?
 
       %h4.list-group-item-heading Status
       .list-group-item-text= @report.current_status.capitalize
@@ -31,7 +31,7 @@
     %li.list-group-item
       %h4.list-group-item-heading Client
       .list-group-item-text="#{@report.age} #{@report.race} #{@report.gender}"
-      .list-group-item-text=@report.nature.present? ? "#{@report.nature}" : 'Nature Not Provided'
+      .list-group-item-text=@report.nature? ? "#{@report.nature}" : 'Nature Not Provided'
 
     %li.list-group-item
       %h4.list-group-item-heading Files
@@ -49,15 +49,15 @@
 
     .btn-delete
       = link_to 'Delete', report_path(@report), method: :delete,
-      confirm: 'Are you sure you want to delete the report?', class: 'btn btn-danger'
+      'data-confirm' => 'Are you sure you want to delete the report? All dispatches and records of this report will be destroyed permanently.', class: 'btn btn-danger'
 
   %ul.list.group.col-md-8
-    = render partial: "reports/logroll"
+    = render partial: "reports/logroll", locals: {report: @report}
     .col-md-6
       %br
       %br
       %td{class: "@report-#{@report.id}-dispatch"}
-      = render partial: "dispatches/create", locals: { report: @report } unless @report.archived_or_completed?
+      = render partial: "dispatches/create", locals: { report: @report, responders: @available_responders } unless @report.archived_or_completed?
     .col-md-6
       %br
       - if @report.dispatches.present?

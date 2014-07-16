@@ -2,10 +2,13 @@
 - if non_rejected_dispatches.present?
   - non_rejected_dispatches.each do |dispatch|
     %dd
-      = link_to dispatch.responder.name, responder_path(dispatch.responder)
+      = link_to dispatch.responder_name, responder_path(dispatch.responder)
       - unless report.archived_or_completed?
         = simple_form_for dispatch do |f|
-          = f.input :status, collection: %w(pending accepted rejected), label: false
+          = f.input :status, collection: %w(pending accepted rejected),
+            label: false, include_blank: false
   %dl
     %dt Dispatched
-    %dd= time_ago_in_words(report.dispatches.not_rejected.first.created_at)
+    %dd
+      - first_dispatch = non_rejected_dispatches.first
+      %abbr.timeago{title: first_dispatch.created_at.getutc.iso8601}= first_dispatch.created_at.to_s

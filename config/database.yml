@@ -3,41 +3,38 @@ development:
   encoding: unicode
   database: streetmom_development
   pool: 5
-  username: streetmom
-  password:
-  host: localhost
+  # username: streetmom
+  # password:
+  # host: localhost
 
 test: &test
   adapter: postgresql
   encoding: unicode
   database: streetmom_test
   pool: 5
-  username: streetmom
-  password:
+  # username: streetmom
+  # password:
 
 staging:
   adapter: postgresql
   encoding: unicode
   database: streetmom_staging
   pool: 5
-  username: streetmom
-  password:
+  # username: streetmom
+  # password:
 
 production:
   adapter: postgresql
   encoding: unicode
   database: streetmom_production
   pool: 5
-  username: streetmom
-  password:
+  # username: streetmom
+  # password:
 
 rangers:
   adapter: postgresql
   encoding: unicode
   database: streetmom_rangers
   pool: 5
-  username: streetmom
-  password:
-
-cucumber:
-  <<: *test
+  # username: streetmom
+  # password:

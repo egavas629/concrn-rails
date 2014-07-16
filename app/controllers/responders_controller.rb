@@ -23,7 +23,7 @@ class RespondersController < ApplicationController
 
     if @responder.save
       flash[:notice] = "#{@responder.name}'s profile was created"
-      redirect_to action: :index
+      redirect_to :index
     else
       render :new
     end
@@ -33,7 +33,7 @@ class RespondersController < ApplicationController
     name = @responder.name
     if @responder.destroy
       flash[:notice] = "#{name}'s profile deleted"
-      redirect_to action: :index
+      redirect_to :index
     else
       flash[:error] = 'Error in deleting Responder'
       redirect_to :back
@@ -51,10 +51,9 @@ class RespondersController < ApplicationController
 
   def update
     @responder.update_attributes(responder_params)
-    Pusher.trigger("reports" , "refresh", {}) unless request.xhr?
     respond_to do |format|
       format.json {render json: @responder}
-      format.html {render action: :show}
+      format.html {render :show}
     end
   end
 

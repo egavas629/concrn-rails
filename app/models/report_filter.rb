@@ -1,5 +1,4 @@
 class ReportFilter
-
   def initialize(params)
     start_date  = params[:start_date]
     end_date    = params[:end_date]
@@ -13,6 +12,7 @@ class ReportFilter
   end
 
   def query
+    completed_reports = Report.completed
     if defined?(@start_date) && defined?(@end_date)
       reports = completed_reports.where('created_at >= ? and created_at <= ?', @start_date, @end_date)
     elsif defined?(@start_date)
@@ -24,11 +24,4 @@ class ReportFilter
     end
     reports.order(@order)
   end
-
-private
-
-  def completed_reports
-    Report.completed
-  end
-
 end
