@@ -1,8 +1,8 @@
 class UsersController < DashboardController
   before_filter :find_user, only: [:show, :update, :edit]
   before_filter :authenticate_admin!,      only:   :create
-  before_filter :authenticate_dispatcher!, except: :create
   before_filter :authenticate_user!,       except: :create
+  before_filter :authenticate_dispatcher!, except: :create
 
   def create
     @user = @agency.users.new(user_params)

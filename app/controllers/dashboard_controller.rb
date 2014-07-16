@@ -7,7 +7,7 @@ class DashboardController < ApplicationController
   helper_method :current_agency
 
   def authenticate_dispatcher!
-    return true if current_user.dispatcher?
+    return true if user_signed_in? && current_user.dispatcher?
     flash[:error] = 'Page is unaccessable please contact Agency Admin if you think this is by mistake.'
     redirect_to root_path
   end
