@@ -8,10 +8,10 @@ class DispatchMessanger
   def respond(body)
     feedback, status = true, nil
     if @responder.shifts.started? && body[/break/i]
-      @responder.shifts.end!('sms') && feedback = false if non_breaktime
+      @responder.shifts.end('sms') && feedback = false if non_breaktime
       status = 'rejected' if @dispatch && @dispatch.pending?
     elsif !@responder.shifts.started? && body[/on/i]
-      @responder.shifts.start!('sms') && feedback = false
+      @responder.shifts.start('sms') && feedback = false
     elsif @dispatch.pending? && body[/no/i]
       status = 'rejected'
     elsif @dispatch.accepted? && body[/done/i]
@@ -22,48 +22,48 @@ class DispatchMessanger
     # If dispatch changed then update status
     @dispatch.update_attributes(status: status) if status
     # Send log if there is a need for feedback
-    @report.logs.create!(author: @responder, body: body) if feedback
+    @report.logs.create(author: @responder, body: body) if feedback
   end
 
   def trigger
     case @dispatch.status
     when 'accepted'
-      accept!
+      accept
     when 'completed'
-      complete!
+      complete
     when 'pending'
-      pending!
+      pending
     when 'rejected'
-      reject!
+      reject
     end
   end
 
   private
 
-  def accept!
-    @dispatch.accept!
+  def accept
+    @dispatch.accept
     accept_dispatch_notification
     acknowledge_acceptance
     notify_about_primary_responder
     notify_reporter
   end
 
-  def complete!
-    @report.complete!
+  def complete
+    @report.complete
     thank_responder
     thank_reporter
   end
 
-  def pending!
+  def pending
     Telephony.send(responder_synopses, @responder.phone)
   end
 
-  def reject!
+  def reject
     acknowledge_rejection
   end
 
   def accept_dispatch_notification
-    @report.logs.create!(
+    @report.logs.create(
       author: @responder, body: '*** Accepted the dispatch ***'
     )
   end

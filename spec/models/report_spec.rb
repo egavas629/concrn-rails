@@ -43,6 +43,62 @@ describe Report do
     end
   end
 
+  describe '#accepted_dispatches' do
+    subject { create(:report) }
+
+    context 'accepted dispatch' do
+      let!(:dispatch) { create(:dispatch, :accepted, report: subject) }
+      its(:accepted_dispatches) { should match_array([dispatch]) }
+    end
+
+    context 'rejected dispatch' do
+      let!(:dispatch) { create(:dispatch, :rejected, report: subject) }
+      its(:accepted_dispatches) { should match_array([]) }
+    end
+
+    context 'pending dispatch' do
+      let!(:dispatch) { create(:dispatch, report: subject) }
+      its(:accepted_dispatches) { should match_array([]) }
+    end
+
+    context 'completed dispatch' do
+      let!(:dispatch) { create(:dispatch, :completed, report: subject) }
+      before          { subject.update_attributes(status: 'completed') }
+
+      its(:accepted_dispatches) { should match_array([dispatch]) }
+    end
+
+    context 'no accepted dispatches' do
+      its(:accepted_dispatches) { should match_array([]) }
+    end
+  end
+
+  describe '#multi_accepted_responders?' do
+    subject(:report) { create(:report, :accepted) }
+    context 'one responder' do
+      its(:multi_accepted_responders?) { should be_false }
+    end
+
+    context 'two responders' do
+      before { create(:dispatch, :accepted, report: report) }
+      its(:multi_accepted_responders?) { should be_true }
+    end
+  end
+
+  describe '#primary_responder' do
+    subject(:report) { create(:report) }
+
+    context 'multiple responders' do
+      let!(:responder_one) { create(:dispatch, :accepted, report: report).responder }
+      let!(:responder_two) { create(:dispatch, :accepted, report: report).responder }
+      its(:primary_responder) { should eq(responder_one) }
+    end
+
+    context 'no responders' do
+      its(:primary_responder) { should be_false }
+    end
+  end
+
   describe '#clean_image' do
     subject(:report) { build(:report, :image_attached) }
 
@@ -56,7 +112,7 @@ describe Report do
         report.delete_image = '1'
         report.send(:clean_image)
       end
-      its('image.url') { should eq("/images/original/missing.png") }
+      its('image.url') { should eq('/images/original/missing.png') }
     end
 
     context 'delete_image is false' do
@@ -64,7 +120,7 @@ describe Report do
         report.delete_image = '0'
         report.send(:clean_image)
       end
-      its('image.url') { should_not eq("/images/original/missing.png") }
+      its('image.url') { should_not eq('/images/original/missing.png') }
     end
   end
 
@@ -110,7 +166,7 @@ describe Report do
       its(:current_pending?)       { should be_false }
 
       context 'with pending dispatch' do
-        before { subject.dispatch!(create(:responder, :on_shift)) }
+        before { subject.dispatch(create(:responder, :on_shift)) }
         its(:current_pending?) { should be_false }
       end
     end
@@ -152,20 +208,20 @@ describe Report do
     end
   end
 
-  describe '#complete!' do
+  describe '#complete' do
     subject { create(:report) }
-    before  { subject.complete! }
+    before  { subject.complete }
     its(:status) { should eq('completed') }
   end
 
-  describe '#set_completed!' do
+  describe '#set_completed' do
     context 'after_validation triggered' do
       subject { create(:report) }
 
       context 'report completed' do
         before { subject.status = 'completed' }
         it 'runs' do
-          expect(subject).to receive(:set_completed!).once
+          expect(subject).to receive(:set_completed).once
           subject.valid?
         end
       end
@@ -173,15 +229,14 @@ describe Report do
       context 'report archived' do
         before { subject.status = 'archived' }
         it 'runs' do
-          expect(subject).to receive(:set_completed!).once
+          expect(subject).to receive(:set_completed).once
           subject.valid?
         end
       end
 
       context 'report pending' do
-        before { subject.status = 'pending' }
         it 'doesn\'t run' do
-          expect(subject).to_not receive(:set_completed!)
+          expect(subject).to_not receive(:set_completed)
           subject.valid?
         end
       end
@@ -191,7 +246,7 @@ describe Report do
       subject { create(:report, :pending) }
       before do
         subject.update_column(:status, 'completed')
-        subject.set_completed!
+        subject.set_completed
       end
       its('dispatches.sample.status') { should eq('rejected') }
     end
@@ -200,7 +255,7 @@ describe Report do
       subject { create(:report, :accepted) }
       before do
         subject.update_column(:status, 'completed')
-        subject.set_completed!
+        subject.set_completed
       end
       its('dispatches.sample.status') { should eq('completed') }
     end
@@ -209,7 +264,7 @@ describe Report do
       subject { create(:report) }
       before do
         subject.update_column(:status, 'completed')
-        subject.set_completed!
+        subject.set_completed
       end
       its(:completed_at) { should be < Time.now }
     end

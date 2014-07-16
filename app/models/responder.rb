@@ -5,7 +5,7 @@ class Responder < User
   has_many :reports,    through:   :dispatches
 
   # CALLBACKS #
-  after_validation :make_unavailable!, on: :update
+  after_validation :make_unavailable, on: :update
   after_update :push_reports
 
   # SCOPES #
@@ -31,8 +31,8 @@ class Responder < User
   # INSTANCE METHODS #
   private
 
-  def make_unavailable!
-    shifts.end!('web') if active_changed? && !active
+  def make_unavailable
+    shifts.end('web') if active_changed? && !active
   end
 
   def push_reports

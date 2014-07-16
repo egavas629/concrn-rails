@@ -15,7 +15,7 @@
       %tbody
         - report.logs.each do |log|
           - log_presenter = LogPresenter.new(log)
-          %tr.log-entry{id: log.id}
+          = content_tag_for :tr, log, class: 'log-entry' do
             = log_presenter.created_at
             = log_presenter.name
             = log_presenter.body

@@ -11,7 +11,7 @@ class Report < ActiveRecord::Base
   # CALLBACKS #
   has_attached_file :image
   before_validation :clean_image, :clean_observations
-  after_validation :set_completed!, if: :archived_or_completed?
+  after_validation :set_completed, if: :archived_or_completed?, on: :update
   after_commit :push_reports
   after_create :send_to_dispatcher
 
@@ -70,6 +70,7 @@ class Report < ActiveRecord::Base
   end
 
   def primary_responder
+    return false if accepted_dispatches.blank?
     accepted_dispatches.first.responder
   end
 
@@ -88,8 +89,8 @@ class Report < ActiveRecord::Base
     Report.pending.include?(self)
   end
 
-  def dispatch!(responder)
-    dispatches.create!(responder: responder)
+  def dispatch(responder)
+    dispatches.create(responder: responder)
   end
 
   def accepted?
@@ -108,15 +109,15 @@ class Report < ActiveRecord::Base
     archived? || completed?
   end
 
-  def complete!
-    update_attributes!(status: 'completed')
+  def complete
+    update_attributes(status: 'completed')
   end
 
-  def set_completed!
+  def set_completed
     return false unless %w(archived completed).include?(status)
-    update_attributes(completed_at: Time.now) unless completed_at.present?
-    dispatches.pending.each { |i| i.update_attribute(:status, 'rejected') }
-    Dispatch.accepted(id).each { |i| i.update_attribute(:status, 'completed') }
+    touch(:completed_at) unless completed_at.present?
+    dispatches.pending.each { |i| i.update_attributes(status: 'rejected') }
+    Dispatch.accepted(id).each { |i| i.update_attributes(status: 'completed') }
   end
 
   private

@@ -22,9 +22,9 @@ class Dispatch < ActiveRecord::Base
   }
 
   # CALLBACKS #
-  after_create :messanger
-  after_update :messanger, if: :status_changed?
-  after_commit :push_reports
+  after_create     :messanger
+  after_update     :messanger, if: :status_changed?
+  after_commit     :push_reports
 
   # CLASS METHODS #
   def self.accepted(report_id = nil)
@@ -45,8 +45,8 @@ class Dispatch < ActiveRecord::Base
   end
 
   # INSTANCE METHODS #
-  def accept!
-    update_attributes(accepted_at: Time.now) if accepted?
+  def accept
+    touch(:accepted_at) if accepted?
   end
 
   def accepted?

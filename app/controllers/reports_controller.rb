@@ -42,7 +42,7 @@ class ReportsController < DashboardController
   end
 
   def update
-    @report.update_attributes!(report_params)
+    @report.update_attributes(report_params)
     respond_to do |format|
       format.js { render json: {success: true} }
       format.html { redirect_to :back }
