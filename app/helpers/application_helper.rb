@@ -14,4 +14,8 @@ module ApplicationHelper
     end
   end
 
+  def google_maps(address)
+    "https://maps.google.com/?q=#{address}"
+  end
+
 end

@@ -1,0 +1,12 @@
+- if responders.present?
+  %h3 Responders
+  = render 'table', users: responders, deactivated: deactivated
+- else
+  %p.notice
+    %br There are no responders to show.
+- if dispatchers.present?
+  %h3 Dispatchers
+  = render 'table', users: dispatchers, deactivated: deactivated
+- else
+  %p.notice
+    %br There are no dispatchers to show.

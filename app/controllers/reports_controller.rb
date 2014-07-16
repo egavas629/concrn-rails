@@ -1,6 +1,7 @@
-class ReportsController < ApplicationController
-  before_action :authenticate_user!,   only: %w(index)
-  before_action :ensure_dispatcher,    only: %w(index active history)
+class ReportsController < DashboardController
+  before_action :authenticate_user!,       except: %w(new create)
+  before_action :authenticate_dispatcher!, only: %w(index active history)
+
   before_action :available_responders, only: %w(index active show)
   before_action :find_report,          only: %w(destroy update show download)
 
@@ -9,16 +10,16 @@ class ReportsController < ApplicationController
   end
 
   def index
-    @unassigned_reports = Report.unassigned
-    @pending_reports = Report.pending
+    @unassigned_reports = current_agency.reports.unassigned
+    @pending_reports = current_agency.reports.pending
   end
 
   def active
-    @reports = Report.accepted
+    @reports = current_agency.reports.accepted
   end
 
   def history
-    reports = ReportFilter.new(params).query
+    reports = ReportFilter.new(current_agency.id, params).query
     @reports = params[:show_all] ? reports : reports.page(params[:page])
   end
 
@@ -61,25 +62,21 @@ class ReportsController < ApplicationController
                          buffer_size: '4096'
   end
 
-  def available_responders
-    @available_responders = Responder.available
-  end
-
   private
 
-  def find_report
-    @report = Report.find(params[:id])
+  def available_responders
+    @available_responders = current_agency.responders.available
   end
 
-  def ensure_dispatcher
-    redirect_to edit_user_registration_path unless current_user.role == 'dispatcher'
+  def find_report
+    @report = current_agency.reports.find(params[:id])
   end
 
   def report_params
     report_attributes = [
       :name, :phone, :lat, :long, :status, :nature, :delete_image, :setting,
-      { observations: [] }, :age, :gender, :race, :address,
-      :neighborhood, :image
+      { observations: [] }, :age, :gender, :race, :address, :neighborhood,
+      :image, :agency_id
     ]
 
     params.require(:report).permit report_attributes

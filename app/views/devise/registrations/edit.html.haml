@@ -1,0 +1,15 @@
+%h2= "#{current_user.name}'s Profile"
+
+= simple_form_for(current_user, :as => :user, :url => user_registration_path(:user), :html => { :method => :put }) do |f|
+  = f.error_notification
+  = f.input :name, placeholder: "Joe"
+  = f.input :phone, placeholder: "415-555-2323"
+  = f.input :email, :required => true, :autofocus => true
+  - if devise_mapping.confirmable? && resource.pending_reconfirmation?
+    %p
+      Currently waiting confirmation for: #{resource.unconfirmed_email}
+  = f.input :password, :autocomplete => "off", :hint => "leave it blank if you don't want to change it", :required => false
+  = f.input :password_confirmation, :required => false
+  = f.input :current_password, :hint => "we need your current password to confirm your changes", :required => true
+  = f.button :submit, "Update"
+= link_to "Back", :back

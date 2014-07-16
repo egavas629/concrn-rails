@@ -1,4 +1,4 @@
-class LogsController < ApplicationController
+class LogsController < DashboardController
   def create
     Log.create(log_params)
     render nothing: true, status: :ok

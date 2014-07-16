@@ -1,0 +1,27 @@
+%table.table.pusher
+  %thead
+    %tr
+      %th Name
+      %th Phone
+      %th Email
+      - if users[0].responder?
+        %th Completed
+        %th Rejected
+      %th Available
+      - if !deactivated && users[0].responder?
+        %th Current Status
+  %tbody
+    - users.each do |user|
+      = content_tag_for :tr, user do
+        %th= link_to user.name, user_path(user)
+        %td.phone= user.phone
+        %td= link_to user.email, "mailto:#{user.email}"
+        - if user.responder?
+          %td= user.dispatches.completed_count
+          %td= user.dispatches.rejected_count
+        %td
+          - path = user.shifts.started? ? end_shift_user_path(user) : start_shift_user_path(user)
+          = simple_form_for '', url: path, method: :post do |f|
+            = f.check_box :available, checked: user.shifts.started?, class: 'availability'
+        - if !deactivated && user.responder?
+          %td= ResponderPresenter.new(user).status

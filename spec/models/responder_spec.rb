@@ -1,18 +1,13 @@
 require 'spec_helper'
 
 describe Responder do
+  it { should belong_to(:user).class_name(User) }
   it { should have_many(:dispatches).dependent(:destroy) }
-  it { should have_many(:shifts).dependent(:destroy) }
   it { should have_many(:reports).through(:dispatches) }
-  it { should validate_presence_of(:name) }
-  it { should validate_uniqueness_of(:name) }
-  it { should validate_presence_of(:phone) }
-  it { should validate_uniqueness_of(:phone) }
 
   describe 'scopes' do
     let(:time)                { Time.now }
     let(:responder)           { create(:responder, :on_shift, created_at: time - 10.minutes) }
-    let(:responder_off)       { create(:responder, created_at: time - 5.minutes) }
     let(:responder_inactive)  { create(:responder, active: false, created_at: time - 3.minutes) }
     let(:dispatcher)          { create(:dispatcher) }
 
@@ -20,34 +15,13 @@ describe Responder do
       subject { Responder.all }
 
       it { should_not include(dispatcher) }
-      it { should include(responder, responder_off, responder_inactive) }
-    end
-
-    describe '.active' do
-      subject { Responder.active }
-
-      it { should_not include(responder_inactive) }
-      it { should include(responder, responder_off) }
-    end
-
-    describe '.inactive' do
-      subject { Responder.inactive }
-
-      it { should start_with(responder_inactive) }
-      it { should_not include(responder, responder_off) }
-    end
-
-    describe '.on_shift' do
-      subject { Responder.on_shift }
-
-      it { should_not include(responder_off, responder_inactive) }
-      it { should include(responder) }
+      it { should include(responder, responder_inactive) }
     end
 
     describe '.available' do
       subject { Responder.available }
 
-      it { should_not include(responder_off, responder_inactive) }
+      it { should_not include(responder_inactive) }
       it { should include(responder) }
 
       it 'excludes accepted/pending responders' do
@@ -71,22 +45,7 @@ describe Responder do
     it { should start_with(responder) }
   end
 
-  # Instance methods
-  describe '#phone=' do
-    subject     { create(:responder, phone: '555 555 5551gsas') }
-    its(:phone) { should eq('5555555551') }
-  end
-
-  describe '#set_password' do
-    subject { build(:responder, password: nil, password_confirmation: nil) }
-    before  { subject.set_password }
-
-    its(:password) { should eq('password') }
-    its(:password_confirmation) { should eq('password') }
-  end
-
-  # Private
-  describe '#make_unavailable' do
+  describe '#make_unavailable!' do
     let(:responder) { create(:responder, :on_shift) }
     subject         { responder.shifts }
 

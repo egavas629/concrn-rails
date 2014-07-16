@@ -2,7 +2,7 @@
 - if non_rejected_dispatches.present?
   - non_rejected_dispatches.each do |dispatch|
     %dd
-      = link_to dispatch.responder_name, responder_path(dispatch.responder)
+      = link_to dispatch.responder_name, user_path(dispatch.responder)
       - unless report.archived_or_completed?
         = simple_form_for dispatch do |f|
           = f.input :status, collection: %w(pending accepted rejected),

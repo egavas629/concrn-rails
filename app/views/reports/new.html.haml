@@ -5,10 +5,10 @@
     = f.input :address
     %h4 Reporting Party Information
     = f.input :name, label: "Contact Name",
-      input_html: { value: current_user.name }
+      input_html: { value: current_user.try(:name) }
     = f.input :phone, label: "Contact Phone No.", placeholder: "4158575309",
       type: "tel", maxlength: "10", required: true, hint: "10-digit US numbers only",
-      input_html: { value: current_user.phone }
+      input_html: { value: current_user.try(:phone) }
     %div.form-group
       %label.control-label Is this report concerning a person?
       %input#is-person.form-control{type: 'checkbox'}
@@ -22,6 +22,8 @@
       .observation-checkboxes
         = f.input :observations, as: :check_boxes, collection: Report::OBSERVATION
     = f.input :nature, label: "Additional Description"
+    = f.input :agency_id, input_html: { value: current_user.agency_id },
+      as: :hidden if user_signed_in?
     = f.submit 'Submit Report', class: 'btn btn-primary'
 
   / = @location.address

@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Shift do
   context 'validations' do
-    it { should belong_to(:responder) }
-    it { should validate_presence_of(:responder) }
+    it { should belong_to(:user) }
+    it { should validate_presence_of(:user) }
     it { should validate_presence_of(:start_time) }
     it { should validate_presence_of(:start_via) }
   end
