@@ -10,7 +10,6 @@ class Log < ActiveRecord::Base
 
   # CALLBACKS #
   after_commit :refresh_report
-  after_touch  :refresh_report
 
   # SCOPE #
   default_scope -> { order(:created_at) }
@@ -23,7 +22,7 @@ class Log < ActiveRecord::Base
       Telephony.send(body, responder.phone) && message_sent = true
     end
 
-    touch(:sent_at) if message_sent
+    update_attributes(sent_at: Time.now) if message_sent
   end
 
   def broadcasted?
