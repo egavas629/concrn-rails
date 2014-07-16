@@ -1,14 +1,23 @@
 class UsersController < DashboardController
   before_filter :find_user, only: [:show, :update, :edit]
-  before_filter :authenticate_dispatcher!
+  before_filter :authenticate_admin!,      only:   :create
+  before_filter :authenticate_dispatcher!, except: :create
+  before_filter :authenticate_user!,       except: :create
 
   def create
-    @user = current_agency.users.new(user_params)
+    @user = @agency.users.new(user_params)
+    success_message = "#{@user.name}'s profile was created"
     if @user.save
-      flash[:notice] = "#{@user.name}'s profile was created"
+      flash[:notice] = success_message
       redirect_to action: :index
     else
-      render :new
+      if user_signed_in?
+        flash[:notice] = success_message
+        render :new
+      else
+        flash[:notice] = @user.errors.full_messages.join(', ')
+        redirect_to :back
+      end
     end
   end
 
@@ -51,6 +60,12 @@ class UsersController < DashboardController
   end
 
   private
+
+  def authenticate_admin!
+    user_signed_in? && current_user.dispatcher? && a = true ||
+    authenticate_super_admin! && a = false
+    @agency = a ? current_agency : Agency.find(params[:user][:agency_id])
+  end
 
   def find_user
     @user = current_agency.users.find(params[:id])

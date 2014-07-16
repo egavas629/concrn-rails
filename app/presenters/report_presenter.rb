@@ -14,8 +14,4 @@ class ReportPresenter < BasePresenter
       'old'
     end
   end
-
-  def google_maps_address
-    "https://maps.google.com/?q=#{report.address}"
-  end
 end

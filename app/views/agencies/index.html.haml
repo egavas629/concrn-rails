@@ -1,0 +1,20 @@
+.row
+  %h1.pull-left Agencies
+  .pull-right= link_to 'New Agency', new_agency_path, class: 'btn btn-default'
+
+%table.table
+  %tr
+    %td Name
+    %td Call Phone
+    %td Text Phone
+    %td Address
+    %td Created On
+    %td
+  - @agencies.each do |agency|
+    = content_tag_for :tr, agency do
+      %td= link_to agency.name, agency
+      %td= agency.call_phone
+      %td= agency.text_phone
+      %td= link_to agency.address, google_maps(agency.address), target: '_blank'
+      %td= AgencyPresenter.new(agency).created_at
+      %td= link_to 'Edit', edit_agency_path(agency), class: 'btn btn-default'
