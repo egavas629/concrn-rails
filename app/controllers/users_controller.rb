@@ -8,7 +8,7 @@ class UsersController < DashboardController
     @user = @agency.users.new(user_params)
     if @user.save
       flash[:notice] = "#{@user.name}'s profile was created"
-      redirect_to action: :index
+      user_signed_in? ? (redirect_to action: :index) : (redirect_to :back)
     else
       flash[:notice] = @user.errors.full_messages.join(', ')
       user_signed_in? ? (render :new) : (redirect_to :back)
@@ -46,10 +46,21 @@ class UsersController < DashboardController
   end
 
   def update
-    @user.update_attributes(user_params)
     respond_to do |format|
-      format.json {render json: @user}
-      format.html {redirect_to @user}
+      if @user.update_attributes(user_params)
+
+        format.json {render json: @user}
+        format.html {
+          flash[:notice] = "#{@user.name} successfully updated"
+          redirect_to @user
+        }
+      else
+        format.json {render json: @user}
+        format.html {
+          flash[:notice] = "Error updating #{@user.name}"
+          render action: :edit
+        }
+      end
     end
   end
 
