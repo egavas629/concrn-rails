@@ -6,18 +6,12 @@ class UsersController < DashboardController
 
   def create
     @user = @agency.users.new(user_params)
-    success_message = "#{@user.name}'s profile was created"
     if @user.save
-      flash[:notice] = success_message
+      flash[:notice] = "#{@user.name}'s profile was created"
       redirect_to action: :index
     else
-      if user_signed_in?
-        flash[:notice] = success_message
-        render :new
-      else
-        flash[:notice] = @user.errors.full_messages.join(', ')
-        redirect_to :back
-      end
+      flash[:notice] = @user.errors.full_messages.join(', ')
+      user_signed_in? ? (render :new) : (redirect_to :back)
     end
   end
 

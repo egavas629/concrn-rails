@@ -11,9 +11,6 @@ class User < ActiveRecord::Base
   # CONSTANTS #
   ROLES = %w(responder dispatcher)
 
-  # CALLBACKS #
-  before_validation :set_active, on: :create
-
   # VALIDATIONS #
   validates :phone,  presence: true, uniqueness: true
   validates :name,   presence: true, uniqueness: { scope: :agency_id }
@@ -44,11 +41,5 @@ class User < ActiveRecord::Base
     write_attribute(:phone, NumberSanitizer.sanitize(new_phone))
   rescue NoMethodError
     errors.add(:phone, 'Phone Number is not valid')
-  end
-
-  private
-
-  def set_active
-    assign_attribute(:active, true)
   end
 end
