@@ -42,4 +42,8 @@ class User < ActiveRecord::Base
   rescue NoMethodError
     errors.add(:phone, 'Phone Number is not valid')
   end
+
+  def active_for_authentication?
+    super && active
+  end
 end
