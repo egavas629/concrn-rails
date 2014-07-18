@@ -8,6 +8,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def current_agency
+    return false unless user_signed_in?
+    current_user.agency
+  end
+  helper_method :current_agency
+
   protected
 
   def configure_permitted_parameters
