@@ -3,7 +3,7 @@ ruby '2.0.0'
 
 gem 'rails', '4.0.0'
 gem 'pg'
-gem 'turbolinks'
+# gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 gem 'haml'
 gem 'simple_form'
@@ -31,9 +31,8 @@ gem 'kaminari'
 gem 'factory_girl_rails'
 gem 'faker'
 
-group :development, :test do
-  gem 'rspec-rails'
-end
+# Need it in development so creates specs in future scaffolds/generators
+gem 'rspec-rails', '~> 2.14.1', group: %w(development test)
 
 # Environment Variable Handling
 gem 'figaro'
@@ -47,7 +46,7 @@ gem 'bourbon'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'gritter'
 gem 'jquery-rails'
-gem 'jquery-turbolinks'
+# gem 'jquery-turbolinks'
 gem 'jquery-ui-rails'
 gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'

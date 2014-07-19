@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140624031007) do
+ActiveRecord::Schema.define(version: 20140718211820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,9 @@ ActiveRecord::Schema.define(version: 20140624031007) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "address"
+    t.string   "call_phone"
+    t.string   "text_phone"
   end
 
   create_table "dispatches", force: true do |t|
@@ -69,19 +72,22 @@ ActiveRecord::Schema.define(version: 20140624031007) do
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.datetime "completed_at"
+    t.integer  "agency_id"
   end
+
+  add_index "reports", ["agency_id"], name: "index_reports_on_agency_id", using: :btree
 
   create_table "shifts", force: true do |t|
     t.datetime "start_time"
     t.datetime "end_time"
     t.string   "start_via"
     t.string   "end_via"
-    t.integer  "responder_id"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "shifts", ["responder_id"], name: "index_shifts_on_responder_id", using: :btree
+  add_index "shifts", ["user_id"], name: "index_shifts_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",          null: false

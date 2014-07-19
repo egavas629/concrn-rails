@@ -1,17 +1,22 @@
-def reports
+def agencies
+  puts 'Seeding Agency...'
+  Agency.destroy_all
+  return FactoryGirl.create(:agency)
+end
+
+def reports(agency_id)
     puts 'Seeding Reports...'
-    Report.destroy_all
-    3.times { FactoryGirl.create :report }
+    3.times { FactoryGirl.create :report, agency_id: agency_id }
 end
 
-def accounts
+def accounts(agency_id)
     puts 'Seeding Teammates...'
-    User.destroy_all
+    FactoryGirl.create :dispatcher, name: 'Dispatcher Dan',
+      email: 'dan@concrn.com', password: 'password', agency_id: agency_id
 
-    dispatcher = FactoryGirl.create :dispatcher, name: 'Dispatcher Dan', email: 'dan@concrn.com', password: 'password'
-    7.times { FactoryGirl.create :responder }
+    7.times { FactoryGirl.create :responder,  agency_id: agency_id }
 end
 
-
-reports
-accounts
+agency_id = agencies.id
+reports(agency_id)
+accounts(agency_id)

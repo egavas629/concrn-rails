@@ -3,6 +3,7 @@ class Report < ActiveRecord::Base
   serialize :observations, Array
 
   # RELATIONS #
+  belongs_to :agency
   has_many :dispatches, dependent: :destroy
   has_many :logs,       dependent: :destroy
   has_many :responders, through:   :dispatches
@@ -12,6 +13,7 @@ class Report < ActiveRecord::Base
   before_validation :clean_image, :clean_observations
   after_validation :set_completed, if: :archived_or_completed?, on: :update
   after_commit :push_reports
+  after_create :send_to_dispatcher
 
   # CONSTANTS #
   AGEGROUP    = [
@@ -37,6 +39,8 @@ class Report < ActiveRecord::Base
   validates_inclusion_of :age, in: AGEGROUP, allow_blank: true
   validates_inclusion_of :race, in: ETHNICITY, allow_blank: true
   validates_inclusion_of :setting, in: SETTING, allow_blank: true
+  validates_attachment :image,
+    :content_type => { :content_type => %w(image/jpeg image/jpg image/png) }
 
   # SCOPE #
   scope :accepted, lambda {
@@ -117,6 +121,13 @@ class Report < ActiveRecord::Base
   end
 
   private
+
+  def send_to_dispatcher
+    return false if agency.blank? || agency.dispatchers.blank? || agency.dispatchers.on_shift.count < 1
+    agency.dispatchers.on_shift.each do |dispatcher|
+      Telephony.send("New Report @ #{address}.", dispatcher.phone)
+    end
+  end
 
   def clean_image
     image.clear if delete_image == '1'

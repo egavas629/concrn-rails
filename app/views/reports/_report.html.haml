@@ -34,7 +34,7 @@
       %dt Observations
       %dd= report.observations * ', '
 
-  %td= link_to report.address, report_presenter.google_maps_address, target: '_blank'
+  %td= link_to report.address, google_maps(report.address), target: '_blank'
 
   %td{class: "report-#{report.id}-dispatch"}
     = render "dispatches/create", report: report, responders: responders unless report.archived_or_completed?

@@ -1,0 +1,29 @@
+.row
+  .col-md-5
+    %h1.name= "#{@user.name} (#{@user.role.capitalize})"
+  .col-md-5.col-md-offset-2
+    %br
+    - if @user.active && @user.responder?
+      - path = @user.shifts.started? ? end_shift_user_path(@user) : start_shift_user_path(@user)
+      = simple_form_for '', url: path, method: :post do |f|
+        .availability
+          = f.check_box :available, class: "available", :label => false, :inline_label => true, checked: @user.shifts.started?
+          %strong Available
+    - elsif !@user.active
+      %strong Inactive
+
+    .phone= @user.phone
+    .email= link_to @user.email, "mailto:#{@user.email}"
+
+- if @user.responder?
+  %br
+  = render 'shift_table', shifts: @user.shifts
+  %br
+  = render 'dispatch_table', dispatches: @user.dispatches
+
+.row
+  %br
+  - status = @user.active ? 'Deactivate' : 'Reactivate'
+  .col-sm-2= link_to "#{status} Responder", user_path(@user, user: {active: !@user.active}), method: :put,
+    class: 'btn btn-warning'
+  .col-sm-2= link_to 'Edit', edit_user_path(@user), class: 'btn btn-default'

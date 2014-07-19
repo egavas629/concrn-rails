@@ -1,5 +1,8 @@
 Streetmom::Application.routes.draw do
-  devise_for :users
+
+  resources :agencies
+
+  devise_for :users, path_prefix: 'my'
 
   resources :reports, except: %w(edit) do
     collection do
@@ -12,7 +15,7 @@ Streetmom::Application.routes.draw do
     end
   end
 
-  resources :responders, except: %w(edit) do
+  resources :users, except: %w(destroy) do
     collection do
       get 'by_phone'
       get 'deactivated'
@@ -22,6 +25,7 @@ Streetmom::Application.routes.draw do
       post  'end',  to: 'shifts#end',   :as => :end_shift
     end
   end
+
   resources :dispatches, only: %w(create update)
   resources :logs,       only: %w(create update)
   resources :reporters,  only: %w(show)

@@ -1,0 +1,26 @@
+%h1= @agency.name
+
+%table.table
+  %tr
+    %td Call Phone
+    %td= @agency.call_phone
+  %tr
+    %td Text Phone
+    %td= @agency.text_phone
+  %tr
+    %td Address
+    %td= @agency.address
+  %tr
+    %td Created On
+    %td= AgencyPresenter.new(@agency).created_at
+
+%hr
+%h3 Admin User
+= simple_form_for @user do |f|
+  = f.input :agency_id, input_html: { value: @agency.id }, as: :hidden
+  = render 'users/form', f: f
+
+%hr
+= link_to 'Edit', edit_agency_path(@agency), class: 'btn btn-default'
+= link_to 'Delete', agency_path(@agency), method: :delete,
+  'data-confirm' => 'Are you sure you want to delete the agency? All users and records of this agency will be destroyed permanently.', class: 'btn btn-danger'

@@ -1,4 +1,4 @@
-class DispatchesController < ApplicationController
+class DispatchesController < DashboardController
   def create
     if responder ? report.dispatch(responder) : false
       flash[:notice] = "#{responder.name} has been dispatched to help #{report.name}."
@@ -18,11 +18,11 @@ class DispatchesController < ApplicationController
 
   def responder
     id = params.require(:dispatch).permit(:responder_id)[:responder_id]
-    id.present? ? Responder.find(id) : false
+    id.present? ? current_agency.responders.find(id) : false
   end
 
   def report
-    Report.find params.require(:dispatch).permit(:report_id)[:report_id]
+    current_agency.reports.find params.require(:dispatch).permit(:report_id)[:report_id]
   end
 
   private

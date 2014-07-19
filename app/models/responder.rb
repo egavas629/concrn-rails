@@ -1,22 +1,15 @@
 class Responder < User
   # RELATIONS #
+  belongs_to :user, class_name: User, foreign_key: :id
   has_many :dispatches, dependent: :destroy
   has_many :reports,    through:   :dispatches
-  has_many :shifts,     dependent: :destroy
-
-  # VALIDATIONS #
-  validates :phone, presence: true, uniqueness: true
-  validates :name,  presence: true, uniqueness: true
 
   # CALLBACKS #
   after_validation :make_unavailable, on: :update
   after_update :push_reports
 
   # SCOPES #
-  default_scope ->    { where(role: 'responder') }
-  scope :active,   -> { where(active: true) }
-  scope :inactive, -> { where(active: false) }
-  scope :on_shift, -> { where(id: Shift.on.map(&:responder_id)) }
+  default_scope -> { where(role: 'responder') }
 
   scope :available, lambda {
     find_by_sql(%Q{
@@ -36,17 +29,6 @@ class Responder < User
   end
 
   # INSTANCE METHODS #
-  def phone=(new_phone)
-    write_attribute(:phone, NumberSanitizer.sanitize(new_phone))
-  rescue NoMethodError
-    errors.add(:phone, 'Phone Number is not valid')
-  end
-
-  def set_password
-    self.password              = 'password'
-    self.password_confirmation = 'password'
-  end
-
   private
 
   def make_unavailable

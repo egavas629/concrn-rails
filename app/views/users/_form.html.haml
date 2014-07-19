@@ -1,0 +1,8 @@
+= f.input :name
+= f.input :phone, as: :tel
+= f.input :email, as: :email
+= f.input :role, collection: User::ROLES
+- if f.object.new_record?
+  = f.input :password
+  = f.input :password_confirmation
+= f.button :submit

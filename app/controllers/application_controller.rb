@@ -1,6 +1,19 @@
 class ApplicationController < ActionController::Base
   before_filter :configure_permitted_parameters, if: :devise_controller?
 
+  def authenticate_super_admin!
+    authenticate_or_request_with_http_basic do |username, password|
+      ENV['SUPER_ADMIN_USERNAME'] == username &&
+      ENV['SUPER_ADMIN_PASSWORD'] == password
+    end
+  end
+
+  def current_agency
+    return false unless user_signed_in?
+    current_user.agency
+  end
+  helper_method :current_agency
+
   protected
 
   def configure_permitted_parameters
