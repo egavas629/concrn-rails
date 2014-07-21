@@ -11,7 +11,7 @@ end
 
 def accounts(agency_id)
     puts 'Seeding Teammates...'
-    FactoryGirl.create :dispatcher, name: 'Dispatcher Dan',
+    FactoryGirl.create :dispatcher, name: 'Doug Marks',
       email: 'doug@concrn.com', password: 'streetmom', agency_id: agency_id
 
     7.times { FactoryGirl.create :responder,  agency_id: agency_id }
