@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 20140718211820) do
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.datetime "completed_at"
-    # t.integer  "agency_id"
+    t.integer  "agency_id"
   end
 
   add_index "reports", ["agency_id"], name: "index_reports_on_agency_id", using: :btree
@@ -105,7 +105,7 @@ ActiveRecord::Schema.define(version: 20140718211820) do
     t.string   "name"
     t.string   "phone"
     t.string   "role",                   default: "responder"
-    # t.integer  "agency_id"
+    t.integer  "agency_id"
     t.boolean  "active",                 default: true
   end
 
