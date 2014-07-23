@@ -1,6 +1,6 @@
 .row
   %h1.pull-left Agencies
-  .pull-right= link_to 'New Agency', new_agency_path, class: 'btn btn-default'
+  .btn-new-agency.pull-right= link_to 'New Agency', new_agency_path, class: 'btn btn-default'
 
 %table.table
   %tr
@@ -17,4 +17,5 @@
       %td= agency.text_phone
       %td= link_to agency.address, google_maps(agency.address), target: '_blank'
       %td= AgencyPresenter.new(agency).created_at
-      %td= link_to 'Edit', edit_agency_path(agency), class: 'btn btn-default'
+      %td{class: "btn-edit-agency"}
+        = link_to 'Edit', edit_agency_path(agency), class: 'btn btn-default'

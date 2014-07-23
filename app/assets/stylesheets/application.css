@@ -11,11 +11,12 @@
  *= require_self
  *= require jquery-ui/datepicker
  *= require twitter/bootstrap
+ *= require agencies
  *= require devise
  *= require dispatches
  *= require globals
  *= require logs
  *= require reports
- *= require responders
+ *= require users
  *= require gritter
  */
