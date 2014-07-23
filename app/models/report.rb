@@ -125,7 +125,7 @@ class Report < ActiveRecord::Base
   def send_to_dispatcher
     return false if agency.blank? || agency.dispatchers.blank? || agency.dispatchers.on_shift.count < 1
     agency.dispatchers.on_shift.each do |dispatcher|
-      Telephony.send("New Report @ #{address}.", dispatcher.phone)
+      Telephony.send("New Report @ #{address}. www.concrn.com/reports", dispatcher.phone)
     end
   end
 
