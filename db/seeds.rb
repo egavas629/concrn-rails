@@ -17,5 +17,5 @@ def accounts(agency_id)
 end
 
 agency_id = agencies.id
-# reports(agency_id)
-# accounts(agency_id)
+reports(agency_id)
+accounts(agency_id)
