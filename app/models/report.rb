@@ -39,7 +39,7 @@ class Report < ActiveRecord::Base
   # VALIDATIONS #
   validates :address, presence: true
   validates_inclusion_of :status, in: STATUS
-  # validates_inclusion_of :urgency in: URGENCY, allow_blank: true
+  validates_inclusion_of :urgency, in: URGENCY, allow_blank: true
   validates_inclusion_of :gender, in: GENDER, allow_blank: true
   validates_inclusion_of :age, in: AGEGROUP, allow_blank: true
   validates_inclusion_of :race, in: ETHNICITY, allow_blank: true

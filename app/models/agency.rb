@@ -10,4 +10,5 @@ class Agency < ActiveRecord::Base
   validates :address,    uniqueness: true, presence: true
   validates :text_phone, uniqueness: true, presence: true
   validates :call_phone, uniqueness: true, presence: true
+  validates :zip_codes, uniqueness:true
 end

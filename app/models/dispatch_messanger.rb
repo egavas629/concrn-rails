@@ -120,7 +120,8 @@ class DispatchMessanger
       "Reporter: #{[@report.name, @report.phone].delete_blank * ', '}",
       "#{[@report.race, @report.gender, @report.age].delete_blank * '/'}",
       @report.setting,
-      @report.nature
+      @report.nature,
+      @report.urgency
     ].delete_blank * ' | '
   end
 
