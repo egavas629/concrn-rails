@@ -13,8 +13,12 @@
               %br
     %table.table#transcript
       %tbody
+        - previous_log = LogPresenter.new(report)
         - report.logs.each do |log|
           - log_presenter = LogPresenter.new(log)
+          - unless log_presenter.date_created == previous_log.date_created
+            = log_presenter.date_created
+          - previous_log = log_presenter
           = content_tag_for :tr, log, class: 'log-entry' do
             = log_presenter.created_at
             = log_presenter.name
