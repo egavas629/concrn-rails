@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20140725061443) do
     t.text     "address"
     t.string   "call_phone"
     t.string   "text_phone"
+    t.text     "zip_code_list"
   end
 
   create_table "dispatches", force: true do |t|
