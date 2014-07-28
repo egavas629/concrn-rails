@@ -64,7 +64,7 @@ class DispatchMessanger
 
   def accept_dispatch_notification
     @report.logs.create(
-      author: @responder, body: '*** Accepted the dispatch ***'
+      author: @responder, body: '--- Accepted the dispatch ---'
     )
   end
 
