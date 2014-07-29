@@ -8,8 +8,11 @@ class DispatchMessanger
   def respond(body)
     feedback, status = true, nil
     if @responder.shifts.started? && body[/break/i]
-      @responder.shifts.end('sms') && feedback = false if non_breaktime
-      status = 'rejected' if @dispatch && @dispatch.pending?
+      if @dispatch.rejected?
+        @responder.shifts.end('sms') && feedback = false
+      else
+        @responder.shifts.end('sms') && feedback = false if breaktime
+        status = 'rejected' if @dispatch && @dispatch.pending?
     elsif !@responder.shifts.started? && body[/on/i]
       @responder.shifts.start('sms') && feedback = false
     elsif @dispatch.pending? && body[/no/i]
@@ -82,7 +85,7 @@ class DispatchMessanger
     Telephony.send(message, @responder.phone)
   end
 
-  def non_breaktime
+  def breaktime
     @dispatch.nil? || @dispatch.completed? || @dispatch.pending? || @dispatch.rejected?
   end
 
