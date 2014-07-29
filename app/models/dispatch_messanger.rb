@@ -8,7 +8,7 @@ class DispatchMessanger
   def respond(body)
     feedback, status = true, nil
     if @responder.shifts.started? && body[/break/i]
-      @responder.shifts.end('sms') && feedback = false if non_breaktime || @responder.dispatches.first.status == rejected
+      @responder.shifts.end('sms') && feedback = false if non_breaktime
       status = 'rejected' if @dispatch && @dispatch.pending?
     elsif !@responder.shifts.started? && body[/on/i]
       @responder.shifts.start('sms') && feedback = false
@@ -83,7 +83,7 @@ class DispatchMessanger
   end
 
   def non_breaktime
-    @dispatch.nil? || @dispatch.completed? || @dispatch.pending?
+    @dispatch.nil? || @dispatch.completed? || @dispatch.pending? || @dispatch.rejected?
   end
 
   def notify_reporter
