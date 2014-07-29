@@ -7,20 +7,18 @@ class DispatchMessanger
 
   def respond(body)
     feedback, status = true, nil
-    if @responder.shifts.started? && body[/break/i]
-      if @dispatch.rejected?
-        @responder.shifts.end('sms') && feedback = false
-      else
-        @responder.shifts.end('sms') && feedback = false if breaktime
-        status = 'rejected' if @dispatch && @dispatch.pending?
-      end
+    if @responder.shifts.started? && body[/break/i] && @dispatch.rejected?
+      @responder.shifts.end('sms') && feedback = false
+    elsif @responder.shifts.started? && body[/break/i]
+      @responder.shifts.end('sms') && feedback = false if breaktime
+      status = 'rejected' if @dispatch && @dispatch.pending?
     elsif !@responder.shifts.started? && body[/on/i]
       @responder.shifts.start('sms') && feedback = false
     elsif @dispatch.pending? && body[/no/i]
       status = 'rejected'
     elsif @dispatch.accepted? && body[/done/i]
       status = 'completed'
-    elsif !@dispatch.accepted? && !@dispatch.completed?
+    elsif @dispatch.pending?
       status = 'accepted'
     end
     # If dispatch changed then update status
