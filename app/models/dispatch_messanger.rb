@@ -13,6 +13,7 @@ class DispatchMessanger
       else
         @responder.shifts.end('sms') && feedback = false if breaktime
         status = 'rejected' if @dispatch && @dispatch.pending?
+      end
     elsif !@responder.shifts.started? && body[/on/i]
       @responder.shifts.start('sms') && feedback = false
     elsif @dispatch.pending? && body[/no/i]
