@@ -7,6 +7,12 @@ class LogPresenter < BasePresenter
     end
   end
 
+  def date_created
+    h.content_tag :td do
+      log.created_at.strftime('%-m/%-d/%y')
+    end
+  end
+
   def body
     h.content_tag :td, class: 'body' do
       log.body

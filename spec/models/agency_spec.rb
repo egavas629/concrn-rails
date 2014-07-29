@@ -13,5 +13,6 @@ describe Agency do
   it { should validate_uniqueness_of(:address) }
   it { should validate_uniqueness_of(:text_phone) }
   it { should validate_uniqueness_of(:call_phone) }
+  it { should validate_uniqueness_of(:zip_code_list) }
 
 end

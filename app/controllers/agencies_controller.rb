@@ -6,10 +6,10 @@ class AgenciesController < ApplicationController
   def create
     @agency.assign_attributes(agency_parameters)
     if @agency.save
-      flash[:notice] = "#{@agency.name} was created successfully"
+      flash[:notice] = "#{@agency.name} was created successfully."
       redirect_to @agency
     else
-      flash[:notice] = "There was an error creating the agency"
+      flash[:notice] = "There was an error creating the agency."
       render :new
     end
   end
@@ -17,10 +17,10 @@ class AgenciesController < ApplicationController
   def destroy
     name = @agency.name
     if @agency.destroy
-      flash[:notice] = "#{name} was deleted successfully"
+      flash[:notice] = "#{name} was deleted successfully."
       redirect_to action: :index
     else
-      flash[:notice] = "There was an error deleting the agency"
+      flash[:notice] = "There was an error deleting the agency."
       redirect_to :back
     end
   end
@@ -41,10 +41,10 @@ class AgenciesController < ApplicationController
 
   def update
     if @agency.update_attributes(agency_parameters)
-      flash[:notice] = "#{@agency.name} was updated successfully"
+      flash[:notice] = "#{@agency.name} was updated successfully."
       redirect_to @agency
     else
-      flash[:notice] = "There was an updating the agency"
+      flash[:notice] = "There was an error updating the agency."
       redirect_to :back
     end
   end
@@ -60,6 +60,6 @@ class AgenciesController < ApplicationController
   end
 
   def agency_parameters
-    params.require(:agency).permit(:name, :address, :call_phone, :text_phone)
+    params.require(:agency).permit(:name, :address, :call_phone, :text_phone, :zip_code_list)
   end
 end

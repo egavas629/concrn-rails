@@ -7,8 +7,10 @@ class DispatchMessanger
 
   def respond(body)
     feedback, status = true, nil
-    if @responder.shifts.started? && body[/break/i]
-      @responder.shifts.end('sms') && feedback = false if non_breaktime
+    if @responder.shifts.started? && body[/break/i] && @dispatch.rejected?
+      @responder.shifts.end('sms') && feedback = false
+    elsif @responder.shifts.started? && body[/break/i]
+      @responder.shifts.end('sms') && feedback = false if breaktime
       status = 'rejected' if @dispatch && @dispatch.pending?
     elsif !@responder.shifts.started? && body[/on/i]
       @responder.shifts.start('sms') && feedback = false
@@ -16,7 +18,7 @@ class DispatchMessanger
       status = 'rejected'
     elsif @dispatch.accepted? && body[/done/i]
       status = 'completed'
-    elsif !@dispatch.accepted? && !@dispatch.completed?
+    elsif @dispatch.pending?
       status = 'accepted'
     end
     # If dispatch changed then update status
@@ -64,7 +66,7 @@ class DispatchMessanger
 
   def accept_dispatch_notification
     @report.logs.create(
-      author: @responder, body: '*** Accepted the dispatch ***'
+      author: @responder, body: '--- Accepted the dispatch ---'
     )
   end
 
@@ -77,14 +79,13 @@ class DispatchMessanger
 
   def acknowledge_rejection
     message = <<-MSG
-      You have been removed from this incident at #{@report.address}.
-      You are now available to be dispatched.
+      You have been removed from this incident at #{@report.address}. You are now available to be dispatched.
     MSG
     Telephony.send(message, @responder.phone)
   end
 
-  def non_breaktime
-    @dispatch.nil? || @dispatch.completed? || @dispatch.pending?
+  def breaktime
+    @dispatch.nil? || @dispatch.completed? || @dispatch.pending? || @dispatch.rejected?
   end
 
   def notify_reporter
@@ -94,8 +95,7 @@ class DispatchMessanger
   def notify_about_primary_responder
     return false unless @report.multi_accepted_responders?
     message = <<-MSG
-      The primary responder for this report is: #{@report.primary_responder.name} –
-      #{@report.primary_responder.phone}
+      The primary responder for this report is: #{@report.primary_responder.name} – #{@report.primary_responder.phone}
     MSG
     Telephony.send(message, @responder.phone)
   end
@@ -103,8 +103,7 @@ class DispatchMessanger
   def reporter_synopsis
     if @report.multi_accepted_responders?
       <<-MSG
-        #{@responder.name} - #{@responder.phone} is on the way to help
-        #{@report.primary_responder.name}.
+        #{@responder.name} - #{@responder.phone} is on the way to help #{@report.primary_responder.name}.
       MSG
     elsif @report.agency.present? && @report.agency.call_phone.present?
       agency = @report.agency
@@ -120,14 +119,14 @@ class DispatchMessanger
       "Reporter: #{[@report.name, @report.phone].delete_blank * ', '}",
       "#{[@report.race, @report.gender, @report.age].delete_blank * '/'}",
       @report.setting,
-      @report.nature
+      @report.nature,
+      @report.urgency
     ].delete_blank * ' | '
   end
 
   def thank_responder
     message = <<-EOF
-      The report is now completed, thanks for your help! You are now available
-      to be dispatched.
+      The report is now completed, thanks for your help! You are now available to be dispatched.
     EOF
     Responder.accepted(@report.id).each do |responder|
       Telephony.send(message, responder.phone)

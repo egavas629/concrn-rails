@@ -9,6 +9,7 @@
     = f.input :phone, label: "Contact Phone No.", placeholder: "4158575309",
       type: "tel", maxlength: "10", required: true, hint: "10-digit US numbers only",
       input_html: { value: current_user.try(:phone) }
+    = f.input :urgency, collection: Report::URGENCY
     %div.form-group
       %label.control-label Is this report concerning a person?
       %input#is-person.form-control{type: 'checkbox'}
