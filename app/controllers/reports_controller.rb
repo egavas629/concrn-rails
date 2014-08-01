@@ -69,7 +69,8 @@ class ReportsController < DashboardController
   end
 
   def find_report
-    @report = current_agency.reports.find(params[:id])
+    @report = Report.find(params[:id])
+    warn "Found report does not match agency" unless current_agency.try(:id) === @report.agency_id
   end
 
   def report_params
