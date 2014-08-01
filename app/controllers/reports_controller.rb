@@ -1,5 +1,5 @@
 class ReportsController < DashboardController
-  before_action :authenticate_user!,       except: %w(new create)
+  before_action :authenticate_user!,       except: %w(new create update)
   before_action :authenticate_dispatcher!, only: %w(index active history)
 
   before_action :available_responders, only: %w(index active show)
