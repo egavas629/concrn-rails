@@ -1,5 +1,5 @@
 class ReportsController < DashboardController
-  before_action :authenticate_user!,       except: %w(new create)
+  before_action :authenticate_user!,       except: %w(new create update)
   before_action :authenticate_dispatcher!, only: %w(index active history)
 
   before_action :available_responders, only: %w(index active show)
@@ -69,7 +69,8 @@ class ReportsController < DashboardController
   end
 
   def find_report
-    @report = current_agency.reports.find(params[:id])
+    @report = Report.find(params[:id])
+    warn "Found report does not match agency" unless current_agency.try(:id) === @report.agency_id
   end
 
   def report_params

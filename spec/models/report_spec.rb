@@ -43,6 +43,15 @@ describe Report do
     end
   end
 
+  describe '#auto_assign_agency' do
+    let(:agency) { create(:agency) }
+    subject { create(:report, agency: nil, zip: agency.zip_code_list) }
+    it 'assigns the agency automatically' do
+      subject.agency.should == agency
+    end
+    
+  end
+
   describe '#accepted_dispatches' do
     subject { create(:report) }
 

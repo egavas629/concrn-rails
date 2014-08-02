@@ -1,6 +1,13 @@
 class Report < ActiveRecord::Base
   attr_accessor :delete_image
   serialize :observations, Array
+  reverse_geocoded_by :lat, :long do |obj, results|
+    if geo = results.first
+      obj.zip = geo.postal_code
+    end
+  end
+  after_validation :reverse_geocode
+  before_save :auto_assign_agency
 
   # RELATIONS #
   belongs_to :agency
@@ -126,6 +133,10 @@ class Report < ActiveRecord::Base
   end
 
   private
+
+  def auto_assign_agency
+    self.agency ||= Agency.find_by("zip_code_list like ?", "%#{zip}%")
+  end
 
   def send_to_dispatcher
     return false if agency.blank? || agency.dispatchers.blank? || agency.dispatchers.on_shift.count < 1
