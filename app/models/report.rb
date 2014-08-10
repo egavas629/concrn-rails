@@ -135,7 +135,7 @@ class Report < ActiveRecord::Base
   private
 
   def auto_assign_agency
-    self.agency ||= Agency.find_by("zip_code_list like ?", "%#{zip}%")
+    self.agency ||= Agency.find_by("zip_code_list like ?", "%#{zip}%") || Agency.find_by(name: "Concrn Team")
   end
 
   def send_to_dispatcher

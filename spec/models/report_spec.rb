@@ -49,7 +49,12 @@ describe Report do
     it 'assigns the agency automatically' do
       subject.agency.should == agency
     end
-    
+
+    it 'assigns the agency to the concrn team' do
+      concrn = create(:agency, name: 'Concrn Team')
+      report = create(:report, agency: nil, zip: '66600')
+      report.agency.should == concrn
+    end
   end
 
   describe '#accepted_dispatches' do
