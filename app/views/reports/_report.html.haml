@@ -37,7 +37,8 @@
       %dt Urgency
       %dd= report.urgency
 
-  %td= link_to report.address, google_maps(report.address), target: '_blank'
+  %td
+    %dd= link_to report.address, google_maps(report.address), target: '_blank'
     - if report.image.present?
       %a{:target => "_blank", :href => report.image.url(:original)}
         %img{:src => report.image.url, :style => 'width:100px;height:auto;'}
