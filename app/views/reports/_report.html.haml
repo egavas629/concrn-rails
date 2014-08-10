@@ -39,6 +39,7 @@
 
   %td
     %dd= link_to report.address, google_maps(report.address), target: '_blank'
+    %br
     - if report.image.present?
       %a{:target => "_blank", :href => report.image.url(:original)}
         %img{:src => report.image.url, :style => 'width:100px;height:auto;'}

@@ -42,6 +42,7 @@ class ReportsController < DashboardController
   end
 
   def update
+    @report = Report.find(params[:id])
     @report.update_attributes!(report_params)
     respond_to do |format|
       format.js { render json: {success: true} }
@@ -76,7 +77,7 @@ class ReportsController < DashboardController
   def report_params
     report_attributes = [
       :name, :phone, :lat, :long, :status, :nature, :delete_image, :setting,
-      { observations: [] }, :age, :gender, :race, :address, :neighborhood,
+      :observations, :age, :gender, :race, :address, :neighborhood,
       :image, :agency_id, :urgency
     ]
 
