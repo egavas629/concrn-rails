@@ -77,7 +77,7 @@ class ReportsController < DashboardController
   def report_params
     report_attributes = [
       :name, :phone, :lat, :long, :status, :nature, :delete_image, :setting,
-      :observations, :age, :gender, :race, :address, :neighborhood,
+      { observations: [] }, :age, :gender, :race, :address, :neighborhood,
       :image, :agency_id, :urgency
     ]
 

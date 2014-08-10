@@ -1,5 +1,6 @@
 class Report < ActiveRecord::Base
   attr_accessor :delete_image
+  serialize :observations, Array
   reverse_geocoded_by :lat, :long do |obj, results|
     if geo = results.first
       obj.zip = geo.postal_code
