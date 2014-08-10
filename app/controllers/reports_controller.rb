@@ -54,7 +54,7 @@ class ReportsController < DashboardController
   end
 
   def download
-    file = open(report.image.url)
+    file = open(@report.image.url)
     send_data file.read, filename:    report.image_file_name,
                          type:        report.image_content_type,
                          disposition: 'attachment',

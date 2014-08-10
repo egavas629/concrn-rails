@@ -33,7 +33,7 @@ class Report < ActiveRecord::Base
   SETTING     = ['Public Space', 'Workplace', 'School', 'Home', 'Other']
   OBSERVATION = [
     'At-risk of harm', 'Under the influence', 'Anxious',
-    'Depressed', 'Aggarvated', 'Threatening'
+    'Depressed', 'Aggravated', 'Threatening'
   ]
   GENDER      = %w(Male Female Other)
   ETHNICITY   = [
