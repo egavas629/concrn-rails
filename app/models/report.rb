@@ -16,7 +16,7 @@ class Report < ActiveRecord::Base
   has_many :responders, through:   :dispatches
 
   # CALLBACKS #
-  has_attached_file :image, :styles => { :medium => "600x600>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
+  has_attached_file :image
   before_validation :clean_image, :clean_observations
   after_validation :set_completed, if: :archived_or_completed?, on: :update
   after_commit :push_reports
