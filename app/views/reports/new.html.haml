@@ -2,34 +2,36 @@
 .report-form
   = simple_form_for @report do |f|
     %h4 Location
-    = f.input :address
+    .col-md-9= f.input :address
+    .col-md-3= f.input :zip, label: "Zip Code"
     %h4 Reporting Party Information
-    = f.input :name, label: "Contact Name",
+    .col-md-6= f.input :name, label: "Contact Name",
       input_html: { value: current_user.try(:name) }
-    = f.input :phone, label: "Contact Phone No.", placeholder: "4158575309",
+    .col-md-6= f.input :phone, label: "Contact Phone No.", placeholder: "4158675309",
       type: "tel", maxlength: "10", required: true, hint: "10-digit US numbers only",
       input_html: { value: current_user.try(:phone) }
-    = f.input :urgency, collection: Report::URGENCY
-    %div.form-group
-      %label.control-label Is this report concerning a person?
-      %input#is-person.form-control{type: 'checkbox'}
-    %div#person-fields{style: 'display:none;'}
-      %h4 Patient Description
-      = f.input :gender, collection: Report::GENDER
-      = f.input :age, collection: Report::AGEGROUP
-      = f.input :race, collection: Report::ETHNICITY
-      = f.input :setting, collection: Report::SETTING
-      %h4 Incident Description
-      .observation-checkboxes
-        = f.input :observations, as: :check_boxes, collection: Report::OBSERVATION
-    = f.input :nature, label: "Additional Description"
-    = f.input :agency_id, input_html: { value: current_user.agency_id },
-      as: :hidden if user_signed_in?
-    = f.submit 'Submit Report', class: 'btn btn-primary'
 
-  / = @location.address
-  / = :lat(@location.latitude)
-  / = :long(@location.longitude)
+    .col-md-12
+      = f.input :urgency, collection: Report::URGENCY
+      %div.form-group
+        %label.control-label Is this report concerning a person?
+        %input#is-person.form-control{type: 'checkbox'}
+      %div#person-fields{style: 'display:none;'}
+        %h4 Patient Description
+        = f.input :gender, collection: Report::GENDER
+        = f.input :age, collection: Report::AGEGROUP
+        = f.input :race, collection: Report::ETHNICITY
+        = f.input :setting, collection: Report::SETTING
+        %h4 Incident Description
+        .observation-checkboxes
+          = f.input :observations, as: :check_boxes, collection: Report::OBSERVATION
+      = f.input :nature, label: "Additional Description"
+      = f.input :agency_id, input_html: { value: current_user.agency_id },
+        as: :hidden if user_signed_in?
+      = f.input_field :image
+      %br
+    .new-submit= f.submit 'Submit Report', class: 'btn btn-primary'
+
 
 = content_for :footer_js do
   :javascript
