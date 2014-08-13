@@ -112,6 +112,16 @@ describe Dispatch do
     end
   end
 
+    describe '#rejected?' do
+      before { dispatch.status = 'rejected' }
+      its(:rejected?) { should be_true }
+      it 'is false unless rejected' do
+        dispatch.status = 'accepted'
+        expect(dispatch.rejected?).to be_false
+      end
+    end
+  end
+
   describe '#status_update' do
     subject { create(:dispatch) }
     its(:status_update) { should include(subject.responder_name, subject.status) }

@@ -61,6 +61,10 @@ class Dispatch < ActiveRecord::Base
     status == 'pending'
   end
 
+  def rejected?
+    status == 'rejected'
+  end
+
   def status_update
     [
       responder_name, status,
