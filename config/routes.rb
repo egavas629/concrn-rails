@@ -11,6 +11,7 @@ Streetmom::Application.routes.draw do
     end
 
     member do
+      post 'upload' => 'reports#update'
       get 'download' => 'reports#download', :as => :download
     end
   end
