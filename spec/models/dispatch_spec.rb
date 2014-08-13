@@ -110,7 +110,6 @@ describe Dispatch do
         expect(dispatch.pending?).to be_false
       end
     end
-  end
 
     describe '#rejected?' do
       before { dispatch.status = 'rejected' }
