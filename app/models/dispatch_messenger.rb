@@ -1,4 +1,4 @@
-class DispatchMessanger
+class DispatchMessenger
   def initialize(responder)
     @responder = responder
     @dispatch  = responder.dispatches.first
@@ -101,13 +101,13 @@ class DispatchMessanger
   def reporter_synopsis
     if @report.multi_accepted_responders?
       <<-MSG
-        #{@responder.name} - #{@responder.phone} is on the way to help #{@report.primary_responder.name}.
+        Additional Support: #{@responder.name} is on the way to help #{@report.primary_responder.name}.
       MSG
     elsif @report.agency.present? && @report.agency.call_phone.present?
       agency = @report.agency
-      "INCIDENT RESPONSE: #{@responder.name} is on the way. Contact the #{agency.name} at #{agency.call_phone}"
+      "Incident Response: #{@responder.name} is on the way. Contact the #{agency.name} at #{agency.call_phone}"
     else
-      "INCIDENT RESPONSE: #{@responder.name} is on the way. #{@responder.phone}"
+      "Incident Response: #{@responder.name} is on the way. #{@responder.phone}"
     end
   end
 

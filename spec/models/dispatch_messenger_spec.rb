@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DispatchMessanger do
+describe DispatchMessenger do
   describe '.initialize'
   describe '.respond'
   describe '.accept'
@@ -22,30 +22,30 @@ describe DispatchMessanger do
   # describe '#messanger' do
   #   context 'accepted' do
   #     subject    { build(:dispatch, status: 'accepted') }
-  #     it 'DispatchMessanger receives #accept!' do
-  #       expect_any_instance_of(DispatchMessanger).to receive(:accept!)
+  #     it 'DispatchMessenger receives #accept!' do
+  #       expect_any_instance_of(DispatchMessenger).to receive(:accept!)
   #       subject.save!
   #     end
   #   end
   #   context 'completed' do
   #     subject    { build(:dispatch, status: 'completed') }
-  #     it 'DispatchMessanger receives #complete!' do
-  #       expect_any_instance_of(DispatchMessanger).to receive(:complete!)
+  #     it 'DispatchMessenger receives #complete!' do
+  #       expect_any_instance_of(DispatchMessenger).to receive(:complete!)
   #       subject.save!
   #     end
   #   end
   #   context 'pending' do
   #     let(:report)    { create(:report) }
   #     let(:responder) { create(:responder, :on_shift) }
-  #     it 'DispatchMessanger receives #pending!' do
-  #       expect_any_instance_of(DispatchMessanger).to receive(:pending!)
+  #     it 'DispatchMessenger receives #pending!' do
+  #       expect_any_instance_of(DispatchMessenger).to receive(:pending!)
   #       report.dispatch!(responder)
   #     end
   #   end
   #   context 'rejected' do
   #     subject    { build(:dispatch, status: 'rejected') }
-  #     it 'DispatchMessanger receives #reject!' do
-  #       expect_any_instance_of(DispatchMessanger).to receive(:reject!)
+  #     it 'DispatchMessenger receives #reject!' do
+  #       expect_any_instance_of(DispatchMessenger).to receive(:reject!)
   #       subject.save!
   #     end
   #   end

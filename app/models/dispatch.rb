@@ -75,7 +75,7 @@ class Dispatch < ActiveRecord::Base
   private
 
   def messanger
-    DispatchMessanger.new(responder).trigger
+    DispatchMessenger.new(responder).trigger
   end
 
   def push_reports

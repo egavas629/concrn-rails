@@ -17,6 +17,6 @@ class Telephony
   def self.receive(body, opts = {})
     responder = Responder.find_by_phone(opts[:from])
     send("#{opts[:from]}: #{opts[:body]}", to: '6507876770') unless responder
-    DispatchMessanger.new(responder).respond(body)
+    DispatchMessenger.new(responder).respond(body)
   end
 end
