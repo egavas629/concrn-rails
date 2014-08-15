@@ -63,6 +63,7 @@ class DispatchMessenger
       acknowledge_rejection
     else
       acknowledge_break
+    end
   end
 
   def accept_dispatch_notification
