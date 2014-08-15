@@ -59,7 +59,10 @@ class DispatchMessenger
   end
 
   def reject
-    acknowledge_rejection
+    if @responder.shifts.started?
+      acknowledge_rejection
+    else
+      acknowledge_break
   end
 
   def accept_dispatch_notification
@@ -78,6 +81,13 @@ class DispatchMessenger
   def acknowledge_rejection
     message = <<-MSG
       You have been removed from this incident at #{@report.address}. You are now available to be dispatched.
+    MSG
+    Telephony.send(message, @responder.phone)
+  end
+
+  def acknowledge_break
+    message = <<-MSG
+      You have been removed from this incident at #{@report.address}. Please text 'On' when ready to return to your shift.
     MSG
     Telephony.send(message, @responder.phone)
   end
