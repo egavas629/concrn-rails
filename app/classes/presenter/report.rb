@@ -7,7 +7,7 @@ class Presenter::Report
 
   def to_h
     report.attributes.merge({
-      agency: agency_attributes.slice("name")
+      agency: agency_attributes.slice("name").merge(default: report.agency.default?),
     })
   end
 

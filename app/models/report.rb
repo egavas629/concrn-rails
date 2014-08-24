@@ -1,4 +1,5 @@
 class Report < ActiveRecord::Base
+  DEFAULT_TEAM_NAME = "Concrn Team"
   attr_accessor :delete_image
   serialize :observations, Array
   reverse_geocoded_by :lat, :long do |obj, results|
@@ -135,7 +136,7 @@ class Report < ActiveRecord::Base
   private
 
   def auto_assign_agency
-    self.agency ||= Agency.find_by("zip_code_list like ?", "%#{zip}%") || Agency.find_by(name: "Concrn Team")
+    self.agency ||= Agency.find_by("zip_code_list like ?", "%#{zip}%") || Agency.find_by(name: DEFAULT_TEAM_NAME)
   end
 
   def send_to_dispatcher

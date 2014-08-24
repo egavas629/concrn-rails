@@ -11,4 +11,8 @@ class Agency < ActiveRecord::Base
   validates :text_phone, uniqueness: true, presence: true
   validates :call_phone, uniqueness: true, presence: true
   validates :zip_code_list, uniqueness:true
+
+  def default?
+    name == Report::DEFAULT_TEAM_NAME
+  end
 end
