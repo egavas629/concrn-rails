@@ -14,6 +14,10 @@ module ApplicationHelper
     end
   end
 
+  def urgency_label(urgency)
+    Report::URGENCY_LABELS[urgency.to_i + 1]
+  end
+
   def google_maps(address)
     "https://maps.google.com/?q=#{address}"
   end

@@ -27,7 +27,7 @@
     - if @report.urgency?
       %li.list-group-item
         %h4.list-group-item-heading Urgency
-        .list-group-item-text=@report.urgency
+        .list-group-item-text= urgency_label(@report.urgency)
 
     - if @report.nature? || @report.age? || @report.race? || @report.gender?
       %li.list-group-item

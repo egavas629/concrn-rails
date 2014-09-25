@@ -27,7 +27,7 @@ class ReportsController < DashboardController
     @report = Report.new(report_params)
     respond_to do |format|
       if @report.save
-        format.js { render json: @report }
+        format.js { render json: Presenter::Report.present(@report) }
         format.html { redirect_to action: :index }
       else
         format.js { render json: @report }
