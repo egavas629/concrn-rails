@@ -23,11 +23,8 @@ class Report < ActiveRecord::Base
   after_commit :push_reports
   after_create :send_to_dispatcher
 
-  # CONSTANTS #
-  URGENCY     = [
-    '1 - Not urgent', '2 - This week', '3 - Today', '4 - Within an hour',
-    '5 - Need help now'
-  ]
+  URGENCY_LABELS = ['Not urgent', 'This week', 'Today', 'Within an hour']
+
   AGEGROUP    = [
     'Youth (0-17)', 'Young Adult (18-34)', 'Adult (35-64)', 'Senior (65+)'
   ]
@@ -47,7 +44,6 @@ class Report < ActiveRecord::Base
   # VALIDATIONS #
   validates :address, presence: true
   validates_inclusion_of :status, in: STATUS
-  validates_inclusion_of :urgency, in: URGENCY, allow_blank: true
   validates_inclusion_of :gender, in: GENDER, allow_blank: true
   validates_inclusion_of :age, in: AGEGROUP, allow_blank: true
   validates_inclusion_of :race, in: ETHNICITY, allow_blank: true
