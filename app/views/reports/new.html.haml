@@ -12,7 +12,7 @@
       input_html: { value: current_user.try(:phone) }
 
     .col-md-12
-      = f.input :urgency, collection: Report::URGENCY
+      = f.input :urgency,  collection: Report::URGENCY_LABELS.map.with_index {|label, i| [label, i+1]}
       %div.form-group
         %label.control-label Is this report concerning a person?
         %input#is-person.form-control{type: 'checkbox'}

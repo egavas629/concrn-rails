@@ -35,7 +35,7 @@
       %dd= report.observations * ', '
     - if report.urgency?
       %dt Urgency
-      %dd= report.urgency
+      %dd= urgency_label(report.urgency)
 
   %td
     %dd= link_to report.address, google_maps(report.address), target: '_blank'
