@@ -23,7 +23,7 @@ class Report < ActiveRecord::Base
   after_commit :push_reports
   after_create :send_to_dispatcher
 
-  URGENCY_LABELS = ['Not urgent', 'This week', 'Today', 'Within an hour']
+  URGENCY_LABELS = ['Not urgent', 'This week', 'Today', 'Within an hour', 'Need help now']
 
   AGEGROUP    = [
     'Youth (0-17)', 'Young Adult (18-34)', 'Adult (35-64)', 'Senior (65+)'
