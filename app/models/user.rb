@@ -2,6 +2,9 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :recoverable, :registerable,
          :rememberable, :trackable, :validatable
 
+  # CALLBACKS #
+  after_validation :make_unavailable, on: :update
+
   # RELATIONS #
   belongs_to :agency
   has_one    :responder,  class_name: 'Responder', foreign_key: :id
@@ -41,6 +44,10 @@ class User < ActiveRecord::Base
     write_attribute(:phone, NumberSanitizer.sanitize(new_phone))
   rescue NoMethodError
     errors.add(:phone, 'Phone Number is not valid')
+  end
+
+  def make_unavailable
+    shifts.end('web') if active_changed? && !active
   end
 
   def active_for_authentication?
