@@ -2,14 +2,14 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :recoverable, :registerable,
          :rememberable, :trackable, :validatable
 
-  # CALLBACKS #
-  after_validation :make_unavailable, on: :update
-
   # RELATIONS #
   belongs_to :agency
   has_one    :responder,  class_name: 'Responder', foreign_key: :id
   has_one    :dispatcher, class_name: 'Dispatcher', foreign_key: :id
   has_many   :shifts,     dependent: :destroy
+
+  # CALLBACKS #
+  after_validation :make_unavailable, on: :update
 
   # CONSTANTS #
   ROLES = %w(responder dispatcher)
