@@ -10,7 +10,7 @@
 
 .bleed.drop-main {
   padding-top: 75px;
-  background-image: url("/assets/home/city-crop2.png");
+  background-image: url("/assets/home/city-crop.png");
   height: 475px;
   @media(max-width: $screen-xs) {
     padding-top: 0;
@@ -41,22 +41,26 @@
 }
 
 .app-badges {
-  vertical-align: center;
-  padding-top: 73px;
+  float: none;
+  margin: 0 auto;
+  padding-top: 100px;
+  text-align: center;
 }
 
 .bleed.praying {
-  background-image: url('/assets/home/praying.png');
+ /* background-image: url('/assets/home/praying.png');*/
   height: 600px;
 }
 
 .praying {
   &.over-header {
-    margin: $large-gap 0 $small-gap;
     color: $blue;
     font-size: 18px;
     width: 800px;
-    margin-left: 177px;
+    float: none;
+    margin: 0 auto;
+    padding-top: 25px
+    /*margin-left: 177px;*/
   }
   &.heading {
     text-transform: uppercase;
@@ -65,15 +69,7 @@
     font-weight: $semibold-weight;
   }
   &.copy {
-
     font-size: 16px;
+    margin-bottom: 15px;
   }
-}
-
-.appstore-btn {
-  margin-left: 348px;
-}
-
-.gplay-btn {
-  margin-left: 150px;
 }

@@ -12,6 +12,7 @@
 /tmp
 
 # Ignore OS X garbage
+/.DS_Store
 */**.DS_Store
 
 # Pow
