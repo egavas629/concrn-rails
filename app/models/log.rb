@@ -20,6 +20,7 @@ class Log < ActiveRecord::Base
 
     Responder.accepted(report.id).each do |responder|
       Telephony.send(body, responder.phone) && message_sent = true
+    # Telephony.send(body, @report.phone) && message_sent = true
     end
 
     update_attributes(sent_at: Time.now) if message_sent

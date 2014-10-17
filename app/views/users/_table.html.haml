@@ -7,7 +7,8 @@
       - if users[0].responder?
         %th Completed
         %th Rejected
-      %th Available
+      - if !deactivated
+        %th Available
       - if !deactivated && users[0].responder?
         %th Current Status
   %tbody
@@ -19,9 +20,10 @@
         - if user.responder?
           %td= user.dispatches.completed_count
           %td= user.dispatches.rejected_count
-        %td
-          - path = user.shifts.started? ? end_shift_user_path(user) : start_shift_user_path(user)
-          = simple_form_for '', url: path, method: :post do |f|
-            = f.check_box :available, checked: user.shifts.started?, class: 'availability'
+        - if !deactivated
+          %td
+            - path = user.shifts.started? ? end_shift_user_path(user) : start_shift_user_path(user)
+            = simple_form_for '', url: path, method: :post do |f|
+              = f.check_box :available, checked: user.shifts.started?, class: 'availability'
         - if !deactivated && user.responder?
           %td= ResponderPresenter.new(user).status

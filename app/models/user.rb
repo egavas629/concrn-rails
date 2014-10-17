@@ -8,6 +8,9 @@ class User < ActiveRecord::Base
   has_one    :dispatcher, class_name: 'Dispatcher', foreign_key: :id
   has_many   :shifts,     dependent: :destroy
 
+  # CALLBACKS #
+  after_validation :make_unavailable, on: :update
+
   # CONSTANTS #
   ROLES = %w(responder dispatcher)
 
@@ -41,6 +44,10 @@ class User < ActiveRecord::Base
     write_attribute(:phone, NumberSanitizer.sanitize(new_phone))
   rescue NoMethodError
     errors.add(:phone, 'Phone Number is not valid')
+  end
+
+  def make_unavailable
+    shifts.end('web') if active_changed? && !active
   end
 
   def active_for_authentication?

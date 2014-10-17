@@ -3,7 +3,7 @@
     %h1.name= "#{@user.name} (#{@user.role.capitalize})"
   .col-md-5.col-md-offset-2
     %br
-    - if @user.active && @user.responder?
+    - if @user.active
       - path = @user.shifts.started? ? end_shift_user_path(@user) : start_shift_user_path(@user)
       = simple_form_for '', url: path, method: :post do |f|
         .availability

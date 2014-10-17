@@ -10,8 +10,8 @@
 
 .bleed.drop-main {
   padding-top: 75px;
-  background-image: url("/assets/home/city-crop2.png");
-  height: 465px;
+  background-image: url("/assets/home/city-crop.png");
+  height: 475px;
   @media(max-width: $screen-xs) {
     padding-top: 0;
     height: 500px;
@@ -20,13 +20,13 @@
 
 .jumbohome {
   &.container {
-    padding-top: 100px;
+    padding-top: 75px;
     color: $white;
   }
 
   &.over-header {
-    font-weight: $ultralight-weight;
-    font-size: $fs-large;
+    font-weight: $light-weight;
+    font-size: 30px;
   }
   &.heading {
     text-transform: uppercase;
@@ -34,21 +34,33 @@
   }
   &.copy {
     @include make-lg-column(6);
-    font-weight: $light-weight;
+/*    font-weight: $light-weight;*/
+    font-size: 18px;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
   }
 }
 
+.app-badges {
+  float: none;
+  margin: 0 auto;
+  padding-top: 100px;
+  text-align: center;
+}
+
 .bleed.praying {
-  background-image: url('/assets/home/praying.png');
-  height: 500px;
+ /* background-image: url('/assets/home/praying.png');*/
+  height: 600px;
 }
 
 .praying {
   &.over-header {
-    text-transform: uppercase;
-    margin: $large-gap 0 $small-gap;
     color: $blue;
+    font-size: 18px;
+    width: 800px;
+    float: none;
+    margin: 0 auto;
+    padding-top: 25px
+    /*margin-left: 177px;*/
   }
   &.heading {
     text-transform: uppercase;
@@ -57,6 +69,7 @@
     font-weight: $semibold-weight;
   }
   &.copy {
-    margin-top: $xlarge-gap;
+    font-size: 16px;
+    margin-bottom: 15px;
   }
 }
