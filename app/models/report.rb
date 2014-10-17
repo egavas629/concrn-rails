@@ -4,7 +4,7 @@ class Report < ActiveRecord::Base
   serialize :observations, Array
   reverse_geocoded_by :lat, :long do |obj, results|
     if geo = results.first
-      obj.zip = geo.postal_code
+      obj.zip ||= geo.postal_code
     end
   end
   after_validation :reverse_geocode
