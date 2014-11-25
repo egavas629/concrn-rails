@@ -19,3 +19,13 @@ input, select, textarea {
 .caps {
   text-transform: uppercase;
 }
+
+a {
+  color: $purple;
+  text-decoration: none;
+}
+
+.btn-primary {
+ background-color: $purple;
+ border-color: $purple;
+}

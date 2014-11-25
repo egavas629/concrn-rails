@@ -8,9 +8,9 @@
     padding: 6px 15px;
     margin-top: $xsmall-gap;
     display: block;
-    background: url('/assets/concrn-logo-small.png') no-repeat;
+    background: url('/assets/concrn-small.png') no-repeat;
     height: 60px;
-    width: 193px;
+    width: 200px;
   }
 
   .navbar-toggle {
@@ -36,7 +36,7 @@
   background: none;
   box-shadow: none;
   .navbar-brand {
-    background-image: url('/assets/concrn-logo-small.png');
+    background-image: url('/assets/concrn-small.png');
   }
   .navbar-text {
     color: white;
