@@ -25,7 +25,25 @@ a {
   text-decoration: none;
 }
 
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  color: $purple;
+}
+
+a:active {
+  color: $dark-purple;
+  text-decoration: none;
+}
+
 .btn-primary {
  background-color: $purple;
  border-color: $purple;
+}
+
+.btn-primary:hover {
+ background-color: $dark-purple;
+ border-color: $dark-purple;
 }
