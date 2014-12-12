@@ -1,16 +1,17 @@
 .navbar {
-  background: white;
+  background: $warm;
   box-shadow: 0 1px 1px rgba(0,0,0,0.37);
-  position: relative;
+  position: fixed;
+  width: 100%;
   margin-bottom: 5px;
 
   .navbar-brand {
     padding: 6px 15px;
     margin-top: $xsmall-gap;
     display: block;
-    background: url('/assets/concrn-logo-small.png') no-repeat;
+    background: url('/assets/concrn-small.png');
     height: 60px;
-    width: 193px;
+    width: 200px;
   }
 
   .navbar-toggle {
@@ -23,6 +24,7 @@
     margin: 0;
     padding-left: 20px;
     padding-top: 0px;
+    font-weight: $semibold-weight;
   }
 
   .navbar-text {
@@ -35,8 +37,9 @@
   position: absolute;
   background: none;
   box-shadow: none;
+
   .navbar-brand {
-    background-image: url('/assets/concrn-logo-small.png');
+    background-image: url('/assets/concrn-small.png');
   }
   .navbar-text {
     color: white;

@@ -9,12 +9,13 @@
 }
 
 .bleed.drop-main {
-  padding-top: 75px;
-  background-image: url("/assets/home/city-crop.png");
-  height: 475px;
+  padding-top: 73px;
+  padding-bottom: 37px;
+  background-image: url("/assets/home/city.png");
+  height: float;
   @media(max-width: $screen-xs) {
     padding-top: 0;
-    height: 500px;
+    height: float;
   }
 }
 
@@ -34,7 +35,6 @@
   }
   &.copy {
     @include make-lg-column(6);
-/*    font-weight: $light-weight;*/
     font-size: 18px;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
   }
@@ -48,19 +48,19 @@
 }
 
 .bleed.praying {
- /* background-image: url('/assets/home/praying.png');*/
-  height: 600px;
+  height: float;
+  background-color: $warm;
+  padding-bottom: 37px;
 }
 
 .praying {
   &.over-header {
-    color: $blue;
+    color: $purple;
     font-size: 18px;
-    width: 800px;
+    max-width: 800px;
     float: none;
     margin: 0 auto;
     padding-top: 25px
-    /*margin-left: 177px;*/
   }
   &.heading {
     text-transform: uppercase;
@@ -73,3 +73,10 @@
     margin-bottom: 15px;
   }
 }
+
+.fb-like {
+  padding-right: 20px;
+  top: -5px;
+
+}
+
