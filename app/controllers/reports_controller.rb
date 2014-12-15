@@ -10,7 +10,7 @@ class ReportsController < DashboardController
   end
 
   def index
-    @unassigned_reports = current_agency.reports.unassigned
+    @unassigned_reports = current_agency.reports.unassigned.oldest
     @pending_reports = current_agency.reports.pending
   end
 
@@ -78,7 +78,7 @@ class ReportsController < DashboardController
     report_attributes = [
       :name, :phone, :lat, :long, :status, :nature, :delete_image, :setting,
       { observations: [] }, :age, :gender, :race, :address, :neighborhood,
-      :image, :agency_id, :urgency
+      :image, :agency_id, :urgency, :zip
     ]
 
     params.require(:report).permit report_attributes

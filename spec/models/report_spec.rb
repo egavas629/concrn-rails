@@ -41,6 +41,10 @@ describe Report do
       it { should include(rejected_report, report) }
       it { should_not include(accepted_report, archived_report, completed_report, pending_report) }
     end
+    describe '.oldest' do
+      subject { Report.oldest }
+      it { should eq [report, accepted_report, archived_report, completed_report, pending_report, rejected_report] }
+    end
   end
 
   describe '#auto_assign_agency' do

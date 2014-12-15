@@ -69,6 +69,8 @@ class Report < ActiveRecord::Base
       .where.not(id: pending.map(&:id).concat(accepted.map(&:id)))
   }
 
+  scope :oldest, -> { order("reports.created_at ASC") }
+
   # INSTANCE METHODS #
   def accepted_dispatches
     dispatches.accepted
