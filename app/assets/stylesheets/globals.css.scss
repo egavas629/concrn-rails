@@ -47,3 +47,14 @@ a:active {
  background-color: $dark-purple;
  border-color: $dark-purple;
 }
+
+.btn-sign-up {
+  background-color: $blue;
+  border-color: $blue;
+  color: $white;
+}
+
+.btn-sign-up:hover {
+  background-color: $dark-blue;
+  color: $white;
+}

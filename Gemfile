@@ -63,4 +63,7 @@ group :test do
   gem 'test_after_commit'
 end
 
-gem 'guard-rubocop', group: :development
+group :development do
+	gem 'guard-rubocop'
+	gem 'byebug'
+end

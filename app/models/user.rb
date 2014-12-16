@@ -16,9 +16,8 @@ class User < ActiveRecord::Base
   ROLES = %w(responder dispatcher reporter)
 
   # VALIDATIONS #
-  validates :phone,  presence: true, uniqueness: true
+  validates :phone,  length: { is: 10 }, uniqueness: true
   validates :name,   presence: true, uniqueness: { scope: :agency_id }
-  validates :agency, presence: true
   validates_inclusion_of :role, in: ROLES
 
   # SCOPES #
@@ -47,9 +46,12 @@ class User < ActiveRecord::Base
   end
 
   def phone=(new_phone)
-    write_attribute(:phone, NumberSanitizer.sanitize(new_phone))
-  rescue NoMethodError
-    errors.add(:phone, 'Phone Number is not valid')
+    sanitized_phone = NumberSanitizer.sanitize(new_phone)
+    if sanitized_phone.nil?
+      errors.add(:phone, 'is not valid')
+    else
+      write_attribute(:phone, sanitized_phone)
+    end
   end
 
   def make_unavailable
