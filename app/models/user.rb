@@ -6,13 +6,14 @@ class User < ActiveRecord::Base
   belongs_to :agency
   has_one    :responder,  class_name: 'Responder', foreign_key: :id
   has_one    :dispatcher, class_name: 'Dispatcher', foreign_key: :id
+  has_one    :reporter, class_name: 'Reporter', foreign_key: :id
   has_many   :shifts,     dependent: :destroy
 
   # CALLBACKS #
   after_validation :make_unavailable, on: :update
 
   # CONSTANTS #
-  ROLES = %w(responder dispatcher)
+  ROLES = %w(responder dispatcher reporter)
 
   # VALIDATIONS #
   validates :phone,  presence: true, uniqueness: true
@@ -25,6 +26,7 @@ class User < ActiveRecord::Base
   scope :inactive,    -> { where(active: false) }
   scope :dispatchers, -> { where(role: 'dispatcher') }
   scope :responders,  -> { where(role: 'responder') }
+  scope :reporters,  -> { where(role: 'reporter') }
   scope :on_shift,    -> { where(id: Shift.on.map(&:user_id)) }
 
   # INSTANCE METHODS #
@@ -38,6 +40,10 @@ class User < ActiveRecord::Base
 
   def responder?
     role == 'responder'
+  end
+
+  def reporter?
+    role == 'reporter'
   end
 
   def phone=(new_phone)
