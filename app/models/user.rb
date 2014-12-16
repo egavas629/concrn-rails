@@ -46,12 +46,9 @@ class User < ActiveRecord::Base
   end
 
   def phone=(new_phone)
-    sanitized_phone = NumberSanitizer.sanitize(new_phone)
-    if sanitized_phone.nil?
-      errors.add(:phone, 'is not valid')
-    else
-      write_attribute(:phone, sanitized_phone)
-    end
+    write_attribute(:phone, NumberSanitizer.sanitize(new_phone))
+  rescue NoMethodError
+    errors.add(:phone, 'Phone Number is not valid')
   end
 
   def make_unavailable
