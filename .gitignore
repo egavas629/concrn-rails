@@ -21,3 +21,6 @@
 # Ignore application configuration
 /config/application.yml
 /coverage
+
+# Ignore Sublime Text junk
+.fuse_hidden*
