@@ -79,7 +79,7 @@ class ReportsController < DashboardController
     report_attributes = [
       :name, :phone, :lat, :long, :status, :nature, :delete_image, :setting,
       { observations: [] }, :age, :gender, :race, :address, :neighborhood,
-      :image, :agency_id, :urgency, :zip
+      :image, :agency_id, :urgency, :zip, uploads_attributes: [:file, :_destroy]
     ]
 
     params.require(:report).permit report_attributes

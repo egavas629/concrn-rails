@@ -29,6 +29,10 @@
       = f.input :agency_id, input_html: { value: current_user.agency_id },
         as: :hidden if user_signed_in?
       = f.input_field :image
+
+      = f.simple_fields_for :uploads do |builder|
+        = render 'upload_fields', f: builder
+      = link_to_add_fields "Add Another File", f, :uploads
       %br
     .new-submit= f.submit 'Submit Report', class: 'btn btn-primary'
 

@@ -15,6 +15,9 @@ class Report < ActiveRecord::Base
   has_many :dispatches, dependent: :destroy
   has_many :logs,       dependent: :destroy
   has_many :responders, through:   :dispatches
+  has_many :uploads, dependent: :destroy
+
+  accepts_nested_attributes_for :uploads, reject_if: :all_blank, allow_destroy: true
 
   # CALLBACKS #
   has_attached_file :image

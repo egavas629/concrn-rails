@@ -29,7 +29,7 @@ Streetmom::Application.configure do
   config.assets.debug = true
   config.paperclip_defaults = {
      :storage => :filesystem,
-     :url => "/system/:class/:attachment/:id/:style/:filename",
+     :url => "/:attachment/:id/:style/:basename.:extension",
      :path => ":rails_root/public/:attachment/:id/:style/:basename.:extension"
   }
 end

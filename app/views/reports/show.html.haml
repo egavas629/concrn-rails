@@ -47,13 +47,17 @@
         %a{:target => "_blank", :href => @report.image.url(:original)}
           %img{:src => @report.image.url, :style => 'width:200px;height:auto;'}
         .list-group-item-text= link_to "Remove File", report_path(@report, "report[delete_image]" => '1'), method: :put
-        %small One attachment per report only
       - else
         .list-group-item-text
           = simple_form_for @report do |f|
             = f.input_field :image
             %br
             = f.button :submit, 'Add File'
+      - @report.uploads.each do |upload|
+        .report-file
+          .list-group-item-text= upload.file_file_name
+          %a{:target => "_blank", :href => upload.file.url }
+            %img{:src => upload.file_image_url, :style => 'width:200px;height:auto;'}
 
     .btn-delete
       = link_to 'Delete', report_path(@report), method: :delete,
