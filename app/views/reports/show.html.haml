@@ -58,6 +58,7 @@
           .list-group-item-text= upload.file_file_name
           %a{:target => "_blank", :href => upload.file.url }
             %img{:src => upload.file_image_url, :style => 'width:200px;height:auto;'}
+          .list-group-item-text= link_to "Remove File", upload_path(upload), method: :delete
 
     .btn-delete
       = link_to 'Delete', report_path(@report), method: :delete,

@@ -32,5 +32,7 @@ Streetmom::Application.routes.draw do
   resources :reporters,  only: %w(show create new)
   resources :sms,        only: %w(create)
 
+  resources :uploads,    only: %w(destroy)
+
   root 'pages#home'
 end
