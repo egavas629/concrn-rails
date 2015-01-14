@@ -15,4 +15,9 @@ class Agency < ActiveRecord::Base
   def default?
     name == Report::DEFAULT_TEAM_NAME
   end
+
+  def time_zone
+    zipcode = zip_code_list.split(%r{,\s*})[0]
+    return ActiveSupport::TimeZone.find_by_zipcode(zipcode)
+  end
 end

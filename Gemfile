@@ -18,6 +18,9 @@ gem 'pusher'
 # Get Coordinates for Address
 gem 'geocoder'
 
+# Find time zones by zip code
+gem 'tzip'
+
 # Images on AWS S3
 gem 'aws-sdk'
 

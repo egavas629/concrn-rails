@@ -5,7 +5,7 @@
       %th Date
       %th
         Time
-        = "(24 hour, #{Time.now.localtime.zone})"
+        = "(24 hour, #{Time.use_zone(time_zone){Time.zone.now}})"
     %tbody
       - shifts.each do |shift|
         %tr
