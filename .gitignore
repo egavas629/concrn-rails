@@ -24,3 +24,7 @@
 
 # Ignore Sublime Text junk
 .fuse_hidden*
+
+# Ignore uploads
+/public/files
+/public/images
