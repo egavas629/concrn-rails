@@ -17,7 +17,7 @@
 
 - if @user.responder?
   %br
-  = render 'shift_table', time_zone: @user.agency.time_zone, shifts: @user.shifts
+  = render 'shift_table', shifts: @user.shifts
   %br
   = render 'dispatch_table', dispatches: @user.dispatches
 
