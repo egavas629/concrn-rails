@@ -15,23 +15,9 @@ describe Agency do
   it { should validate_uniqueness_of(:call_phone) }
   it { should validate_uniqueness_of(:zip_code_list) }
 
-  context '#time_zone' do
-    let!(:agency)  { create(:agency) }
-
-    describe 'one zip_code' do
-      subject { create(:agency, zip_code_list: "78702") }
-      its(:time_zone) { should eq 'Central Time (US & Canada)' }
-    end
-
-    describe 'comma seperated zips' do
-      subject { create(:agency, zip_code_list: "78702, 89767") }
-      its(:time_zone) { should eq 'Central Time (US & Canada)' }
-    end
-
-    describe 'space seperated zips' do
-      subject { create(:agency, zip_code_list: "78702 89767") }
-      its(:time_zone) { should eq 'Central Time (US & Canada)' }
-    end
+  describe '#time_zone' do
+    subject { create(:agency, address: "55555 Roady Rd, Austin, TX  78702-4444") }
+    its(:time_zone) { should eq 'Central Time (US & Canada)' }
   end
 
 end

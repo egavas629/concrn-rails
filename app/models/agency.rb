@@ -17,7 +17,7 @@ class Agency < ActiveRecord::Base
   end
 
   def time_zone
-    zipcode = zip_code_list.split(%r{,\s*})[0]
+    zipcode = address.scan(/\b\d{5}\b/).last
     return ActiveSupport::TimeZone.find_by_zipcode(zipcode)
   end
 end
