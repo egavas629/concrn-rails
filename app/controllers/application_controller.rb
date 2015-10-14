@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   before_filter :configure_permitted_parameters, if: :devise_controller?
+  before_filter :redirect_to_org
 
   def authenticate_super_admin!
     authenticate_or_request_with_http_basic do |username, password|
@@ -13,6 +14,10 @@ class ApplicationController < ActionController::Base
     current_user.agency
   end
   helper_method :current_agency
+
+  def redirect_to_org
+    Rails.logger.info request.env["HTTP_USER_AGENT"]
+  end
 
   protected
 
