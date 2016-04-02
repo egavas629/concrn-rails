@@ -8,10 +8,8 @@ class Report < ActiveRecord::Base
     end
   end
   after_validation :reverse_geocode
-  before_save :auto_assign_agency
 
   # RELATIONS #
-  belongs_to :agency
   has_many :dispatches, dependent: :destroy
   has_many :logs,       dependent: :destroy
   has_many :responders, through:   :dispatches
@@ -136,14 +134,8 @@ class Report < ActiveRecord::Base
 
   private
 
-  def auto_assign_agency
-    self.agency = zip.presence && Agency.find_by("zip_code_list like ?", "%#{zip}%")
-    self.agency ||= Agency.find_by(name: DEFAULT_TEAM_NAME)
-  end
-
   def send_to_dispatcher
-    return false if agency.blank? || agency.dispatchers.blank? || agency.dispatchers.on_shift.count < 1
-    agency.dispatchers.on_shift.each do |dispatcher|
+    Dispatcher.on_shift.each do |dispatcher|
       Telephony.send("New Report @ #{address}. www.concrn.com/reports", dispatcher.phone)
     end
   end

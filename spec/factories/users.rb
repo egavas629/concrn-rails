@@ -6,7 +6,6 @@ FactoryGirl.define do
     phone         { Faker::PhoneNumber.phone_number }
     password      { 'password' }
     name          { Faker::Name.name }
-    association     :agency
     active        { true }
 
     trait :dispatcher do

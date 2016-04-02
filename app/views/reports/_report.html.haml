@@ -2,7 +2,7 @@
 = content_tag_for :tr, report, class: "freshness-#{report_presenter.freshness}" do
   %td{title: report.created_at.to_s}
     %strong
-      .digits= "#{report.created_at.in_time_zone(report.agency.time_zone).strftime("%I:%M %p")}"
+      .digits= "#{report.created_at.in_time_zone(Streetmom::TIME_ZONE).strftime("%I:%M %p")}"
       .time-ago.words
         (
         %abbr.timeago{title: report.created_at.getutc.iso8601}= report.created_at.to_s

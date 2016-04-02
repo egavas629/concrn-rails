@@ -11,20 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150112173145) do
+ActiveRecord::Schema.define(version: 20160402211045) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "agencies", force: true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "address"
-    t.string   "call_phone"
-    t.string   "text_phone"
-    t.string   "zip_code_list"
-  end
 
   create_table "dispatches", force: true do |t|
     t.integer  "report_id"
@@ -73,12 +63,9 @@ ActiveRecord::Schema.define(version: 20150112173145) do
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.datetime "completed_at"
-    t.integer  "agency_id"
     t.string   "urgency"
     t.string   "zip"
   end
-
-  add_index "reports", ["agency_id"], name: "index_reports_on_agency_id", using: :btree
 
   create_table "shifts", force: true do |t|
     t.datetime "start_time"
@@ -118,13 +105,11 @@ ActiveRecord::Schema.define(version: 20150112173145) do
     t.string   "name"
     t.string   "phone"
     t.string   "role",                                            default: "responder"
-    t.integer  "agency_id"
     t.boolean  "active",                                          default: true
     t.decimal  "long",                   precision: 10, scale: 6
     t.decimal  "lat",                    precision: 10, scale: 6
   end
 
-  add_index "users", ["agency_id"], name: "index_users_on_agency_id", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 

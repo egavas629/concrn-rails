@@ -17,7 +17,7 @@
 
 - if @user.responder?
   %br
-  = render 'shift_table', shifts: @user.shifts, time_zone: @user.agency.time_zone
+  = render 'shift_table', shifts: @user.shifts, time_zone: Streetmom::TIME_ZONE
   %br
   = render 'dispatch_table', dispatches: @user.dispatches
 

@@ -1,10 +1,8 @@
 require 'spec_helper'
 
 describe User do
-  it { should belong_to(:agency) }
   it { should have_many(:shifts).dependent(:destroy) }
   it { should validate_presence_of(:name) }
-  it { should validate_uniqueness_of(:name).scoped_to(:agency_id) }
   # it { should ensure_length_of(:phone).is_equal_to(10) }
   it { should validate_uniqueness_of(:phone) }
   it { should ensure_inclusion_of(:role).in_array(User::ROLES) }

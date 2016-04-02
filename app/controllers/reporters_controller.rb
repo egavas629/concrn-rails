@@ -2,7 +2,7 @@ class ReportersController < DashboardController
   before_filter :authenticate_user!,       except: [:new, :create]
 
   def show
-    @reports  = current_agency.reports.where(reporter_params)
+    @reports  = Report.where(reporter_params)
     @key_info = params['name'] || params['phone'] || params['address']
     render
   end

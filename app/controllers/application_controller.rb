@@ -9,12 +9,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def current_agency
-    return false unless user_signed_in?
-    current_user.agency
-  end
-  helper_method :current_agency
-
   def redirect_to_org
     Rails.logger.info request.env["HTTP_USER_AGENT"]
   end
