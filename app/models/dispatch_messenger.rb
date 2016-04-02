@@ -49,7 +49,6 @@ class DispatchMessenger
   end
 
   def complete
-    @report.complete
     thank_responder
     thank_reporter
   end
@@ -137,9 +136,7 @@ class DispatchMessenger
     message = <<-EOF
       The report is now completed, thanks for your help! You are now available to be dispatched.
     EOF
-    Responder.accepted(@report.id).each do |responder|
-      Telephony.send(message, responder.phone)
-    end
+    Telephony.send(message, @responder.phone)
   end
 
   def thank_reporter
