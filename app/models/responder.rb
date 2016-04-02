@@ -8,9 +8,6 @@ class Responder < User
   after_validation :make_unavailable, on: :update
   after_update :push_reports
 
-  # VALIDATIONS #
-  validates :agency, presence: true
-
   # SCOPES #
   default_scope -> { where(role: 'responder') }
 

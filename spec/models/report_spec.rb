@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Report do
-  it { should belong_to(:agency) }
   it { should have_many(:dispatches).dependent(:destroy) }
   it { should have_many(:logs).dependent(:destroy) }
   it { should have_many(:responders).through(:dispatches) }
@@ -44,34 +43,6 @@ describe Report do
     describe '.oldest' do
       subject { Report.oldest }
       it { should eq [report, accepted_report, archived_report, completed_report, pending_report, rejected_report] }
-    end
-  end
-
-  describe '#auto_assign_agency' do
-    let!(:agency) { create(:agency) }
-    subject { create(:report, agency: nil) }
-
-    context "with a nil zip code" do
-      it "assigns to the default agency" do
-        default = create(:agency, name: Report::DEFAULT_TEAM_NAME)
-        subject.agency.should == default
-      end
-    end
-
-    context "with a matching zip code" do 
-      before do
-        subject.update_attributes(zip: agency.zip_code_list)
-      end
-
-      it 'assigns the agency automatically' do
-        subject.agency.should == agency
-      end
-    end
-
-    it 'assigns the agency to the concrn team' do
-      concrn = create(:agency, name: 'Concrn Team')
-      report = create(:report, agency: nil, zip: '66600')
-      report.agency.should == concrn
     end
   end
 

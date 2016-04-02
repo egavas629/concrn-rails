@@ -10,24 +10,19 @@ class ShiftPresenter < BasePresenter
   end
 
 private
-
-  def time_zone
-    shift.user.agency.time_zone
-  end
-
   def start_day
-    shift.start_time.in_time_zone(time_zone).strftime('%-m-%-d-%y')
+    shift.start_time.in_time_zone(Streetmom::TIME_ZONE).strftime('%-m-%-d-%y')
   end
 
   def start_time
-    shift.start_time.in_time_zone(time_zone).strftime('%H:%M')
+    shift.start_time.in_time_zone(Streetmom::TIME_ZONE).strftime('%H:%M')
   end
 
   def end_day
-    shift.end_time.in_time_zone(time_zone).strftime('%-m-%-d-%y') if shift.end_time? && !shift.same_day?
+    shift.end_time.in_time_zone(Streetmom::TIME_ZONE).strftime('%-m-%-d-%y') if shift.end_time? && !shift.same_day?
   end
 
   def end_time
-    shift.end_time ? shift.end_time.in_time_zone(time_zone).strftime('%H:%M') : 'now'
+    shift.end_time ? shift.end_time.in_time_zone(Streetmom::TIME_ZONE).strftime('%H:%M') : 'now'
   end
 end

@@ -26,7 +26,7 @@ class ShiftsController < DashboardController
 private
 
   def find_user
-    @user = current_agency.users.find(user_id)
+    @user = User.find(user_id)
   end
 
   def user_id
