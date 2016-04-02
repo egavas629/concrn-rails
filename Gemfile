@@ -42,4 +42,5 @@ end
 group :development do
 	gem 'guard-rubocop'
 	gem 'byebug'
+  gem 'quiet_assets'
 end
