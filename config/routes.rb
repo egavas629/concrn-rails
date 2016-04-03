@@ -1,7 +1,5 @@
 Streetmom::Application.routes.draw do
 
-  resources :agencies
-
   devise_for :users, path_prefix: 'my'
 
   resources :reports, except: %w(edit) do
