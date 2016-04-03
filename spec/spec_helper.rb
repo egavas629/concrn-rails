@@ -14,6 +14,22 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
+Geocoder.configure(:lookup => :test)
+
+Geocoder::Lookup::Test.set_default_stub(
+  [
+    {
+      'latitude'     => 37.7922304,
+      'longitude'    => -122.4061408,
+      'address'      => "717 California St, San Francisco, CA 94108, USA",
+      'state'        => 'San Francisco',
+      'state_code'   => 'CA',
+      'country'      => 'United States',
+      'country_code' => 'US'
+    }
+  ]
+)
+
 RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.include FactoryGirl::Syntax::Methods

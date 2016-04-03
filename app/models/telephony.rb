@@ -6,7 +6,8 @@ class Telephony
   end
 
   def self.send(body = 'Thanks!', to = nil)
-    return true if Rails.env.test?
+    return Rails.logger.info("skipping SMS send('#{body}', '#{to}')") if Rails.env.test?
+
     client.account.messages.create(from: OUTGOING_PHONE, to: to, body: body)
   rescue => e
     puts "### ERROR: #{e} ###"
@@ -14,6 +15,8 @@ class Telephony
   end
 
   def self.receive(body, opts = {})
+    return Rails.logger.info("skipping SMS receive('#{body}', '#{opts.inspect}')") if Rails.env.test?
+
     responder = Responder.find_by_phone(opts[:from])
     send("#{opts[:from]}: #{opts[:body]}", to: '6507876770') unless responder
     DispatchMessenger.new(responder).respond(body)
