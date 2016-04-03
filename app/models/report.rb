@@ -138,16 +138,7 @@ class Report < ActiveRecord::Base
   end
 
   def find_neighborhood
-    lat = self.lat.to_f
-    long = self.long.to_f
-
-    url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=#{lat},#{long}&key=#{ENV['GoogleAPI']}"
-    
-    response = HTTParty.get(url)
-
-    neighborhood = response["results"][0]["address_components"][2]["short_name"]
-
-    self.neighborhood = neighborhood
+    self.neighborhood = Neighborhood.at(lat, long)
   end
 
   private
