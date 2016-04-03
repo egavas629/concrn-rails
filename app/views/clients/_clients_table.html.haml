@@ -5,6 +5,7 @@
       %th Age
       %th Gender
       %th Ethnicity
+      %th Reports
   %tbody
     - clients.each do |client|
       = content_tag_for :tr, client do
@@ -12,3 +13,4 @@
         %td= client.age
         %td= client.gender
         %td= client.race
+        %td= client.reports.count

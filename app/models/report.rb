@@ -19,6 +19,7 @@ class Report < ActiveRecord::Base
   has_many :logs,       dependent: :destroy
   has_many :responders, through:   :dispatches
   has_many :uploads, dependent: :destroy
+  belongs_to :client
 
   accepts_nested_attributes_for :uploads, reject_if: :all_blank, allow_destroy: true
 

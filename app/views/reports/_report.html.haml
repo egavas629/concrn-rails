@@ -50,3 +50,9 @@
       = render "dispatches/index", report: report
     - elsif report.archived? && report.dispatches.empty?
       No one assigned
+
+  %td
+    - if report.client
+      =link_to report.client.name, client_path(report.client)
+    - elsif
+      None

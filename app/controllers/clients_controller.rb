@@ -10,6 +10,7 @@ class ClientsController < DashboardController
   end
 
   def show
+    @available_responders = Responder.available
   end
 
   def new

@@ -52,6 +52,7 @@ class ReportsController < DashboardController
   end
 
   def show
+    @clients = Client.active
     render
   end
 
@@ -76,9 +77,10 @@ class ReportsController < DashboardController
 
   def report_params
     report_attributes = [
-      :name, :phone, :lat, :long, :status, :nature, :delete_image, :setting,
-      { observations: [] }, :age, :gender, :race, :address, :neighborhood,
-      :image, :urgency, :zip, uploads_attributes: [:file, :_destroy]
+      :client_id, :name, :phone, :lat, :long, :status, :nature, :delete_image,
+      :setting, { observations: [] }, :age, :gender, :race, :address,
+      :neighborhood, :image, :urgency, :zip, uploads_attributes: [:file,
+                                                                  :_destroy]
     ]
 
     params.require(:report).permit report_attributes

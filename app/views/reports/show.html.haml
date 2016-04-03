@@ -31,9 +31,24 @@
 
     - if @report.nature? || @report.age? || @report.race? || @report.gender?
       %li.list-group-item
-        %h4.list-group-item-heading Client
+        %h4.list-group-item-heading Client Description
         .list-group-item-text="#{@report.age} #{@report.race} #{@report.gender}"
         .list-group-item-text=@report.nature
+
+    %li.list-group-item
+      %h4.list-group-item-heading Assigned Client
+      = render partial: "reports/assign_client", locals: { report: @report, clients: @clients }
+      - if @report.client
+        %dl
+          %dt
+            Age
+          %dd= @report.client.age
+          %dt
+            Ethnicity
+          %dd= @report.client.race
+          %dt
+            Gender
+          %dd= @report.client.gender
 
     - if @report.observations?
       %li.list-group-item
