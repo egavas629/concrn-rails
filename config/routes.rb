@@ -41,5 +41,5 @@ Streetmom::Application.routes.draw do
 
   get '/visualizations/reports_timeline_map', to: 'visualizations#reports_timeline_map'
 
-  get '/reports_charts', to: 'visualizations#reports_charts'
+  get '/visualizations/reports_charts', to: 'visualizations#reports_charts'
 end
