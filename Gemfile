@@ -29,6 +29,8 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
+gem 'httparty'
+gem 'awesome_print'
 
 group :rangers, :production, :staging do
   gem 'rails_12factor'

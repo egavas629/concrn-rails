@@ -1,4 +1,8 @@
+require 'httparty'
+
 class Report < ActiveRecord::Base
+  include HTTParty
+
   DEFAULT_TEAM_NAME = "Concrn Team"
   attr_accessor :delete_image
   serialize :observations, Array
@@ -8,6 +12,7 @@ class Report < ActiveRecord::Base
     end
   end
   after_validation :reverse_geocode
+  after_validation :find_neighborhood
 
   # RELATIONS #
   has_many :dispatches, dependent: :destroy
@@ -132,6 +137,19 @@ class Report < ActiveRecord::Base
     Dispatch.accepted(id).each { |i| i.update_attributes(status: 'completed') }
   end
 
+  def find_neighborhood
+    lat = self.lat.to_f
+    long = self.long.to_f
+
+    url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=#{lat},#{long}&key=#{ENV['GoogleAPI']}"
+    
+    response = HTTParty.get(url)
+
+    neighborhood = response["results"][0]["address_components"][2]["short_name"]
+
+    self.neighborhood = neighborhood
+  end
+
   private
 
   def send_to_dispatcher
@@ -151,4 +169,5 @@ class Report < ActiveRecord::Base
   def push_reports
     Push.refresh
   end
+
 end
