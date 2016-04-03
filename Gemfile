@@ -9,8 +9,9 @@ gem 'haml'
 gem 'simple_form'
 gem 'devise'
 
+
 # Telephony API
-gem 'twilio-ruby'
+gem 'twilio-ruby', '~> 4.1.0'
 
 gem 'rack-cors', :require => 'rack/cors'
 # Pusher API
