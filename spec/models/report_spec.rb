@@ -1,6 +1,11 @@
 require 'spec_helper'
 
+
 describe Report do
+  before do
+    allow(Neighborhood).to receive(:at).and_return("Tenderloin")
+  end
+
   it { should have_many(:dispatches).dependent(:destroy) }
   it { should have_many(:logs).dependent(:destroy) }
   it { should have_many(:responders).through(:dispatches) }
