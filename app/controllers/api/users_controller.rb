@@ -1,41 +1,30 @@
 class Api::UsersController < ApplicationController
+	 before_filter :find_user
 
-	def verify_responder_by_phone
-    @user = User.find_by_phone(NumberSanitizer.sanitize(params[:phone]))
+	def is_user_responder
     status = @user.present? && @user.responder?
     render json: { result_value: status }
   end
 
-    def start
-    respond_to do |format|
-      if @user.shifts.start
-        flash[:notice] = "#{@user.name}'s shift has started."
-      else
-        flash[:alert]  = "Error starting #{@user.name}'s shift."
-      end
-      format.html { redirect_to :back }
-    end
+  def responder_shift_has_started
+    status = @user.shifts.started?
+    render json: { result_value: status }
   end
 
-  def end
-    respond_to do |format|
-      if @user.shifts.end
-        flash[:notice] = "#{@user.name}'s shift has ended."
-      else
-        flash[:alert]  = "Error ending #{@user.name}'s shift."
-      end
-      format.html { redirect_to :back }
-    end
+  def start_responder_shift
+  	@user.shifts.start
+  	head :ok
+  end
+
+  def end_responder_shift
+  	@user.shifts.end
+  	head :ok
   end
 
 private
 
   def find_user
-    @user = users.find(user_id)
-  end
-
-  def user_id
-    params[:id]
+    @user = User.find_by_phone(NumberSanitizer.sanitize(params[:phone]))
   end
 
 end

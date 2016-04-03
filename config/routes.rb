@@ -27,9 +27,12 @@ Streetmom::Application.routes.draw do
   end
 
   namespace :api do
-    resources :users, except: %w(create update destroy edit new) do
+    resources :users, except: %w(create update destroy edit new show index) do
       collection do
-        get 'verify_responder_by_phone'
+        get 'is_user_responder'
+        get 'responder_shift_has_started'
+        get 'start_responder_shift'
+        get 'end_responder_shift'
       end
     end
   end
