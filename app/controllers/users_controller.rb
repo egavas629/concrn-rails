@@ -1,8 +1,8 @@
 class UsersController < DashboardController
   before_filter :find_user, only: [:show, :update, :edit]
-  before_filter :authenticate_admin!,      only:   :create
-  before_filter :authenticate_user!,       except: :create
-  before_filter :authenticate_dispatcher!, except: :create
+  # before_filter :authenticate_admin!,      only:   :create
+  # before_filter :authenticate_user!,       except: [:create, :verify_responder_by_phone]
+  # before_filter :authenticate_dispatcher!, except: [:create, :verify_responder_by_phone]
 
   def create
     @user = @agency.users.new(user_params)
@@ -15,14 +15,15 @@ class UsersController < DashboardController
     end
   end
 
-  def by_phone
-    @user = current_agency.users.find_by_phone(NumberSanitizer.sanitize(params[:phone]))
-    if @user.present?
-      render json: @user
-    else
-      head :not_found
-    end
-  end
+  # depracated 
+  # def by_phone
+  #   @user = current_agency.users.find_by_phone(NumberSanitizer.sanitize(params[:phone]))
+  #   if @user.present?
+  #     render json: @user
+  #   else
+  #     head :not_found
+  #   end
+  # end
 
   def deactivated
     @responders = current_agency.responders.inactive
@@ -73,7 +74,7 @@ class UsersController < DashboardController
   end
 
   def find_user
-    @user = current_agency.users.find(params[:id])
+    @user = users.find(params[:id])
   end
 
   def user_params

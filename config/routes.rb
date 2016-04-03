@@ -18,12 +18,19 @@ Streetmom::Application.routes.draw do
 
   resources :users, except: %w(destroy) do
     collection do
-      get 'by_phone'
       get 'deactivated'
     end
     member do
       post 'start', to: 'shifts#start', :as => :start_shift
       post  'end',  to: 'shifts#end',   :as => :end_shift
+    end
+  end
+
+  namespace :api do
+    resources :users, except: %w(create update destroy edit new) do
+      collection do
+        get 'verify_responder_by_phone'
+      end
     end
   end
 
