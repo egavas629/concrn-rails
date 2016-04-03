@@ -121,7 +121,7 @@ GEM
     jquery-ui-rails (5.0.0)
       railties (>= 3.2.16)
     json (1.8.1)
-    jwt (1.0.0)
+    jwt (1.5.4)
     kaminari (0.16.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -252,9 +252,9 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    twilio-ruby (3.11.5)
+    twilio-ruby (4.1.0)
       builder (>= 2.1.2)
-      jwt (>= 0.1.2)
+      jwt (~> 1.0)
       multi_json (>= 1.3.0)
     tzinfo (0.3.40)
     tzip (0.0.4)
@@ -306,7 +306,7 @@ DEPENDENCIES
   simplecov (~> 0.7.1)
   test_after_commit
   thin
-  twilio-ruby
+  twilio-ruby (~> 4.1.0)
   tzip
   uglifier (>= 1.3.0)
 
