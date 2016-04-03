@@ -40,4 +40,6 @@ Streetmom::Application.routes.draw do
   root 'pages#home'
 
   get '/visualizations/reports_timeline_map', to: 'visualizations#reports_timeline_map'
+
+  get '/reports_charts', to: 'visualizations#reports_charts'
 end
