@@ -7,11 +7,11 @@
               type: 'column'
           },
           title: {
-              text: 'Reports by Time'
+              text: 'Reports by Month'
           },
           xAxis: {
           		type: 'datetime',
-              categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+              categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
           },
           yAxis: {
               title: {
@@ -20,10 +20,7 @@
           },
           series: [{
               name: 'Total',
-              data: januaryReports,
-          }, {
-              name: 'Response Received',
-              data: [5, 7, 3, 5, 2]
+              data: #{@data},
           }]
       });
   });
