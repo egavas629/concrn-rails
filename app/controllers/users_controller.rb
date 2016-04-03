@@ -78,6 +78,6 @@ class UsersController < DashboardController
   end
 
   def user_params
-    params.require(:user).permit(:active, :phone, :name, :role, :email, :password, :password_confirmation)
+    params.require(:user).permit(:active, :phone, :name, :role, :email, :password, :password_confirmation, :on_duty)
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150112173145) do
+ActiveRecord::Schema.define(version: 20160403190649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,6 +122,7 @@ ActiveRecord::Schema.define(version: 20150112173145) do
     t.boolean  "active",                                          default: true
     t.decimal  "long",                   precision: 10, scale: 6
     t.decimal  "lat",                    precision: 10, scale: 6
+    t.boolean  "on_duty",                                         default: false
   end
 
   add_index "users", ["agency_id"], name: "index_users_on_agency_id", using: :btree

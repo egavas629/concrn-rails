@@ -30,7 +30,7 @@ Streetmom::Application.routes.draw do
     resources :users, except: %w(create update destroy edit new show index) do
       collection do
         get 'is_user_responder'
-        get 'responder_shift_has_started'
+        get 'has_responder_shift_started'
         get 'start_responder_shift'
         get 'end_responder_shift'
       end

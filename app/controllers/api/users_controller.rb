@@ -6,18 +6,18 @@ class Api::UsersController < ApplicationController
     render json: { result_value: status }
   end
 
-  def responder_shift_has_started
-    status = @user.shifts.started?
+  def has_responder_shift_started
+    status = @user.on_duty
     render json: { result_value: status }
   end
 
   def start_responder_shift
-  	@user.shifts.start
+  	@user.update(on_duty: true)
   	head :ok
   end
 
   def end_responder_shift
-  	@user.shifts.end
+  	@user.update(on_duty: false)
   	head :ok
   end
 
