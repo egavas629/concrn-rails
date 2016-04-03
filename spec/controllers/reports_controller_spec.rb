@@ -30,6 +30,10 @@ describe ReportsController do
     let(:report) { create(:report, :accepted) }
     let(:additional_responder) { create(:user, :responder) }
 
+    def complete_report(report_id)
+      put :update, id: report_id, report: { status: :completed }
+    end
+
     before do
       request.env['HTTP_REFERER'] = '/reports'
     end
@@ -48,9 +52,20 @@ describe ReportsController do
         notified << to
       end
 
-      put :update, id: report.id, report: { status: :completed }
-
+      complete_report(report.id)
       notified.should have(report.responders.count).items
+    end
+
+    it "notifies reporter once" do
+      received = false
+      allow(Telephony).to receive(:send) do |body, to|
+        next unless body =~ /Report resolved, thanks for being concrned!/
+        fail "#{to} has already been notified" if received
+        received = true
+      end
+
+      complete_report(report.id)
+      expect(received).to be
     end
   end
 end
