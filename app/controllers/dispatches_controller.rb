@@ -18,11 +18,11 @@ class DispatchesController < DashboardController
 
   def responder
     id = params.require(:dispatch).permit(:responder_id)[:responder_id]
-    id.present? ? current_agency.responders.find(id) : false
+    id.present? ? Responder.find(id) : false
   end
 
   def report
-    current_agency.reports.find params.require(:dispatch).permit(:report_id)[:report_id]
+    Report.find params.require(:dispatch).permit(:report_id)[:report_id]
   end
 
   private

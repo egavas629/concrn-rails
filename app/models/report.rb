@@ -1,4 +1,8 @@
+require 'httparty'
+
 class Report < ActiveRecord::Base
+  include HTTParty
+
   DEFAULT_TEAM_NAME = "Concrn Team"
   attr_accessor :delete_image
   serialize :observations, Array
@@ -8,10 +12,9 @@ class Report < ActiveRecord::Base
     end
   end
   after_validation :reverse_geocode
-  before_save :auto_assign_agency
+  after_validation :find_neighborhood
 
   # RELATIONS #
-  belongs_to :agency
   has_many :dispatches, dependent: :destroy
   has_many :logs,       dependent: :destroy
   has_many :responders, through:   :dispatches
@@ -134,16 +137,14 @@ class Report < ActiveRecord::Base
     Dispatch.accepted(id).each { |i| i.update_attributes(status: 'completed') }
   end
 
-  private
-
-  def auto_assign_agency
-    self.agency = zip.presence && Agency.find_by("zip_code_list like ?", "%#{zip}%")
-    self.agency ||= Agency.find_by(name: DEFAULT_TEAM_NAME)
+  def find_neighborhood
+    self.neighborhood = Neighborhood.at(lat, long)
   end
 
+  private
+
   def send_to_dispatcher
-    return false if agency.blank? || agency.dispatchers.blank? || agency.dispatchers.on_shift.count < 1
-    agency.dispatchers.on_shift.each do |dispatcher|
+    Dispatcher.on_shift.each do |dispatcher|
       Telephony.send("New Report @ #{address}. www.concrn.com/reports", dispatcher.phone)
     end
   end
@@ -159,4 +160,5 @@ class Report < ActiveRecord::Base
   def push_reports
     Push.refresh
   end
+
 end

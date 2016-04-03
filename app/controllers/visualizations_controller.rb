@@ -1,8 +1,6 @@
 class VisualizationsController < ApplicationController
 	before_action :authenticate_user!
-	def reports_timeline_map
-		# render: "visualizations/reports_timeline_map"
-	end
+	
 
 	def reports_charts
 		reports = Report.all

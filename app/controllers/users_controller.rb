@@ -5,7 +5,7 @@ class UsersController < DashboardController
   before_filter :authenticate_dispatcher!, except: :create
 
   def create
-    @user = @agency.users.new(user_params)
+    @user = User.new(user_params)
     if @user.save
       flash[:notice] = "#{@user.name}'s profile was created"
       user_signed_in? ? (redirect_to action: :index) : (redirect_to :back)
@@ -16,7 +16,7 @@ class UsersController < DashboardController
   end
 
   def by_phone
-    @user = current_agency.users.find_by_phone(NumberSanitizer.sanitize(params[:phone]))
+    @user = User.find_by_phone(NumberSanitizer.sanitize(params[:phone]))
     if @user.present?
       render json: @user
     else
@@ -25,20 +25,20 @@ class UsersController < DashboardController
   end
 
   def deactivated
-    @responders = current_agency.responders.inactive
-    @dispatchers = current_agency.dispatchers.inactive
+    @responders = Responder.inactive
+    @dispatchers = Dispatcher.inactive
   end
 
   def edit
   end
 
   def index
-    @responders = current_agency.responders.active
-    @dispatchers = current_agency.dispatchers.active
+    @responders = Responder.active
+    @dispatchers = Dispatcher.active
   end
 
   def new
-    @user = current_agency.users.new
+    @user = User.new
   end
 
   def show
@@ -67,13 +67,11 @@ class UsersController < DashboardController
   private
 
   def authenticate_admin!
-    user_signed_in? && current_user.dispatcher? && a = true ||
-    authenticate_super_admin! && a = false
-    @agency = a ? current_agency : Agency.find(params[:user][:agency_id])
+    user_signed_in? && (current_user.dispatcher? || authenticate_super_admin!)
   end
 
   def find_user
-    @user = current_agency.users.find(params[:id])
+    @user = User.find(params[:id])
   end
 
   def user_params

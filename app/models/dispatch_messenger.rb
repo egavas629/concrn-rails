@@ -49,7 +49,6 @@ class DispatchMessenger
   end
 
   def complete
-    @report.complete
     thank_responder
     thank_reporter
   end
@@ -114,11 +113,8 @@ class DispatchMessenger
       <<-MSG
         Additional Support: #{@responder.name} is on the way to help #{@report.primary_responder.name}.
       MSG
-    elsif @report.agency.present? && @report.agency.call_phone.present?
-      agency = @report.agency
-      "Incident Response: #{@responder.name} is on the way. Contact the #{agency.name} at #{agency.call_phone}"
     else
-      "Incident Response: #{@responder.name} is on the way. #{@responder.phone}"
+      "Incident Response: #{@responder.name} is on the way. Contact #{Streetmom::AGENCY_NAME} at #{Streetmom::PHONE_NUMBER}"
     end
   end
 
@@ -137,9 +133,7 @@ class DispatchMessenger
     message = <<-EOF
       The report is now completed, thanks for your help! You are now available to be dispatched.
     EOF
-    Responder.accepted(@report.id).each do |responder|
-      Telephony.send(message, responder.phone)
-    end
+    Telephony.send(message, @responder.phone)
   end
 
   def thank_reporter
