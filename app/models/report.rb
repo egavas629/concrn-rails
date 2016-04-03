@@ -8,6 +8,7 @@ class Report < ActiveRecord::Base
     end
   end
   after_validation :reverse_geocode
+  # after_validation :find_neighborhood
 
   # RELATIONS #
   has_many :dispatches, dependent: :destroy
