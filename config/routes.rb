@@ -28,6 +28,12 @@ Streetmom::Application.routes.draw do
   resources :phone_numbers, only: [:new, :create]
   post 'phone_numbers/verify' => "phone_numbers#verify"
 
+  resources :clients, except: %w(destroy) do
+    collection do
+      get 'deactivated'
+    end
+  end
+
   resources :dispatches, only: %w(create update)
   resources :logs,       only: %w(create update)
   resources :reporters,  only: %w(show create new)

@@ -1,0 +1,14 @@
+%table.table.pusher
+  %thead
+    %tr
+      %th Name
+      %th Age
+      %th Gender
+      %th Ethnicity
+  %tbody
+    - clients.each do |client|
+      = content_tag_for :tr, client do
+        %th= link_to client.name, client_path(client)
+        %td= client.age
+        %td= client.gender
+        %td= client.race

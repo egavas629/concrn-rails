@@ -1,0 +1,4 @@
+.row
+  %h2.col-sm-6 Deactivated Clients
+  .table-top-button.col-sm-1.col-sm-offset-4= link_to 'Active Clients', clients_path, class: 'btn btn-primary'
+= render 'clients_table', clients: @clients
