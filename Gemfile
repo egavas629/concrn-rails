@@ -12,6 +12,7 @@ gem 'devise'
 # Telephony API
 gem 'twilio-ruby'
 
+gem 'rack-cors', :require => 'rack/cors'
 # Pusher API
 gem 'pusher'
 
