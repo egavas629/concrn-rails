@@ -3,20 +3,18 @@ class PhoneNumbersController < ApplicationController
     @phone_number = PhoneNumber.new
   end
 
+  #Post route
   def create
-    @phone_number = PhoneNumber.find_or_create_by(phone_number:params[:phone_number][:phone_number])
+    @phone_number = PhoneNumber.find_or_create_by(phone_number:params[:phone_number])
     @phone_number.generate_pin
     @phone_number.send_pin
-    respond_to do |format|
-      format.js
-    end
+    render json: {status: "sent"} #Sends back JSON object indicating message sent
   end
 
+  #Post route
   def verify
-    @phone_number = PhoneNumber.find_by(phone_number: params[:hidden_phone_number])
+    @phone_number = PhoneNumber.find_by(phone_number: params[:phone_number])
     @phone_number.verify(params[:pin])
-    respond_to do |format|
-      format.js
-    end
+    render json: {verified: @phone_number.verified} #Sends back Json object indicating whether number is verified
   end
 end
