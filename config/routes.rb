@@ -38,4 +38,6 @@ Streetmom::Application.routes.draw do
   resources :uploads,    only: %w(destroy)
 
   root 'pages#home'
+
+  get '/reports_timeline_map', to: 'visualizations#reports_timeline_map'
 end
