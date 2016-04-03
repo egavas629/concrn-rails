@@ -1,1 +1,3 @@
-[ ![Codeship Status for dbmarks/concrn-rails](https://www.codeship.io/projects/6769f830-e773-0131-9491-1a5aac3dee39/status)](https://www.codeship.io/projects/25924)
+[![Build Status](https://travis-ci.org/egavas629/concrn-rails.svg?branch=development)](https://travis-ci.org/egavas629/concrn-rails)
+
+Rails API for http://www.concrn.org/

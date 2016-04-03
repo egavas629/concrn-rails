@@ -7,7 +7,6 @@ class Telephony
 
   def self.send(body = 'Thanks!', to = nil)
     return true if Rails.env.test?
-    sleep 1 # Carriers are sloppy.
     client.account.messages.create(from: OUTGOING_PHONE, to: to, body: body)
   rescue => e
     puts "### ERROR: #{e} ###"
