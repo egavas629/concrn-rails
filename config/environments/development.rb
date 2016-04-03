@@ -4,6 +4,7 @@ Streetmom::Application.configure do
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
+
   config.cache_classes = false
 
   # Do not eager load code on boot.
@@ -32,4 +33,12 @@ Streetmom::Application.configure do
      :url => "/:attachment/:id/:style/:basename.:extension",
      :path => ":rails_root/public/:attachment/:id/:style/:basename.:extension"
   }
+
+
+  config.middleware.insert_before 0, "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*', :headers => :any, :methods => [:get, :post, :options]
+      end
+    end
 end

@@ -7,6 +7,9 @@ gem 'haml'
 gem 'simple_form'
 gem 'devise'
 gem 'twilio-ruby'
+
+gem 'rack-cors', :require => 'rack/cors'
+# Pusher API
 gem 'pusher'
 gem 'geocoder'
 gem 'tzip'
