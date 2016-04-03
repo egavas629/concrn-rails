@@ -7,9 +7,6 @@ FactoryGirl.define do
     phone   { '5103874543' }
     lat     { Random.new.rand(37.781190..37.785505) }
     long    { Random.new.rand(-122.420003..-122.411674) }
-
-    # 37.781190 37.785505
-    # -122.411674 -122.420003
     address { Faker::Address.street_address }
 
     trait(:accepted) do
