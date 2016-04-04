@@ -36,4 +36,6 @@ Streetmom::Application.routes.draw do
   resources :uploads,    only: %w(destroy)
 
   root 'pages#home'
+
+  get '/visualizations/reports_charts', to: 'visualizations#reports_charts'
 end

@@ -10,3 +10,4 @@
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
 Streetmom::Application.config.secret_key_base = '5abef5ec5ac032954e1fe6ac8ef53298a75f194cf121d79f52175024c060e2e875ca1177179a6d5bbf6089f77a6296fb1e630a40af7c83b739949b4c86b723a7'
+
