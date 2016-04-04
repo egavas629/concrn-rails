@@ -1,12 +1,14 @@
 $(document).ready(function(){
+	if($('#map').length < 1) return;
+
 	  var zoomLevel = 16;
-  /* 
+  /*
     for zoomLevel, 1 is really zoomed out (global view) and bigger numbers are more zoomed in.
     zoomLevel is an integer.
   */
-  var latitude = 37.784659; 
+  var latitude = 37.784659;
   // latitude is the distance from the equator (north-south)
-  var longitude = -122.4145; 
+  var longitude = -122.4145;
   // longitude is the distance from the Greenwich Meridian Line (east-west)
 
   mapboxgl.accessToken = 'pk.eyJ1IjoiYmVybmljZWNodWEiLCJhIjoiY2lrOHZsODJnMDByNnYwa3Byejd4azdwdyJ9.ULosBQzbIJtQg88gDsQExA';
