@@ -30,6 +30,11 @@
     %meta{name: "msapplication-TileImage", content: "/mstile-144x144.png"}
     %link{href:'http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900', rel: 'stylesheet'}
     %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}
+    %meta{:charset => "utf-8"}
+    %meta{:content => "initial-scale=1,maximum-scale=1,user-scalable=no", :name => "viewport"}
+    %script{:src => "https://api.tiles.mapbox.com/mapbox-gl-js/v0.16.0/mapbox-gl.js"}
+    %link{:href => "https://api.tiles.mapbox.com/mapbox-gl-js/v0.16.0/mapbox-gl.css", :rel => "stylesheet"}
+    %script{:charset => "utf-8", :src => "//d3js.org/d3.v3.min.js"}
 
   %body{'data-pusher-key' => ENV['PUSHER_KEY']}
     = conditional_nav_tag do

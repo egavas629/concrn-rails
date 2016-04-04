@@ -45,6 +45,12 @@ Streetmom::Application.routes.draw do
 
   root 'pages#home'
 
+  resources :timeline_map do
+    collection do
+      get 'timeline_map' => 'timeline_map#index'
+    end
+  end
+
   get '/visualizations/reports_timeline_map', to: 'visualizations#reports_timeline_map'
 
   get '/visualizations/reports_charts', to: 'visualizations#reports_charts'

@@ -18,6 +18,7 @@
  *= require reports
  *= require users
  *= require gritter
+ *= require timeline_map
  *= require phone_numbers
  *= require visualizations
  */
