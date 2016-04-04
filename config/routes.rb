@@ -1,7 +1,5 @@
 Streetmom::Application.routes.draw do
 
-  resources :agencies
-
   devise_for :users, path_prefix: 'my'
 
   resources :reports, except: %w(edit) do
@@ -27,10 +25,21 @@ Streetmom::Application.routes.draw do
     end
   end
 
+  resources :phone_numbers, only: [:new, :create]
+  post 'phone_numbers/verify' => "phone_numbers#verify"
+
+  resources :clients, except: %w(destroy) do
+    collection do
+      get 'deactivated'
+    end
+  end
+
   resources :dispatches, only: %w(create update)
   resources :logs,       only: %w(create update)
   resources :reporters,  only: %w(show create new)
   resources :sms,        only: %w(create)
+
+  resources :reporter_locations, only: %w(create)
 
   resources :uploads,    only: %w(destroy)
 
@@ -41,4 +50,8 @@ Streetmom::Application.routes.draw do
       get 'timeline_map' => 'timeline_map#index'
     end
   end
+
+  get '/visualizations/reports_timeline_map', to: 'visualizations#reports_timeline_map'
+
+  get '/visualizations/reports_charts', to: 'visualizations#reports_charts'
 end

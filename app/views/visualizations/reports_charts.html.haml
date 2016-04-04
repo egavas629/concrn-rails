@@ -1,0 +1,26 @@
+#chart_container{:style => "width:100%; height:400px;"}
+
+:javascript
+  $(function () { 
+      $('#chart_container').highcharts({
+          chart: {
+              type: 'column'
+          },
+          title: {
+              text: 'Reports by Month'
+          },
+          xAxis: {
+          		type: 'datetime',
+              categories: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+          },
+          yAxis: {
+              title: {
+                  text: 'Number of Reports'
+              }
+          },
+          series: [{
+              name: 'Total',
+              data: #{@data},
+          }]
+      });
+  });

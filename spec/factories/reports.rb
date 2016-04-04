@@ -5,8 +5,8 @@ FactoryGirl.define do
   factory(:report) do
     name    { Faker::Name.name }
     phone   { '5103874543' }
-    lat     { 37.920556 + (rand() * (rand() > 0.5 ? -1 : 1)) }
-    long    { 122.416667 + (rand() * (rand() > 0.5 ? -1 : 1)) }
+    lat     { Random.new.rand(37.781190..37.785505) }
+    long    { Random.new.rand(-122.420003..-122.411674) }
     address { Faker::Address.street_address }
 
     trait(:accepted) do

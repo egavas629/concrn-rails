@@ -10,3 +10,5 @@ Streetmom::Application.configure do
   config.action_mailer.delivery_method = :test
   config.active_support.deprecation = :stderr
 end
+
+Paperclip::Attachment.default_options[:path] = "#{Rails.root}/spec/test_files/:class/:id_partition/:style.:extension"

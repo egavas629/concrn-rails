@@ -1,15 +1,19 @@
 require 'spec_helper'
 
+
 describe Report do
-  it { should belong_to(:agency) }
+  before do
+    allow(Neighborhood).to receive(:at).and_return("Tenderloin")
+  end
+
   it { should have_many(:dispatches).dependent(:destroy) }
   it { should have_many(:logs).dependent(:destroy) }
   it { should have_many(:responders).through(:dispatches) }
   it { should validate_presence_of(:address) }
   it { should ensure_inclusion_of(:status).in_array(Report::STATUS) }
-  it { should ensure_inclusion_of(:gender).in_array(Report::GENDER).allow_blank(true) }
-  it { should ensure_inclusion_of(:age).in_array(Report::AGEGROUP).allow_blank(true) }
-  it { should ensure_inclusion_of(:race).in_array(Report::ETHNICITY).allow_blank(true) }
+  it { should ensure_inclusion_of(:gender).in_array(Client::GENDER).allow_blank(true) }
+  it { should ensure_inclusion_of(:age).in_array(Client::AGEGROUP).allow_blank(true) }
+  it { should ensure_inclusion_of(:race).in_array(Client::ETHNICITY).allow_blank(true) }
   it { should ensure_inclusion_of(:setting).in_array(Report::SETTING).allow_blank(true) }
   it { should have_attached_file(:image) }
 
@@ -44,34 +48,6 @@ describe Report do
     describe '.oldest' do
       subject { Report.oldest }
       it { should eq [report, accepted_report, archived_report, completed_report, pending_report, rejected_report] }
-    end
-  end
-
-  describe '#auto_assign_agency' do
-    let!(:agency) { create(:agency) }
-    subject { create(:report, agency: nil) }
-
-    context "with a nil zip code" do
-      it "assigns to the default agency" do
-        default = create(:agency, name: Report::DEFAULT_TEAM_NAME)
-        subject.agency.should == default
-      end
-    end
-
-    context "with a matching zip code" do 
-      before do
-        subject.update_attributes(zip: agency.zip_code_list)
-      end
-
-      it 'assigns the agency automatically' do
-        subject.agency.should == agency
-      end
-    end
-
-    it 'assigns the agency to the concrn team' do
-      concrn = create(:agency, name: 'Concrn Team')
-      report = create(:report, agency: nil, zip: '66600')
-      report.agency.should == concrn
     end
   end
 
@@ -308,6 +284,34 @@ describe Report do
       it 'should trigger' do
         expect(subject).to receive(:push_reports)
         subject.save
+      end
+    end
+  end
+
+  describe '#get_similar_reports' do
+    subject { create(:report, age: 'Adult (35-64)', gender: 'Female', race: 'Hispanic or Latino', observations: ['Anxious', 'Depressed']) }
+
+    context 'when report client ages are different' do
+      let!(:other_report) { create(:report, age: 'Youth (0-17)', gender: subject.gender, race: subject.race, observations: subject.observations)}
+      it 'returns no similar report' do
+        subject.get_similar_reports(5).map(&:id).should eq([])
+      end
+    end
+
+    context 'when report client gender are different' do
+      let!(:other_report) { create(:report, age: subject.age, gender: 'Male', race: subject.race, observations: subject.observations)}
+      it 'returns no similar report' do
+        subject.get_similar_reports(5).map(&:id).should eq([])
+      end
+    end
+
+    context 'with multiple similar reports' do
+      let!(:report1) { create(:report, age: subject.age, gender: subject.gender, race: subject.race, observations: subject.observations) }
+      let!(:report2) { create(:report, age: subject.age, gender: subject.gender, race: subject.race, observations: []) }
+      let!(:report3) { create(:report, age: subject.age, gender: subject.gender, race: 'Asian', observations: subject.observations) }
+
+      it 'returns them in the correct order' do
+        subject.get_similar_reports(5).map(&:id).should eq([report1.id, report2.id, report3.id])
       end
     end
   end

@@ -6,6 +6,12 @@
     = stylesheet_link_tag    "application", media: "all"
     = javascript_include_tag "//js.pusher.com/2.2/pusher.min.js"
     = javascript_include_tag "application"
+    
+    %meta{:content => "initial-scale=1,maximum-scale=1,user-scalable=no", :name => "viewport"}
+    %script{:src => "https://api.tiles.mapbox.com/mapbox-gl-js/v0.16.0/mapbox-gl.js"}
+    %link{:href => "https://api.tiles.mapbox.com/mapbox-gl-js/v0.16.0/mapbox-gl.css", :rel => "stylesheet"}
+    %script{:src => "http://code.highcharts.com/highcharts.js"}
+    
     %link{rel: "apple-touch-icon", sizes: "57x57", href: asset_path("apple-touch-icon-57x57.png")}
     %link{rel: "apple-touch-icon", sizes: "114x114", href: asset_path("apple-touch-icon-114x114.png")}
     %link{rel: "apple-touch-icon", sizes: "72x72", href: asset_path("apple-touch-icon-72x72.png")}

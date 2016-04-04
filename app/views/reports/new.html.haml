@@ -18,16 +18,14 @@
         %input#is-person.form-control{type: 'checkbox'}
       %div#person-fields{style: 'display:none;'}
         %h4 Patient Description
-        = f.input :gender, collection: Report::GENDER
-        = f.input :age, collection: Report::AGEGROUP
-        = f.input :race, collection: Report::ETHNICITY
+        = f.input :gender, collection: Client::GENDER
+        = f.input :age, collection: Client::AGEGROUP
+        = f.input :race, collection: Client::ETHNICITY
         = f.input :setting, collection: Report::SETTING
         %h4 Incident Description
         .observation-checkboxes
           = f.input :observations, as: :check_boxes, collection: Report::OBSERVATION
       = f.input :nature, label: "Additional Description"
-      = f.input :agency_id, input_html: { value: current_user.agency_id },
-        as: :hidden if user_signed_in?
       = f.input_field :image
 
       = f.simple_fields_for :uploads do |builder|

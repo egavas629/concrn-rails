@@ -3,11 +3,11 @@ class User < ActiveRecord::Base
          :rememberable, :trackable, :validatable
 
   # RELATIONS #
-  belongs_to :agency
   has_one    :responder,  class_name: 'Responder', foreign_key: :id
   has_one    :dispatcher, class_name: 'Dispatcher', foreign_key: :id
   has_one    :reporter, class_name: 'Reporter', foreign_key: :id
   has_many   :shifts,     dependent: :destroy
+  has_many   :reporter_locations, dependent: :destroy
 
   # CALLBACKS #
   after_validation :make_unavailable, on: :update
@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
 
   # VALIDATIONS #
   validates :phone,  length: { is: 10 }, uniqueness: true
-  validates :name,   presence: true, uniqueness: { scope: :agency_id }
+  validates :name,   presence: true, uniqueness: true
   validates_inclusion_of :role, in: ROLES
 
   # SCOPES #

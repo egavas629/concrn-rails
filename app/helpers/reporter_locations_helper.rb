@@ -1,0 +1,2 @@
+module ReporterLocationsHelper
+end

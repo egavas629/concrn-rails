@@ -2,7 +2,7 @@
 = content_tag_for :tr, report, class: "freshness-#{report_presenter.freshness}" do
   %td{title: report.created_at.to_s}
     %strong
-      .digits= "#{report.created_at.in_time_zone(report.agency.time_zone).strftime("%I:%M %p")}"
+      .digits= "#{report.created_at.in_time_zone(Streetmom::TIME_ZONE).strftime("%I:%M %p")}"
       .time-ago.words
         (
         %abbr.timeago{title: report.created_at.getutc.iso8601}= report.created_at.to_s
@@ -50,3 +50,9 @@
       = render "dispatches/index", report: report
     - elsif report.archived? && report.dispatches.empty?
       No one assigned
+
+  %td
+    - if report.client
+      =link_to report.client.name, client_path(report.client)
+    - elsif
+      None

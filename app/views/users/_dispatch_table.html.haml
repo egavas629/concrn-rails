@@ -11,7 +11,7 @@
         %tr
           - report = dispatch.report
           = content_tag_for :tr, report, class: row_style(dispatch.status) do
-            %td= dispatch.created_at.in_time_zone(report.agency.time_zone).strftime('%-m-%-d-%y')
+            %td= dispatch.created_at.in_time_zone(Streetmom::TIME_ZONE).strftime('%-m-%-d-%y')
             %td= report.address
             %td= dispatch.status.capitalize
             %td= link_to 'Details', report_path(report)
