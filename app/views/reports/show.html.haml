@@ -36,7 +36,7 @@
         .list-group-item-text=@report.nature
 
     %li.list-group-item
-      %h4.list-group-item-heading Assigned Client
+      %h4.list-group-item-heading Client
       = render partial: "reports/assign_client", locals: { report: @report, clients: @clients }
       - if @report.client
         %dl
