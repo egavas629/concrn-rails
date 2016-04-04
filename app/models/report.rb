@@ -168,11 +168,9 @@ class Report < ActiveRecord::Base
   end
 
   def score_for_matched_observations(observations)
-    score = 0
-    observations.each do |observation|
-      score += 0.1 if self.observations.include?(observation)
+    observations.reduce(0) do |sum, observation|
+      sum += 0.1 if self.observations.include?(observation)
     end
-    score
   end
 
   def get_similarity_score(other_report)
@@ -181,8 +179,10 @@ class Report < ActiveRecord::Base
     other_report_time = other_report.created_at.hour * 60 + other_report.created_at.min
 
     score += 0.33 if other_report.race == self.race
-    # score += score_for_matched_observations(other_report.observations)
-    # score += 0.33 if (other_report_time - self_report_time).abs <= 2 * 60
+
+    # unweighting these, but could be possible alterations to the algorithm
+    #score += score_for_matched_observations(other_report.observations)
+    #score += 0.33 if (other_report_time - self_report_time).abs <= 2 * 60
 
     score
   end
