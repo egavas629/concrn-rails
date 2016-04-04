@@ -26,6 +26,7 @@ Streetmom::Application.routes.draw do
     end
   end
 
+
   namespace :api do
     resources :users, except: %w(create update destroy edit new show index) do
       collection do
@@ -35,7 +36,10 @@ Streetmom::Application.routes.draw do
         get 'end_responder_shift'
       end
     end
+    resources :phone_numbers, only: [:new, :create]
+    post 'phone_numbers/verify' => "phone_numbers#verify"
   end
+
 
   resources :dispatches, only: %w(create update)
   resources :logs,       only: %w(create update)

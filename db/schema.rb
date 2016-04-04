@@ -51,6 +51,14 @@ ActiveRecord::Schema.define(version: 20160403190649) do
   add_index "logs", ["author_id"], name: "index_logs_on_author_id", using: :btree
   add_index "logs", ["report_id"], name: "index_logs_on_report_id", using: :btree
 
+  create_table "phone_numbers", force: true do |t|
+    t.string   "phone_number"
+    t.string   "pin"
+    t.boolean  "verified"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "reports", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
