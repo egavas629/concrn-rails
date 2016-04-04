@@ -9,10 +9,11 @@
           order: (['desc', 'asc'] - [params[:order]])[0]) if current_page?('/reports/history')
       %th Name
       %th Phone
-      %th Client
+      %th Client Description
       %th Incident
       %th Location
       %th Responders
+      %th Client
   - if reports.none?
     %tbody
       %tr

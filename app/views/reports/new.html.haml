@@ -18,9 +18,9 @@
         %input#is-person.form-control{type: 'checkbox'}
       %div#person-fields{style: 'display:none;'}
         %h4 Patient Description
-        = f.input :gender, collection: Report::GENDER
-        = f.input :age, collection: Report::AGEGROUP
-        = f.input :race, collection: Report::ETHNICITY
+        = f.input :gender, collection: Client::GENDER
+        = f.input :age, collection: Client::AGEGROUP
+        = f.input :race, collection: Client::ETHNICITY
         = f.input :setting, collection: Report::SETTING
         %h4 Incident Description
         .observation-checkboxes

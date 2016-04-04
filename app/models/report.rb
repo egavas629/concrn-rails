@@ -19,6 +19,7 @@ class Report < ActiveRecord::Base
   has_many :logs,       dependent: :destroy
   has_many :responders, through:   :dispatches
   has_many :uploads, dependent: :destroy
+  belongs_to :client
 
   accepts_nested_attributes_for :uploads, reject_if: :all_blank, allow_destroy: true
 
@@ -31,28 +32,19 @@ class Report < ActiveRecord::Base
 
   URGENCY_LABELS = ['Not urgent', 'This week', 'Today', 'Within an hour', 'Need help now']
 
-  AGEGROUP    = [
-    'Youth (0-17)', 'Young Adult (18-34)', 'Adult (35-64)', 'Senior (65+)'
-  ]
   SETTING     = ['Public Space', 'Workplace', 'School', 'Home', 'Other']
   OBSERVATION = [
     'At-risk of harm', 'Under the influence', 'Anxious',
     'Depressed', 'Aggravated', 'Threatening'
-  ]
-  GENDER      = %w(Male Female Other)
-  ETHNICITY   = [
-    'Hispanic or Latino', 'American Indian or Alaska Native', 'Asian',
-    'Black or African American', 'Native Hawaiian or Pacific Islander',
-    'White', 'Other/Unknown'
   ]
   STATUS      = %w(archived completed pending)
 
   # VALIDATIONS #
   validates :address, presence: true
   validates_inclusion_of :status, in: STATUS
-  validates_inclusion_of :gender, in: GENDER, allow_blank: true
-  validates_inclusion_of :age, in: AGEGROUP, allow_blank: true
-  validates_inclusion_of :race, in: ETHNICITY, allow_blank: true
+  validates_inclusion_of :gender, in: Client::GENDER, allow_blank: true
+  validates_inclusion_of :age, in: Client::AGEGROUP, allow_blank: true
+  validates_inclusion_of :race, in: Client::ETHNICITY, allow_blank: true
   validates_inclusion_of :setting, in: SETTING, allow_blank: true
   validates_attachment :image,
     :content_type => { :content_type => %w(image/jpeg image/jpg image/png) }
@@ -141,6 +133,20 @@ class Report < ActiveRecord::Base
     self.neighborhood = Neighborhood.at(lat, long)
   end
 
+  def get_similar_reports(number_of_reports = 5)
+    similar_reports = Report
+      .where("gender = ? OR gender = ?", self.gender, 'Other')
+      .where(age: self.age)
+      .where.not(id: self.id)
+      .to_a
+
+    similar_reports.sort_by! do |report|
+      0 - get_similarity_score(report)
+    end
+
+    similar_reports.first(number_of_reports)
+  end
+
   private
 
   def send_to_dispatcher
@@ -161,4 +167,23 @@ class Report < ActiveRecord::Base
     Push.refresh
   end
 
+  def score_for_matched_observations(observations)
+    observations.reduce(0) do |sum, observation|
+      sum += 0.1 if self.observations.include?(observation)
+    end
+  end
+
+  def get_similarity_score(other_report)
+    score = 0
+    self_report_time = self.created_at.hour * 60 + self.created_at.min
+    other_report_time = other_report.created_at.hour * 60 + other_report.created_at.min
+
+    score += 0.33 if other_report.race == self.race
+
+    # unweighting these, but could be possible alterations to the algorithm
+    #score += score_for_matched_observations(other_report.observations)
+    #score += 0.33 if (other_report_time - self_report_time).abs <= 2 * 60
+
+    score
+  end
 end

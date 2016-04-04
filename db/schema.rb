@@ -16,6 +16,16 @@ ActiveRecord::Schema.define(version: 20160403223633) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "clients", force: true do |t|
+    t.string   "name"
+    t.string   "age"
+    t.string   "gender"
+    t.string   "race"
+    t.boolean  "active",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "dispatches", force: true do |t|
     t.integer  "report_id"
     t.integer  "responder_id"
@@ -81,6 +91,7 @@ ActiveRecord::Schema.define(version: 20160403223633) do
     t.datetime "completed_at"
     t.string   "urgency"
     t.string   "zip"
+    t.integer  "client_id"
   end
 
   create_table "shifts", force: true do |t|

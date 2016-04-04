@@ -9,5 +9,11 @@ def accounts
     7.times { FactoryGirl.create :responder }
 end
 
+def clients
+    puts 'Seeding Clients...'
+    10.times { FactoryGirl.create :client }
+end
+
 reports
 accounts
+clients
