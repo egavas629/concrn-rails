@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   has_one    :dispatcher, class_name: 'Dispatcher', foreign_key: :id
   has_one    :reporter, class_name: 'Reporter', foreign_key: :id
   has_many   :shifts,     dependent: :destroy
+  has_many   :reporter_locations, dependent: :destroy
 
   # CALLBACKS #
   after_validation :make_unavailable, on: :update

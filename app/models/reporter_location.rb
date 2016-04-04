@@ -1,0 +1,5 @@
+class ReporterLocation < ActiveRecord::Base
+
+  belongs_to :user
+
+end
