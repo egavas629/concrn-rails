@@ -1,15 +1,14 @@
 <div id='map'></div>
-<script>
-  L.mapbox.accessToken = 'pk.eyJ1IjoiYmVybmljZWNodWEiLCJhIjoiY2lta3h1bDRpMDE4a3R0a3FoN3N0bnE2diJ9.raVL-H6w9AyWvzGc7jRMww';
-  var zoomLevel = 16;
-  /* 
-    for zoomLevel, 1 is really zoomed out (global view) and bigger numbers are more zoomed in.
-    zoomLevel is an integer.
-  */
-  var latitude = 37.784659; 
-  // latitude is the distance from the equator (north-south)
-  var longitude = -122.4145; 
-  // longitude is the distance from the Greenwich Meridian Line (east-west)
 
-  var map = L.mapbox.map('map', 'mapbox.streets').setView([latitude, longitude], zoomLevel);
-</script>
+<div class='map-overlay top'>
+    <div class='map-overlay-inner'>
+        <h2>Significant earthquakes in 2015</h2>
+        <label id='month'></label>
+        <input id='slider' type='range' min='0' max='11' step='1' value='0' />
+    </div>
+    <div class='map-overlay-inner'>
+        <div id='legend' class='legend'>
+            <div>Magnitude (m)</div>
+        </div>
+    </div>
+</div>
