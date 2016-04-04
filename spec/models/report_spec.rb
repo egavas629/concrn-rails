@@ -287,4 +287,32 @@ describe Report do
       end
     end
   end
+
+  describe '#get_similar_reports' do
+    subject { create(:report, age: 'Adult (35-64)', gender: 'Female', race: 'Hispanic or Latino', observations: ['Anxious', 'Depressed']) }
+
+    context 'when report client ages are different' do
+      let!(:other_report) { create(:report, age: 'Youth (0-17)', gender: subject.gender, race: subject.race, observations: subject.observations)}
+      it 'returns no similar report' do
+        subject.get_similar_reports(5).map(&:id).should eq([])
+      end
+    end
+
+    context 'when report client gender are different' do
+      let!(:other_report) { create(:report, age: subject.age, gender: 'Male', race: subject.race, observations: subject.observations)}
+      it 'returns no similar report' do
+        subject.get_similar_reports(5).map(&:id).should eq([])
+      end
+    end
+
+    context 'with multiple similar reports' do
+      let!(:report1) { create(:report, age: subject.age, gender: subject.gender, race: subject.race, observations: subject.observations) }
+      let!(:report2) { create(:report, age: subject.age, gender: subject.gender, race: subject.race, observations: []) }
+      let!(:report3) { create(:report, age: subject.age, gender: subject.gender, race: 'Asian', observations: subject.observations) }
+
+      it 'returns them in the correct order' do
+        subject.get_similar_reports(5).map(&:id).should eq([report1.id, report2.id, report3.id])
+      end
+    end
+  end
 end
