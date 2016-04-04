@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160403223633) do
+ActiveRecord::Schema.define(version: 20160403031548) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,14 +45,6 @@ ActiveRecord::Schema.define(version: 20160403223633) do
     t.string   "phone_number"
     t.string   "pin"
     t.boolean  "verified"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "reporter_locations", force: true do |t|
-    t.integer  "user_id"
-    t.float    "latitude",   null: false
-    t.float    "longitude",  null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
