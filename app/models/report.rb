@@ -7,9 +7,7 @@ class Report < ActiveRecord::Base
   attr_accessor :delete_image
   serialize :observations, Array
   reverse_geocoded_by :lat, :long do |obj, results|
-    if geo = results.first
-      obj.zip ||= geo.postal_code
-    end
+    obj.zip ||= results.first.postal_code if results.first
   end
   after_validation :reverse_geocode
   after_validation :find_neighborhood
@@ -31,13 +29,9 @@ class Report < ActiveRecord::Base
   after_create :send_to_dispatcher
 
   URGENCY_LABELS = ['Not urgent', 'This week', 'Today', 'Within an hour', 'Need help now']
-
-  SETTING     = ['Public Space', 'Workplace', 'School', 'Home', 'Other']
-  OBSERVATION = [
-    'At-risk of harm', 'Under the influence', 'Anxious',
-    'Depressed', 'Aggravated', 'Threatening'
-  ]
-  STATUS      = %w(archived completed pending)
+  SETTING = ['Public Space', 'Workplace', 'School', 'Home', 'Other']
+  OBSERVATION = ['At-risk of harm', 'Under the influence', 'Anxious', 'Depressed', 'Aggravated', 'Threatening' ]
+  STATUS = %w(archived completed pending)
 
   # VALIDATIONS #
   validates :address, presence: true
@@ -46,8 +40,7 @@ class Report < ActiveRecord::Base
   validates_inclusion_of :age, in: Client::AGEGROUP, allow_blank: true
   validates_inclusion_of :race, in: Client::ETHNICITY, allow_blank: true
   validates_inclusion_of :setting, in: SETTING, allow_blank: true
-  validates_attachment :image,
-    :content_type => { :content_type => %w(image/jpeg image/jpg image/png) }
+  validates_attachment :image, :content_type => { :content_type => %w(image/jpeg image/jpg image/png) }
 
   # SCOPE #
   scope :accepted, lambda {

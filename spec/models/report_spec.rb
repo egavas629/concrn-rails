@@ -38,12 +38,19 @@ describe Report do
     describe '.pending' do
       subject { Report.pending }
       it { should include(pending_report) }
-      it { should_not include(report, accepted_report, archived_report, completed_report, rejected_report) }
+      it { should_not include(accepted_report) }
+      it { should_not include(archived_report) }
+      it { should_not include(completed_report) }
+      it { should_not include(rejected_report) }
+      it { should_not include(report) }
     end
     describe '.unassigned' do
       subject { Report.unassigned }
       it { should include(rejected_report, report) }
-      it { should_not include(accepted_report, archived_report, completed_report, pending_report) }
+      it { should_not include(accepted_report)}
+      it { should_not include(archived_report)}
+      it { should_not include(completed_report)}
+      it { should_not include(pending_report)} 
     end
     describe '.by_oldest' do
       subject { Report.by_oldest }
