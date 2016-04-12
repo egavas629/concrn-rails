@@ -7,7 +7,7 @@ gem 'pg'
 gem 'jbuilder', '~> 1.2'
 gem 'haml'
 gem 'simple_form'
-gem 'devise'
+gem 'devise', '3.5.4'
 # Telephony API
 gem 'twilio-ruby', '~> 4.1.0'
 gem 'rack-cors', :require => 'rack/cors'
