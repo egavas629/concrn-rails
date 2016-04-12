@@ -45,6 +45,7 @@ group :test do
   gem 'simplecov', '~> 0.7.1', :require => false
   gem 'shoulda-matchers', require: false
   gem 'test_after_commit'
+  gem 'webmock'
 end
 
 group :development do

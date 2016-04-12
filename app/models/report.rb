@@ -10,7 +10,6 @@ class Report < ActiveRecord::Base
     obj.zip ||= results.first.postal_code if results.first
   end
   after_validation :reverse_geocode
-  after_validation :find_neighborhood
 
   # RELATIONS #
   has_many :dispatches, dependent: :destroy
@@ -122,8 +121,8 @@ class Report < ActiveRecord::Base
     Dispatch.accepted(id).each { |i| i.update_attributes(status: 'completed') }
   end
 
-  def find_neighborhood
-    self.neighborhood = Neighborhood.at(lat, long)
+  def neighborhood
+    read_attribute(:neighborhood) || update_attribute(:neighborhood, Neighborhood.at(lat, long)) && read_attribute(:neighborhood)
   end
 
   def get_similar_reports(number_of_reports = 5)

@@ -50,7 +50,7 @@ describe Report do
       it { should_not include(accepted_report)}
       it { should_not include(archived_report)}
       it { should_not include(completed_report)}
-      it { should_not include(pending_report)} 
+      it { should_not include(pending_report)}
     end
     describe '.by_oldest' do
       subject { Report.by_oldest }
@@ -350,5 +350,31 @@ describe Report do
         expect(similar_reports_ids).to eq([report1.id, report2.id, report3.id])
       end
     end
+  end
+
+  describe '#neighborhood' do
+      context 'when populated' do
+        subject { create :report, neighborhood: 'Mars' }
+
+        it 'reads the attribute' do
+          expect(subject.neighborhood).to eq('Mars')
+        end
+      end
+      context 'when empty' do
+        subject { create :report, neighborhood: nil }
+        before do
+          expect(Neighborhood).to receive(:at).with(subject.lat, subject.long).and_return("Xanadu")
+        end
+
+        it 'returns a fetched neighborhood' do
+          expect(subject.neighborhood).to eq("Xanadu")
+        end
+
+        it 'populates the column' do
+          expect(subject.neighborhood).to eq("Xanadu")
+          expect(Neighborhood).not_to receive(:at)
+          expect(subject.neighborhood).to eq("Xanadu")
+        end
+      end
   end
 end
