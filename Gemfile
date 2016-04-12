@@ -51,6 +51,6 @@ end
 group :development do
 	gem 'guard-rubocop'
 	gem 'byebug'
-
+  gem 'travis'
   gem 'quiet_assets'
 end
