@@ -45,8 +45,8 @@ describe Report do
       it { should include(rejected_report, report) }
       it { should_not include(accepted_report, archived_report, completed_report, pending_report) }
     end
-    describe '.oldest' do
-      subject { Report.oldest }
+    describe '.by_oldest' do
+      subject { Report.by_oldest }
       it { should eq [report, accepted_report, archived_report, completed_report, pending_report, rejected_report] }
     end
   end
@@ -99,6 +99,7 @@ describe Report do
     context 'multiple responders' do
       let!(:responder_one) { create(:dispatch, :accepted, report: report).responder }
       let!(:responder_two) { create(:dispatch, :accepted, report: report).responder }
+
       its(:primary_responder) { should eq(responder_one) }
     end
 

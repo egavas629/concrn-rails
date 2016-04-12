@@ -67,7 +67,7 @@ class Report < ActiveRecord::Base
       .where.not(id: pending.map(&:id).concat(accepted.map(&:id)))
   }
 
-  scope :oldest, -> { order("reports.created_at ASC") }
+  scope :by_oldest, -> { order("reports.created_at ASC") }
 
   # INSTANCE METHODS #
   def accepted_dispatches
@@ -80,7 +80,7 @@ class Report < ActiveRecord::Base
 
   def primary_responder
     return false if accepted_dispatches.blank?
-    accepted_dispatches.first.responder
+    accepted_dispatches.oldest.responder
   end
 
   def current_status

@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 ruby '2.0.0'
 
 gem 'dotenv-rails', :groups => [:development, :test]
-gem 'rails', '4.0.0'
+gem 'rails', '4.1.14'
 gem 'pg'
 gem 'jbuilder', '~> 1.2'
 gem 'haml'
@@ -33,6 +33,7 @@ gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'httparty'
 gem 'awesome_print'
+gem 'by_star'
 
 group :rangers, :production, :staging do
   gem 'rails_12factor'

@@ -10,7 +10,7 @@ class ReportsController < DashboardController
   end
 
   def index
-    @unassigned_reports = Report.unassigned.oldest
+    @unassigned_reports = Report.unassigned.by_oldest
     @pending_reports = Report.pending
   end
 
