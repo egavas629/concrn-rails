@@ -13,5 +13,6 @@ deploy:
   provider: heroku
   app:
     development: staging-concrn
+    master: concrn
   api_key:
     secure: FjmwBrEhqL74B0go3m+9mGzGD+bu7xauBpWu91fJc3tq+/jBhcJyxYg3gv8kGIhJg9+CSNvXFQghQFfGw8EFgdtCi8WWAXiPwC5Vdr6ufyqUbnlEMknO3mMUjYC1lpCvq/dxbz+d8efHJEal7RRGJN4tEyhrEiwH6XgMe/UsqaQ=
