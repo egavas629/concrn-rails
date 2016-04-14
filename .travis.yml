@@ -1,13 +1,14 @@
 language: ruby
 sudo: false
+
 services:
-- postgresql
+  - postgresql
 before_script:
-- psql -c 'create database streetmom_test;' -U postgres
+  - psql -c 'create database streetmom_test;' -U postgres
 script:
-- RAILS_ENV=test bundle exec rake db:migrate --trace
-- bundle exec rake db:test:prepare
-- bundle exec rspec spec/
+  - RAILS_ENV=test bundle exec rake db:migrate --trace
+  - bundle exec rake db:test:prepare
+  - bundle exec rspec spec/
 
 deploy:
   provider: heroku
