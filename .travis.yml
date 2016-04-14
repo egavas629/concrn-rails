@@ -12,6 +12,7 @@ script:
 
 deploy:
   provider: heroku
+  run: "rake db:migrate"
   app:
     development: staging-concrn
     master: concrn
