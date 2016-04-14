@@ -2,6 +2,10 @@ Streetmom::Application.routes.draw do
 
   devise_for :users, path_prefix: 'my'
 
+  devise_scope :user do
+    root to: "devise/sessions#new"
+  end
+  
   resources :reports, except: %w(edit) do
     collection do
       get 'active'
@@ -42,8 +46,6 @@ Streetmom::Application.routes.draw do
   resources :reporter_locations, only: %w(create)
 
   resources :uploads,    only: %w(destroy)
-
-  root 'pages#home'
 
   resources :timeline_map do
     collection do
