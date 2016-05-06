@@ -60,6 +60,7 @@ class Report < ActiveRecord::Base
   }
 
   scope :by_oldest, -> { order("reports.created_at ASC") }
+  scope :by_newest, -> { order("reports.created_at DESC") }
 
   # INSTANCE METHODS #
   def accepted_dispatches
