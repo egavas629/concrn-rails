@@ -1,3 +1,7 @@
 %h2 Unassigned
 = render "report_table", reports: @unassigned_reports, responders: @available_responders
-= paginate @unassigned_reports
+= paginate @unassigned_reports, param_name: :unassigned_page
+
+%h2 Pending
+= render "report_table", reports: @pending_reports, responders: @available_responders
+= paginate @pending_reports, param_name: :pending_page

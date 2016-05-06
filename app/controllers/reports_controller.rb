@@ -10,8 +10,8 @@ class ReportsController < DashboardController
   end
 
   def index
-    @unassigned_reports = Report.unassigned.by_oldest.page(params[:page]).per(10)
-    @pending_reports = Report.pending
+    @unassigned_reports = Report.unassigned.by_oldest.page(params[:unassigned_page]).per(10)
+    @pending_reports = Report.pending.page(params[:pending_page]).per(10)
   end
 
   def active
