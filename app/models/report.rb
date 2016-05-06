@@ -51,12 +51,12 @@ class Report < ActiveRecord::Base
 
   scope :pending, lambda {
     includes(:dispatches).where(status: 'pending').references(:dispatches)
-      .where.not(id: accepted.map(&:id)).where("dispatches.status = 'pending'")
+      .where.not(id: accepted.pluck(:id)).where("dispatches.status = 'pending'")
   }
 
   scope :unassigned, lambda {
     includes(:dispatches).where(status: 'pending')
-      .where.not(id: pending.map(&:id).concat(accepted.map(&:id)))
+      .where.not(id: pending.pluck(:id).concat(accepted.pluck(:id)))
   }
 
   scope :by_oldest, -> { order("reports.created_at ASC") }
