@@ -166,28 +166,23 @@ describe Report do
 
   end
 
-  describe 'state methods' do
-    context 'new report' do
+  describe 'state' do
+    context 'when new' do
       subject { create(:report) }
       its(:current_status) { should eq('unassigned') }
     end
 
-    context 'accepted report' do
+    context 'when accepted' do
       subject { create(:report, :accepted) }
+      
       its(:accepted?)              { should be_true }
       its(:archived?)              { should be_false }
       its(:archived_or_completed?) { should be_false }
       its(:completed?)             { should be_false }
       its(:current_status)         { should eq('active') }
-      its(:current_pending?)       { should be_false }
-
-      context 'with pending dispatch' do
-        before { subject.dispatch(create(:responder, :on_shift)) }
-        its(:current_pending?) { should be_false }
-      end
     end
 
-    context 'archived report' do
+    context 'when archived' do
       subject { create(:report, :archived) }
       its(:archived?)              { should be_true }
       its(:archived_or_completed?) { should be_true }
@@ -195,31 +190,30 @@ describe Report do
       its(:current_status)         { should eq('archived') }
     end
 
-    context 'completed report' do
+    context 'when completed' do
       subject { create(:report, :completed).reload }
       its(:archived?)              { should be_false }
       its(:archived_or_completed?) { should be_true }
       its(:completed?)             { should be_true }
+      its(:pending?)               { should be_false }
       its(:current_status)         { should eq('completed') }
     end
 
-    context 'pending report' do
+    context 'when pending' do
       subject { create(:report, :pending) }
       its(:accepted?)              { should be_false }
       its(:archived?)              { should be_false }
       its(:archived_or_completed?) { should be_false }
       its(:completed?)             { should be_false }
-      its(:current_pending?)       { should be_true }
       its(:current_status)         { should eq('pending') }
     end
 
-    context 'rejected report' do
+    context 'when rejected' do
       subject { create(:report, :rejected) }
       its(:accepted?)              { should be_false }
       its(:archived?)              { should be_false }
       its(:archived_or_completed?) { should be_false }
       its(:completed?)             { should be_false }
-      its(:current_pending?)       { should be_false }
       its(:current_status)         { should eq('unassigned') }
     end
   end
@@ -235,9 +229,12 @@ describe Report do
       subject { create(:report) }
 
       context 'report completed' do
-        before { subject.status = 'completed' }
+        before do
+          subject.dispatch(create :responder)
+        end
         it 'runs' do
           expect(subject).to receive(:set_completed).once
+          subject.dispatches.last.complete!
           subject.valid?
         end
       end

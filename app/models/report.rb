@@ -43,15 +43,13 @@ class Report < ActiveRecord::Base
 
   # SCOPE #
   scope :accepted, lambda {
-    includes(:dispatches).where(status: 'pending').merge(Dispatch.accepted)
-      .order('reports.created_at DESC').references(:dispatches)
+    joins(:dispatches).where(dispatches: {status: 'accepted'})
   }
 
   scope :completed, -> { where(status: %w(completed archived)) }
 
   scope :pending, lambda {
-    includes(:dispatches).where(status: 'pending').references(:dispatches)
-      .where.not(id: accepted.pluck(:id)).where("dispatches.status = 'pending'")
+    joins(:dispatches).where(dispatches: {status: 'pending'})
   }
 
   scope :unassigned, lambda {
@@ -77,18 +75,11 @@ class Report < ActiveRecord::Base
   end
 
   def current_status
-    return status unless status == 'pending'
-    if Dispatch.accepted(id).present?
-      'active'
-    elsif current_pending?
-      'pending'
-    else
-      'unassigned'
-    end
-  end
-
-  def current_pending?
-    Report.pending.include?(self)
+    return 'completed' if completed?
+    return 'active' if active?
+    return 'pending' if pending?
+    return 'archived' if archived?
+    return 'unassigned'
   end
 
   def dispatch(responder)
@@ -102,9 +93,20 @@ class Report < ActiveRecord::Base
   def archived?
     status == 'archived'
   end
+  
+  def pending?
+    dispatches
+      .where.not(status: 'accepted')
+      .where.not(status: 'completed')
+      .where.not(status: 'rejected').any?
+  end
 
+  def active?
+    dispatches.where(status: 'accepted').any?
+  end
+  
   def completed?
-    status == 'completed'
+    dispatches.where(status: 'completed').any?
   end
 
   def archived_or_completed?

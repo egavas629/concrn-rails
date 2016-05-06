@@ -44,6 +44,8 @@ class ReportsController < DashboardController
 
   def update
     @report = Report.find(params[:id])
+    @report.dispatches.sample.complete! if params.fetch(:report)['status'] == 'completed'
+      
     @report.update_attributes!(report_params)
     respond_to do |format|
       format.js { render json: {success: true} }

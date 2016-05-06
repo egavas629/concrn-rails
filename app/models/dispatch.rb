@@ -53,6 +53,10 @@ class Dispatch < ActiveRecord::Base
     status == 'accepted'
   end
 
+  def complete!
+    report.dispatches.each { |d| d.update_attributes!(status: 'completed') }
+  end
+  
   def completed?
     status == 'completed'
   end

@@ -81,6 +81,24 @@ describe Dispatch do
     end
   end
 
+  describe '#complete!' do
+    subject { create :dispatch, :accepted }
+    
+    it 'sets status to complete' do
+      expect {
+        subject.complete!
+      }.to change { subject.reload.status }.from('accepted').to('completed')
+    end
+    
+    it 'completes sibling dispatches' do
+      sibling = create :dispatch, report: subject.report
+      
+      expect {
+        subject.complete!
+      }.to change { sibling.reload.status }.from('pending').to('completed')
+    end
+  end
+
   describe 'status state' do
     subject(:dispatch) { build(:dispatch) }
 
