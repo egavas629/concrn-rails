@@ -1,19 +1,12 @@
-def reports
-    puts 'Seeding Reports...'
-    3.times { FactoryGirl.create :report }
-end
 
-def accounts
-    puts 'Seeding Teammates...'
-    FactoryGirl.create :dispatcher, name: 'Yirtth Venes', email: 'yirtth@concrn.com', password: 'streetmom'
-    7.times { FactoryGirl.create :responder }
-end
+ActiveRecord::Base.transaction do
+  puts 'Seeding Reports...'
+  10.times { FactoryGirl.create :report }
 
-def clients
-    puts 'Seeding Clients...'
-    10.times { FactoryGirl.create :client }
-end
+  puts 'Seeding Teammates...'
+  FactoryGirl.create :dispatcher, name: 'Dan Dan', email: 'dan@concrn.org', password: 'streetmom'
+  3.times { FactoryGirl.create :responder }
 
-reports
-accounts
-clients
+  puts 'Seeding Clients...'
+  3.times { FactoryGirl.create :client }
+end
