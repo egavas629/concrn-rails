@@ -1,20 +1,21 @@
 language: ruby
 sudo: false
-
 services:
-  - postgresql
+- postgresql
 before_script:
-  - psql -c 'create database streetmom_test;' -U postgres
+- psql -c 'create database streetmom_test;' -U postgres
 script:
-  - RAILS_ENV=test bundle exec rake db:migrate --trace
-  - bundle exec rake db:test:prepare
-  - bundle exec rspec spec/
-
+- RAILS_ENV=test bundle exec rake db:migrate --trace
+- bundle exec rake db:test:prepare
+- bundle exec rspec spec/
 deploy:
   provider: heroku
-  run: "rake db:migrate"
+  run: rake db:migrate
   app:
     development: staging-concrn
     master: concrn
   api_key:
     secure: FjmwBrEhqL74B0go3m+9mGzGD+bu7xauBpWu91fJc3tq+/jBhcJyxYg3gv8kGIhJg9+CSNvXFQghQFfGw8EFgdtCi8WWAXiPwC5Vdr6ufyqUbnlEMknO3mMUjYC1lpCvq/dxbz+d8efHJEal7RRGJN4tEyhrEiwH6XgMe/UsqaQ=
+notifications:
+  slack:
+    secure: swq1BGlveQMqRKfDpupSH5hJo2h+YvwcMZnkS2S1jD/sPZPuC/csNAm8DrNOGrRhK/T6VOigiWnRLyo3XXrAx7evhTe06lVEaURzEFcbdFpzrqO4Ri6eEhI/wO+eXLjDbqhIVJXDLDrYHggglU2hu/qMQC0DPfSUtDd/6tR6b2s=
