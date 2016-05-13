@@ -17,5 +17,13 @@ describe Neighborhood do
         expect(Neighborhood.at(420,420, empty_client)).to eq nil
       end
     end
+
+    context 'when passed bad lat/long' do
+      it 'returns nil' do
+        expect(Neighborhood.at(420,nil, mock_client)).to eq nil
+        expect(Neighborhood.at(nil,420, mock_client)).to eq nil
+        expect(Neighborhood.at(nil,nil, mock_client)).to eq nil
+      end
+    end
   end
 end
