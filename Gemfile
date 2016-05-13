@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.0.0'
 
+gem 'google_places'
 gem 'dotenv-rails', :groups => [:development, :test]
 gem 'rails', '4.1.14'
 gem 'pg'

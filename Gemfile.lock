@@ -118,6 +118,8 @@ GEM
       multi_json (~> 1.0)
       net-http-persistent (>= 2.7)
       net-http-pipeline
+    google_places (0.32.0)
+      httparty (~> 0.13.1)
     gritter (1.1.0)
     guard (2.6.1)
       formatador (>= 0.2.4)
@@ -339,6 +341,7 @@ DEPENDENCIES
   faker
   figaro
   geocoder
+  google_places
   gritter
   guard-rspec
   guard-rubocop
@@ -368,5 +371,8 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   webmock
 
+RUBY VERSION
+   ruby 2.0.0p648
+
 BUNDLED WITH
-   1.11.2
+   1.12.1
