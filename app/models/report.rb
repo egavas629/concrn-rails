@@ -49,7 +49,7 @@ class Report < ActiveRecord::Base
   scope :completed, -> { where(status: %w(completed archived)) }
 
   scope :pending, lambda {
-    joins(:dispatches).where(dispatches: {status: 'pending'})
+    joins(:dispatches).where(dispatches: {status: 'pending'}).distinct
   }
 
   scope :unassigned, lambda {
