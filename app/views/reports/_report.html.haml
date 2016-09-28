@@ -9,9 +9,9 @@
         )
       .show_link= link_to("Show Details", report)
 
-  %td= link_to report.name, reporter_path(report, name: report.name)
+  %td= link_to report.name, reporter_path(report, reporter: {name: report.name})
 
-  %td= link_to report.phone, reporter_path(report, phone: report.phone)
+  %td= link_to report.phone, reporter_path(report, reporter: {phone: report.phone})
 
   %td
     - if report.gender?

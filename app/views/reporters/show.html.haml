@@ -14,9 +14,9 @@
       - @reports.each do |report|
         = content_tag_for :tr, report, class: row_style(report.current_status) do
           %td= report.created_at.strftime('%-m-%-d-%y')
-          %td= link_to report.address, reporter_path(report, address: report.address)
-          %td= link_to report.name, reporter_path(report, name: report.name)
-          %td= link_to report.phone, reporter_path(report, phone: report.phone)
+          %td= link_to report.address, reporter_path(report, reporter: {address: report.address})
+          %td= link_to report.name, reporter_path(report, reporter: {name: report.name})
+          %td= link_to report.phone, reporter_path(report, reporter: {phone: report.phone})
           %td= report.status
           %td= link_to 'Details', report_path(report)
 - else

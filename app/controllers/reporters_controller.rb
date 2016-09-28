@@ -26,6 +26,6 @@ class ReportersController < DashboardController
   private
 
   def reporter_params
-    params.require(:reporter).permit(:phone, :name, :email, :password, :password_confirmation)
+    params.require(:reporter).permit(:phone, :name, :email, :password, :password_confirmation, :address)
   end
 end
