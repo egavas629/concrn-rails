@@ -35,6 +35,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'httparty'
 gem 'awesome_print'
 gem 'by_star'
+gem 'pg_search'
 
 group :rangers, :production, :staging do
   gem 'rails_12factor'

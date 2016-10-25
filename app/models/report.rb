@@ -2,6 +2,7 @@ require 'httparty'
 
 class Report < ActiveRecord::Base
   include HTTParty
+  include PgSearch
 
   DEFAULT_TEAM_NAME = "Concrn Team"
   attr_accessor :delete_image
@@ -59,6 +60,10 @@ class Report < ActiveRecord::Base
 
   scope :by_oldest, -> { order("reports.created_at ASC") }
   scope :by_newest, -> { order("reports.created_at DESC") }
+
+  pg_search_scope :keyword_search, :against => [:name, :phone, :observations, :feedback, :neighborhood, :zip, :address, :status, :race, :gender], :associated_against => {
+      :responders => [:name]
+    }, :order_within_rank => "reports.created_at DESC"
 
   # INSTANCE METHODS #
   def accepted_dispatches
