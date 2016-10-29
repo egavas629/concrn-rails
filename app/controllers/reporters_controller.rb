@@ -2,8 +2,9 @@ class ReportersController < DashboardController
   before_filter :authenticate_user!,       except: [:new, :create]
 
   def show
-    @reports  = Report.where(reporter_params)
+    @reports  = Report.where(reporter_params).order('created_at DESC')
     @key_info = params['name'] || params['phone'] || params['address']
+    
     render
   end
 
