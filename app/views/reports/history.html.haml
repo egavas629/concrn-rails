@@ -9,7 +9,14 @@
     .col-sm-1= f.button :submit, 'Search Dates', style: 'margin-top:25px;'
     .col-sm-1= link_to 'Show All', history_reports_path(start_date: params[:start_date],
       end_date: params[:end_date], order: params[:order], show_all: true), class: 'btn btn-primary',
-      style: 'margin:25px; margin-left:43px;'
+      style: 'margin:25px; margin-right:43px;'
+
+  = simple_form_for '', defaults: { input_html: { class: 'keyword_search' } }, url: history_reports_path, method: :get do |f|
+    .col-sm-1
+    .col-sm-3= f.input :search_by_keyword, label: 'Search Keywords',
+      input_html: {class: 'col-sm-2', value: params[:keyword_search]}
+    .col-sm-1= f.button :submit, 'Search', style: 'margin-top:25px;'
+
 
 = render "report_table", reports: @reports, responders: @available_responders
 
