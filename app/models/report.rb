@@ -44,7 +44,7 @@ class Report < ActiveRecord::Base
 
   # SCOPE #
   scope :accepted, lambda {
-    joins(:dispatches).where(dispatches: {status: 'accepted'})
+    joins(:dispatches).where(dispatches: {status: 'accepted'}).distinct
   }
 
   scope :completed, -> { where(status: %w(completed archived)) }
