@@ -114,7 +114,7 @@ class DispatchMessenger
         Additional Support: #{@responder.name} is on the way to help #{@report.primary_responder.name}.
       MSG
     else
-      "Incident Response: #{@responder.name} is on the way. Contact #{Streetmom::AGENCY_NAME} at #{Streetmom::PHONE_NUMBER}"
+      "Incident Response: #{@responder.name} is on the way. Call #{Streetmom::AGENCY_NAME} at #{Streetmom::PHONE_NUMBER}"
     end
   end
 
