@@ -91,6 +91,6 @@
       - if @report.dispatches.present?
         = render partial: "dispatches/index", locals: { report: @report }
 
-  .col-md-8
-    %h3 Reports that might be for the same client
-    = render "report_table", reports: @report.get_similar_reports, responders: []
+  / .col-md-8
+  /   %h3 Reports that might be for the same client
+  /   = render "report_table", reports: @report.get_similar_reports, responders: []
