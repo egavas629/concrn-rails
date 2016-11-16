@@ -61,9 +61,13 @@ class Report < ActiveRecord::Base
   scope :by_oldest, -> { order("reports.created_at ASC") }
   scope :by_newest, -> { order("reports.created_at DESC") }
 
-  pg_search_scope :keyword_search, :against => [:name, :phone, :observations, :feedback, :neighborhood, :zip, :address, :status, :race, :gender], :associated_against => {
-      :responders => [:name]
-    }, :order_within_rank => "reports.created_at DESC"
+  pg_search_scope :keyword_search, :against => [:name, :phone, :address, :status, :nature], :associated_against => {
+      :responders => [:name],
+      :logs => [:body]
+    }, 
+    :using =>
+      { tsearch: {prefix: true, dictionary: "english"}},
+    :order_within_rank => "reports.created_at DESC"
 
   # INSTANCE METHODS #
   def accepted_dispatches
