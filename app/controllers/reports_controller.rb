@@ -2,7 +2,7 @@ class ReportsController < DashboardController
   before_action :authenticate_user!,       except: %w(new create update)
   before_action :authenticate_dispatcher!, only: %w(index active history)
 
-  before_action :available_responders, only: %w(index active show)
+  before_action :available_responders, only: %w(index active show history)
   before_action :find_report,          only: %w(destroy update show download)
 
   def new
