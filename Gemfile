@@ -3,7 +3,7 @@ ruby '2.3.3'
 
 gem 'google_places'
 gem 'dotenv-rails', :groups => [:development, :test]
-gem 'rails', '4.1.14'
+gem 'rails', '>= 4.1.0' , '< 4.2.0'
 gem 'pg'
 gem 'jbuilder', '~> 1.2'
 gem 'haml'
