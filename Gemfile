@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.3.3'
+ruby '2.3.2'
 
 gem 'google_places'
 gem 'dotenv-rails', :groups => [:development, :test]
