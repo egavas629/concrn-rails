@@ -7,7 +7,7 @@ describe Dispatch do
   it { should belong_to(:responder) }
   it { should validate_presence_of(:report) }
   it { should validate_presence_of(:responder) }
-  it { should ensure_inclusion_of(:status).in_array(Dispatch::STATUS) }
+  it { should validate_inclusion_of(:status).in_array(Dispatch::STATUS) }
   it { should delegate_method(:responder_name).to(:responder).as(:name) }
   it { should delegate_method(:report_address).to(:report).as(:address) }
 
