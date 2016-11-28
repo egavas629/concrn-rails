@@ -5,6 +5,17 @@ require 'capybara/rspec'
 require 'shoulda/matchers'
 require "paperclip/matchers"
 
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+
+    with.library :rails
+  end
+end
+
+
+
 RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.include Paperclip::Shoulda::Matchers

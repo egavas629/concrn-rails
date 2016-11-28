@@ -5,7 +5,7 @@ describe User do
   it { should validate_presence_of(:name) }
   # it { should ensure_length_of(:phone).is_equal_to(10) }
   it { should validate_uniqueness_of(:phone) }
-  it { should ensure_inclusion_of(:role).in_array(User::ROLES) }
+  it { should validate_inclusion_of(:role).in_array(User::ROLES) }
 
   context 'scopes' do
     let!(:responder)  { create(:user, :responder) }
