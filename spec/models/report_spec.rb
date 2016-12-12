@@ -58,6 +58,47 @@ describe Report do
     end
   end
 
+  describe '#keyword_search' do
+    let!(:searchable_report){ create(:report, name:'John Doe', phone: '5103874543', address: '135 Main St.', status: 'pending', nature: 'urgent') }
+    let!(:searchable_responder){ create(:responder, name: 'Matt') }
+    let!(:searchable_dispatch){ create(:dispatch, :accepted, report: searchable_report, responder: searchable_responder) }
+    let!(:searchable_log){ create(:log, body: 'lorem ipsum', report: searchable_report)}
+
+    it 'should search by phone number' do
+      expect(Report.keyword_search('5103874543')).to include(searchable_report)
+    end
+
+    it 'should search by name' do
+      expect(Report.keyword_search('John Doe')).to include(searchable_report)
+    end
+
+    it 'should search by address' do
+      expect(Report.keyword_search('135 Main St.')).to include(searchable_report)
+    end
+
+    it 'should search by status' do
+      expect(Report.keyword_search('pending')).to include(searchable_report)
+    end
+
+    it 'should search by nature' do
+      expect(Report.keyword_search('urgent')).to include(searchable_report)
+    end
+
+    it 'should use tsearch(text search)' do
+      expect(Report.keyword_search('Joh')).to include(searchable_report)
+    end
+
+    # relational tests
+    it 'should search by responder name' do
+      expect(Report.keyword_search('Matt')).to include(searchable_report)
+    end
+
+    it 'should search by log body' do
+      expect(Report.keyword_search('lorem ipsum')).to include(searchable_report)
+    end
+
+  end
+
   describe '#accepted_dispatches' do
     subject { create(:report) }
 
