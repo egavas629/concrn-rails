@@ -59,6 +59,7 @@ describe Report do
   end
 
   describe '#keyword_search' do
+    #using let! because we need the report to exist before searching and it is only referenced after the search (in the comparison)
     let!(:searchable_report){ create(:report, name:'John Doe', phone: '5103874543', address: '135 Main St.', status: 'pending', nature: 'urgent') }
     let!(:searchable_responder){ create(:responder, name: 'Matt') }
     let!(:searchable_dispatch){ create(:dispatch, :accepted, report: searchable_report, responder: searchable_responder) }
