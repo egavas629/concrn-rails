@@ -23,8 +23,7 @@ class ReportFilter
     elsif defined?(@end_date)
       reports = completed_reports.where('created_at <= ?', @end_date)
     elsif defined?(@keyword_search)
-      all_reports = Report.all
-      reports = all_reports.keyword_search(@keyword_search)
+      reports = Report.keyword_search(@keyword_search)
     else
       reports = completed_reports.where(@params)
     end
