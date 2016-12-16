@@ -9,6 +9,7 @@ describe Report do
   it { should have_many(:dispatches).dependent(:destroy) }
   it { should have_many(:logs).dependent(:destroy) }
   it { should have_many(:responders).through(:dispatches) }
+  it { should belong_to(:client)}
   it { should validate_presence_of(:address) }
   it { should validate_inclusion_of(:status).in_array(Report::STATUS) }
   it { should validate_inclusion_of(:gender).in_array(Client::GENDER).allow_blank(true) }
@@ -60,7 +61,8 @@ describe Report do
 
   describe '#keyword_search' do
     #using let! because we need the report to exist before searching and it is only referenced after the search (in the comparison)
-    let!(:searchable_report){ create(:report, name:'John Doe', phone: '5103874543', address: '135 Main St.', status: 'pending', nature: 'urgent') }
+    let!(:searchable_client){ create(:client, name: 'Jane Doe')}
+    let!(:searchable_report){ create(:report, name:'John Doe', phone: '5103874543', address: '135 Main St.', status: 'pending', nature: 'urgent', client: searchable_client) }
     let!(:searchable_responder){ create(:responder, name: 'Matt') }
     let!(:searchable_dispatch){ create(:dispatch, :accepted, report: searchable_report, responder: searchable_responder) }
     let!(:searchable_log){ create(:log, body: 'lorem ipsum', report: searchable_report)}
@@ -96,6 +98,10 @@ describe Report do
 
     it 'should search by log body' do
       expect(Report.keyword_search('lorem ipsum')).to include(searchable_report)
+    end
+
+    it 'should search by client name' do
+      expect(Report.keyword_search('Jane Doe')).to include(searchable_report)
     end
 
   end

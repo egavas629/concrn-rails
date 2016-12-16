@@ -63,7 +63,8 @@ class Report < ActiveRecord::Base
 
   pg_search_scope :keyword_search, :against => [:name, :phone, :address, :status, :nature], :associated_against => {
       :responders => [:name],
-      :logs => [:body]
+      :logs => [:body],
+      :client => [:name]
     }, 
     :using =>
       { tsearch: {prefix: true, dictionary: "english"}},
