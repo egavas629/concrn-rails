@@ -5,8 +5,14 @@ module Neighborhood
   
   def self.at(lat, long, client=@client)
     return unless lat && long
-    
-    spots = client.spots(lat, long)
-    spots.any? ? spots.first.vicinity : nil
+
+    begin
+      spots = client.spots(lat, long)
+      spots.any? ? spots.first.vicinity : nil
+
+    rescue Exception => msg
+      puts msg
+    end
+
   end
 end
