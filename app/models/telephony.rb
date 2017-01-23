@@ -15,10 +15,18 @@ class Telephony
   end
 
   def self.receive(body, opts = {})
+    
     return Rails.logger.info("skipping SMS receive('#{body}', '#{opts.inspect}')") if Rails.env.test?
-
+    
     responder = Responder.find_by_phone(opts[:from])
-    send("#{opts[:from]}: #{opts[:body]}", to: '6507876770') unless responder
-    DispatchMessenger.new(responder).respond(body)
+    
+    if responder
+      # if txt msg from a responder, handle dispatcher/reporter interaction
+      DispatchMessenger.new(responder).respond(body)
+    else
+      # text is from reporter, sends txt msg directly to Jacob
+      send("#{opts[:from]}: #{opts[:body]}", to: '6507876770')
+    end
+
   end
 end
