@@ -21,6 +21,8 @@ class ReportsController < DashboardController
   def history
     reports = ReportFilter.new(params).query
     @reports = params[:show_all] ? reports : reports.page(params[:page])
+    @search_item = params[:search_by_keyword]
+    @report_count = @reports.length
   end
 
   def create

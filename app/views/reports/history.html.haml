@@ -17,6 +17,13 @@
       input_html: {class: 'col-sm-2', value: params[:search_by_keyword]}
     .col-sm-1= f.button :submit, 'Search', style: 'margin-top:25px;'
 
+- if @report_count == 1
+  %p= "Found #{@report_count} report matching #{@search_item}"
+- elsif !@search_item
+  %p= "Found #{@report_count} reports"
+- else
+  %p= "Found #{@report_count} reports matching \'#{@search_item}\'"
+
 
 = render "report_table", reports: @reports, responders: @available_responders
 
