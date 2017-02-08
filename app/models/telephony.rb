@@ -16,8 +16,6 @@ class Telephony
 
   def self.receive(body, opts = {})
     
-    return Rails.logger.info("skipping SMS receive('#{body}', '#{opts.inspect}')") if Rails.env.test?
-    
     responder = Responder.find_by_phone(opts[:from])
     
     if responder
