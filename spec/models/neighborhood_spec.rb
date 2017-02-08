@@ -18,12 +18,21 @@ describe Neighborhood do
       end
     end
 
-    context 'when passed bad lat/long' do
-      it 'returns nil' do
-        expect(Neighborhood.at(420,nil, mock_client)).to eq nil
-        expect(Neighborhood.at(nil,420, mock_client)).to eq nil
-        expect(Neighborhood.at(nil,nil, mock_client)).to eq nil
+
+    context 'when an exception occurs' do
+      before do
+        allow(mock_client).to receive(:spots).and_raise("boom")
       end
+
+      it 'returns nil' do
+        expect(Neighborhood.at(123,123,mock_client)).to eq nil
+      end
+
+      it 'logs a warning' do
+        expect(Rails.logger).to receive(:warn).with(/error querying for neighborhood.*/)
+        Neighborhood.at(123, 123, mock_client)
+      end
+
     end
   end
 end
