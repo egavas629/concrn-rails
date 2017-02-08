@@ -25,7 +25,7 @@ class Telephony
       DispatchMessenger.new(responder).respond(body)
     else
       # text is from reporter, sends txt msg directly to Jacob
-      send("#{opts[:from]}: #{opts[:body]}", to: '6507876770')
+      send("#{opts[:from]}: #{opts[:body]}", to: Rails.configuration.backup_sms_phone)
     end
 
   end
