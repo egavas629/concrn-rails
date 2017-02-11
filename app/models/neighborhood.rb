@@ -5,8 +5,12 @@ module Neighborhood
   
   def self.at(lat, long, client=@client)
     return unless lat && long
-    
-    spots = client.spots(lat, long)
-    spots.any? ? spots.first.vicinity : nil
+
+    client.spots(lat, long).try(:first).try(:vicinity)
+
+  rescue Exception => e
+    Rails.logger.warn("error querying for neighborhood for (#{lat} #{long}): #{e}")
+    nil
   end
+
 end
