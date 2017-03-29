@@ -10,12 +10,24 @@ module CsvExportable
 
     def to_csv
       CSV.generate do |csv|
-        exclude_fields = @sensitive_fields || []
-        csv << (attribute_names - exclude_fields)
+        csv << attribute_names
         find_each do |record|
-          csv << record.attributes.except(*exclude_fields).values
+          csv << _hash_sensitive_values(record.attributes).values
         end
       end
+    end
+
+    private
+
+    def _hash_sensitive_values(attributes)
+      hash_fields = @sensitive_fields || []
+      Hash[attributes.map do |k,v|
+        if v and hash_fields.include?(k)
+          [k, Digest::SHA256.hexdigest(v)]
+        else
+          [k, v]
+        end
+      end]
     end
   end
 end
