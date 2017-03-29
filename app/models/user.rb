@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  include CsvExportable
+
   devise :database_authenticatable, :recoverable, :registerable,
          :rememberable, :trackable, :validatable
 

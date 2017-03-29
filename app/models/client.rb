@@ -1,4 +1,6 @@
 class Client < ActiveRecord::Base
+  include CsvExportable
+
   # RELATIONS #
   has_many :reports
 

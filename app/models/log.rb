@@ -1,4 +1,6 @@
 class Log < ActiveRecord::Base
+  include CsvExportable
+
   # RELATIONS #
   belongs_to :report
   belongs_to :author, class_name: 'User'
