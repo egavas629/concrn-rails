@@ -1,6 +1,5 @@
 class Report < ActiveRecord::Base
   include CsvExportable
-  sensitive_fields :name, :phone, :nature
 
   include PgSearch
 

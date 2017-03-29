@@ -1,6 +1,5 @@
 class Log < ActiveRecord::Base
   include CsvExportable
-  sensitive_fields :body
 
   # RELATIONS #
   belongs_to :report
