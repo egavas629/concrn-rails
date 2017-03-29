@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  include CsvExportable
+  sensitive_fields :phone, :name
+
   devise :database_authenticatable, :recoverable, :registerable,
          :rememberable, :trackable, :validatable
 

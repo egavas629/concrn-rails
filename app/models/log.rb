@@ -1,4 +1,7 @@
 class Log < ActiveRecord::Base
+  include CsvExportable
+  sensitive_fields :body
+
   # RELATIONS #
   belongs_to :report
   belongs_to :author, class_name: 'User'

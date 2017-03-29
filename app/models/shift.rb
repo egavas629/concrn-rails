@@ -1,4 +1,6 @@
 class Shift < ActiveRecord::Base
+  include CsvExportable
+
   # RELATIONS #
   belongs_to :user
 

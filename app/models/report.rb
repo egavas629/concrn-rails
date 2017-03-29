@@ -1,7 +1,7 @@
-require 'httparty'
-
 class Report < ActiveRecord::Base
-  include HTTParty
+  include CsvExportable
+  sensitive_fields :name, :phone, :nature
+
   include PgSearch
 
   DEFAULT_TEAM_NAME = "Concrn Team"

@@ -1,4 +1,6 @@
 class Dispatch < ActiveRecord::Base
+  include CsvExportable
+
   # RELATIONS #
   belongs_to :report
   belongs_to :responder

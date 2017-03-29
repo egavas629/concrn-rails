@@ -1,4 +1,7 @@
 class Client < ActiveRecord::Base
+  include CsvExportable
+  sensitive_fields :name
+
   # RELATIONS #
   has_many :reports
 
